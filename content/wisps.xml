@@ -1,0 +1,19 @@
+<wisps gfxroot="gfx/familiar/wisps/">
+	<color name="mirroring_white" r="512" g="512" b="512" a="192"/>
+	<color name="mirroring_black" r="0" g="0" b="0" a="64"/>
+	<color name="mirroring_black" r="0" g="0" b="0"/>
+	<color name="flame_dark_red" r="512" g="0" b="0"/>
+	<color name="core_dark_red" r="190" g="10" b="10"/>
+	<color name="tear_dark_red" r="130" g="10" b="10" or="30"/>
+
+	<wisp id="3" count="0" />
+	<wisp id="5" hp="6" layer="2" priority="99" flameColor="mirroring_black" canShoot="false" coreGfx="" />
+	<wisp id="6" hp="9" layer="2" priority="99" flameColor="mirroring_white" canShoot="false" coreGfx="" />
+	<wisp id="7" count="0" />
+	<wisp id="8" count="0" />
+	<wisp id="13" count="0" />
+	<wisp id="22" hp="10" layer="2" damage="2" tearColor="tear_dark_red" flameColor="flame_dark_red" coreColor="core_dark_red" coreGfx="baby.png" />
+	<wisp id="24" hp="8" layer="2" damage="3" tearColor="tear_dark_red" flameColor="flame_dark_red" coreColor="core_dark_red" coreGfx="heart.png" />
+	<wisp id="27" count="0" />
+	<wisp id="28" count="0" />
+</wisps>

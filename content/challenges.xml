@@ -1,0 +1,3 @@
+<challenges version="1">
+    <challenge name="Laser Fan" id="1" playertype="0" startingitems="20,63,Laser Gun" roomfilter="2,4,12" cursefilter="2" endstage="8" altpath="true" canshoot="false"/>
+</challenges>

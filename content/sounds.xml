@@ -1,0 +1,5 @@
+<sounds root="sfx/">
+	<sound name="Warfarin Hurt">
+        <sample weight="1" path="warfarin_hurt.wav"/>
+    </sounds>
+</sounds>

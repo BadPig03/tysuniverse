@@ -1,0 +1,126 @@
+<ItemPools>
+  <Pool Name="angel">
+    <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Absolution" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="The Gospel of John" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="babyShop">
+    <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="beggar">
+		<Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="boss">
+    <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="curse">
+    <Item Name="Notice Of Critical Condition" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Collapse" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Cursed Treasure" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Scapegoat" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Expired Glue" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="demonBeggar">
+		<Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="devil">
+    <Item Name="Guilt" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Scapegoat" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Hades Blade" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="goldenChest">
+    <Item Name="Marriage Certificate" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Bob's Stomach" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="greedDevil">
+		<Item Name="Scapegoat" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Hades Blade" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="greedAngel">
+    <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="greedTreasure">
+    <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Cornucopia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Collapse" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Conjunctivitis" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Bob's Stomach" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Philosopher's Staff" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Expired Glue" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="keyMaster">
+    <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="library">
+		<Item Name="The Gospel of John" Weight="0.2" DecreaseBy="0.02" RemoveOn="0.02"/>
+	</Pool>
+  <Pool Name="momsChest">
+		<Item Name="Marriage Certificate" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="oldChest">
+		<Item Name="Mirroring" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Broken Mirroring" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Marriage Certificate" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="redChest">
+    <Item Name="Notice Of Critical Condition" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Cursed Treasure" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="rottenBeggar">
+		<Item Name="Bob's Stomach" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+	<Pool Name="secret">
+    <Item Name="Rewind" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Mirroring" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Broken Mirroring" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Crown Of Kings" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Order" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Wake-up" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+  <Pool Name="shop">
+    <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Order" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Atonement Voucher" Weight="1" DecreaseBy="0.25" RemoveOn="0.1"/>
+    <Item Name="Wake-up" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Philosopher's Staff" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="treasure">
+    <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Cornucopia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Notice Of Critical Condition" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Collapse" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Conjunctivitis" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Crown Of Kings" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Bob's Stomach" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Philosopher's Staff" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Expired Glue" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+  </Pool>
+  <Pool Name="ultraSecret">
+		<Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+		<Item Name="Wake-up" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+	</Pool>
+</ItemPools>

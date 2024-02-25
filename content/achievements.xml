@@ -1,0 +1,4 @@
+<achievements gfxroot="gfx/ui/achievement/">
+	<achievement id="1" name="ff0_unlocked" text='You unlocked "ff0"' gfx="achievement_ff0.png" />
+	<achievement id="2" name="tainted_ff0_unlocked" text='You unlocked "tainted ff0"' gfx="achievement_tainted_ff0.png" />
+</achievements>
