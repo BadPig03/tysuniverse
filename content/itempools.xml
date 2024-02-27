@@ -98,7 +98,7 @@
   <Pool Name="shop">
     <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Order" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Order" Weight="0.5" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Atonement Voucher" Weight="1" DecreaseBy="0.25" RemoveOn="0.1"/>
     <Item Name="Wake-up" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Philosopher's Staff" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

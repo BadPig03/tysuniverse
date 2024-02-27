@@ -46,6 +46,7 @@ ty.CustomNullItems = {
     HEPHAESTUSSOUL = Isaac.GetNullItemIdByName("Hephaestus' Soul Fire"),
     WARFARINHAIR = Isaac.GetNullItemIdByName("Warfarin Hair"),
     WARFARINWINGS = Isaac.GetNullItemIdByName("Warfarin Wings"),
+    WARFARINHAEMOLACRIA = Isaac.GetNullItemIdByName("Warfarin Haemolacria"),
     MARRIAGECERTIFICATEHEARTS = Isaac.GetNullItemIdByName("Marriage Certificate Hearts"),
     LOSTSOUL = Isaac.GetNullItemIdByName("Lost Soul"),
 }
