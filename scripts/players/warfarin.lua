@@ -4,6 +4,7 @@ local deadByBrokenHearts = false
 local stopHurtSound = false
 local spawnLadder = false
 local restorePosition = false
+local replaceTrapDoor = false
 
 if CuerLib then
     CuerLib.Players.SetOnlyRedHeartPlayer(ty.CustomPlayerType.WARFARIN, true)
@@ -57,6 +58,24 @@ local function GetClosestEmptyPedestal(player)
     end
     return collectible
 end
+
+local function IsDevilAngelRoomOpened()
+    local room = ty.GAME:GetRoom()
+    for i = 0, 7 do
+        local door = room:GetDoor(i)
+        if door and (door.TargetRoomType == RoomType.ROOM_DEVIL or door.TargetRoomType == RoomType.ROOM_ANGEL) and door.TargetRoomIndex == GridRooms.ROOM_DEVIL_IDX then
+            return true
+        end
+    end
+    return false
+end
+
+function Warfarin:EvaluateCache(player, cacheFlag)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
+		player.TearFlags = player.TearFlags | TearFlags.TEAR_BURSTSPLIT
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Warfarin.EvaluateCache, CacheFlag.CACHE_TEARFLAG)
 
 function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, scale)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and slot == ActiveSlot.SLOT_POCKET and scale == 1 then
@@ -211,16 +230,21 @@ Warfarin:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Warfarin.EvaluateCache)
 function Warfarin:PostFireTear(tear)
     local tear = tear:ToTear()
     local player = tear.SpawnerEntity:ToPlayer()
-    if player and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and player:HasCollectible(CollectibleType.COLLECTIBLE_POLYPHEMUS) then
-        local angle = tear.Velocity:GetAngleDegrees()
-        if angle == 0 then
-            tear.Position = tear.Position + Vector(0, 4)
-        elseif angle == 90 then
-            tear.Position = tear.Position + Vector(-10, 0)
-        elseif angle == 180 then
-            tear.Position = tear.Position + Vector(0, -4)
-        elseif angle == -90 then
-            tear.Position = tear.Position + Vector(10, 0)
+    if player and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
+        if tear.Variant == TearVariant.BLUE then
+            tear:ChangeVariant(TearVariant.BLOOD)
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_POLYPHEMUS) then
+            local angle = tear.Velocity:GetAngleDegrees()
+            if angle == 0 then
+                tear.Position = tear.Position + Vector(0, 4)
+            elseif angle == 90 then
+                tear.Position = tear.Position + Vector(-10, 0)
+            elseif angle == 180 then
+                tear.Position = tear.Position + Vector(0, -4)
+            elseif angle == -90 then
+                tear.Position = tear.Position + Vector(10, 0)
+            end
         end
     end
 end
@@ -257,15 +281,23 @@ function Warfarin:PreTriggerPlayerDeath(player)
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTriggerPlayerDeath)
 
+function Warfarin:PostGridEntitySpawn(grid)
+    local globalData = ty.GLOBALDATA.BloodSample
+    local room = ty.GAME:GetRoom()
+    if replaceTrapDoor then
+        local crawlSpace = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
+        globalData.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
+        globalData.GridIndex = room:GetGridIndex(grid.Position)
+        room:RemoveGridEntity(globalData.GridIndex, 0, false)
+        replaceTrapDoor = false
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_POST_GRID_ENTITY_SPAWN, Warfarin.PostGridEntitySpawn, GridEntityType.GRID_TRAPDOOR)
+
 function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() then
-        local pos = room:FindFreeTilePosition(room:GetCenterPos(), 80)
-        room:RemoveGridEntity(room:GetGridIndex(pos), 0, false)
-        local crawlSpace = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, pos, Vector(0, 0), nil)
-        local data = ty:GetLibData(crawlSpace)
-        data.Enable = rng:RandomFloat() < 2/3
-        ty.GLOBALDATA.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 then
+        replaceTrapDoor = not IsDevilAngelRoomOpened()
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, Warfarin.PreSpawnCleanAward)
@@ -279,14 +311,8 @@ function Warfarin:PostNewRoom()
             spawnLadder = false
         end
         if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == ty.GLOBALDATA.BloodSample.BossIndex and restorePosition then
-            local pos = room:GetCenterPos()
-            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE)) do
-                local data = ty:GetLibData(ent)
-                data.Enable = ty.LEVEL:GetDevilAngelRoomRNG():RandomFloat() < 2/3
-                pos = ent.Position
-            end
             for _, player in pairs(PlayerManager.GetPlayers()) do
-                player.Position = pos
+                player.Position = room:GetGridPosition(ty.GLOBALDATA.BloodSample.GridIndex)
             end
             restorePosition = false
         end
@@ -298,21 +324,17 @@ function Warfarin:PostCrawlspaceUpdate(effect)
     local sprite = effect:GetSprite()
     local data = ty:GetLibData(effect)
     if effect.SubType == ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE then
-        if data.Enable then
-            if sprite:IsPlaying("Closed") and #Isaac.FindInRadius(effect.Position, 24, EntityPartition.PLAYER) == 0 then
-                sprite:Play("Open", true)
+        if sprite:IsPlaying("Closed") and #Isaac.FindInRadius(effect.Position, 24, EntityPartition.PLAYER) == 0 then
+            sprite:Play("Open", true)
+        end
+        if sprite:IsFinished("Open") then
+            sprite:Play("Opened", true)
+        end
+        if sprite:IsPlaying("Opened") then
+            for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
+                spawnLadder = true
+                ty.GAME:StartRoomTransition(GridRooms.ROOM_BLACK_MARKET_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
-            if sprite:IsFinished("Open") then
-                sprite:Play("Opened", true)
-            end
-            if sprite:IsPlaying("Opened") then
-                for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
-                    spawnLadder = true
-                    ty.GAME:StartRoomTransition(GridRooms.ROOM_BLACK_MARKET_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
-                end
-            end
-        else
-            sprite:Play("Closed")
         end
     end
 end

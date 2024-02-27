@@ -25,7 +25,13 @@ local function ClearRoom(player, gridOnly)
         if #itemList <= 3 then
             repeat
                 local rng = player:GetCollectibleRNG(ty.CustomCollectibles.GUILT)
-                table.insert(itemList, ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, true, rng:Next()))
+                local item = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, false, rng:Next())
+                if ty.ITEMCONFIG:GetCollectible(item).Quality <= 2 and rng:RandomInt(100) < 25 then
+                    item = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, true, rng:Next())
+                else
+                    ty.ITEMPOOL:RemoveCollectible(item)
+                end
+                table.insert(itemList, item)
             until #itemList >= 4
         end
         for _, entity in pairs(Isaac.GetRoomEntities()) do

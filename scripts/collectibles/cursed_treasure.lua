@@ -116,6 +116,10 @@ function CursedTreasure:PostPickupCollision(pickup, collider, low)
     if pickup.SubType == ty.CustomEntities.CURSEDCOIN and player then
         ty.SFXMANAGER:Play(SoundEffect.SOUND_PENNYPICKUP, 0.7, 2, false, 1.2)
         TriggerRandomEffect(player)
+        local rng = player:GetCollectibleRNG(ty.CustomCollectibles.CURSEDTREASURE)
+        if rng:RandomFloat() < 1/3 then
+            player:AddCoins(rng:RandomInt(5) + 1)
+        end
     end
 end
 CursedTreasure:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, CursedTreasure.PostPickupCollision, PickupVariant.PICKUP_COIN)

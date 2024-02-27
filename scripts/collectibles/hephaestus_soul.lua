@@ -117,24 +117,35 @@ local function SpawnAFlame(player, tear, ludovicoTear)
 	if flameType & 1 << 4 == 1 << 4 or tear:HasTearFlags(TearFlags.TEAR_LASERSHOT) then
 		return
 	end
+	local rng = player:GetCollectibleRNG(ty.CustomCollectibles.HEPHAESTUSSOUL)
 	if flameType & 1 << 1 == 1 << 1 then
 		flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, tear.Position - Vector(0, 16), tear.Velocity, player):ToEffect()
+		flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire_blue.png", true)
 		if flameType & 1 << 2 == 1 << 2 then
 			flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire_purple.png", true)
+			flame.CollisionDamage = tear.BaseDamage * 0.6
+		else
+			flame.CollisionDamage = tear.BaseDamage * 0.5
 		end
-		flame.CollisionDamage = tear.BaseDamage * 0.6
 	else
-		flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, tear.Position - Vector(0, 16), tear.Velocity, player):ToEffect()
-		flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire.png", true)
-		flame.CollisionDamage = tear.BaseDamage * 0.4
-		if flameType & 1 << 3 == 1 << 3 then
-			flame.CollisionDamage = flame.CollisionDamage * 2
+		if rng:RandomInt(100) < 100 / math.max(1.5, 7 - math.ceil(player.Luck)) or ludovicoTear then
+			flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, tear.Position - Vector(0, 16), tear.Velocity, player):ToEffect()
+			flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire_white.png", true)
+			flame.CollisionDamage = tear.BaseDamage * 1.2
+		else
+			flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, tear.Position - Vector(0, 16), tear.Velocity, player):ToEffect()
+			if flameType & 1 << 3 == 1 << 3 then
+				flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire_red.png", true)
+				flame.CollisionDamage = tear.BaseDamage * 0.9
+			else
+				flame.CollisionDamage = tear.BaseDamage * 0.3
+			end	
 		end
-	end
+	end	
 	flame:FollowParent(tear)
 	flame.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
 	if ludovicoTear then
-		flame.CollisionDamage = flame.CollisionDamage * 10 / 3
+		flame.CollisionDamage = flame.CollisionDamage * 3
 		flame.SpriteScale = Vector(tear.BaseScale * 0.9, tear.BaseScale * 0.9)
 		flame.SizeMulti = flame.SpriteScale
 		flame.ParentOffset = Vector(0, 14.4 * tear.BaseScale)
@@ -151,10 +162,12 @@ end
 
 function HephaestusSoul:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
-		player.CanFly = true
+		if cacheFlag == CacheFlag.CACHE_FLYING then
+			player.CanFly = true
+		end
     end
 end
-HephaestusSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HephaestusSoul.EvaluateCache, CacheFlag.CACHE_FLYING)
+HephaestusSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HephaestusSoul.EvaluateCache)
 
 function HephaestusSoul:PostFireTear(tear)
 	local tear = tear:ToTear()
@@ -188,10 +201,14 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_FIRE_BOMB, HephaestusSoul.PostFi
 function HephaestusSoul:PostLaserCollision(laser, collider, low)
 	local laser = laser:ToLaser()
 	local player = laser.SpawnerEntity and laser.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValidCollider(collider) then
+	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValidCollider(collider) and laser.FrameCount % 3 == 0 then
 		local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
 		local fireData = ty:GetLibData(fireJet, true)
-		fireData.DamageValue = laser.CollisionDamage * 2
+		if laser.Variant == LaserVariant.THIN_RED or laser.Variant == LaserVariant.ELECTRIC then
+			fireData.DamageValue = laser.CollisionDamage * 2
+		else
+			fireData.DamageValue = laser.CollisionDamage * 4
+		end
 		fireData.Owner = player
 		fireData.Target = collider
 	end
@@ -202,11 +219,13 @@ function HephaestusSoul:PostKnifeCollision(knife, collider, low)
 	local knife = knife:ToKnife()
 	local player = knife.SpawnerEntity and knife.SpawnerEntity:ToPlayer()
 	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValidCollider(collider) then
-		local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
-		local fireData = ty:GetLibData(fireJet, true)
-		fireData.DamageValue = knife.CollisionDamage
-		fireData.Owner = player
-		fireData.Target = collider
+		if (knife:IsFlying() and knife:GetKnifeDistance() / knife.MaxDistance < 0.8) or ((not knife:IsFlying() or knife:GetKnifeDistance() / knife.MaxDistance >= 0.8) and ty.GAME:GetFrameCount() % 18 == 0) then
+			local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
+			local fireData = ty:GetLibData(fireJet, true)
+			fireData.DamageValue = knife.CollisionDamage * 2
+			fireData.Owner = player
+			fireData.Target = collider
+		end
 	end
 end
 HephaestusSoul:AddCallback(ModCallbacks.MC_POST_KNIFE_COLLISION, HephaestusSoul.PostKnifeCollision)
@@ -233,8 +252,8 @@ function HephaestusSoul:PostRedCandleFlameEffectUpdate(flame)
 		flame.SizeMulti = flame.SpriteScale
 		flame.ParentOffset = Vector(0, 16 * tear.Scale)
 	end
-	if flame.Timeout > 30 and (not tear or not tear:Exists()) then
-		flame:SetTimeout(30)
+	if flame.Timeout > 45 and (not tear or not tear:Exists()) then
+		flame:SetTimeout(45)
 	end
 end
 HephaestusSoul:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, HephaestusSoul.PostRedCandleFlameEffectUpdate, EffectVariant.RED_CANDLE_FLAME)
@@ -252,8 +271,8 @@ function HephaestusSoul:PostBlueFlameEffectUpdate(flame)
 		flame.SizeMulti = flame.SpriteScale
 		flame.ParentOffset = Vector(0, 16 * tear.Scale)
 	end
-	if flame.Timeout > 45 and (not tear or not tear:Exists()) then
-		flame:SetTimeout(45)
+	if flame.Timeout > 30 and (not tear or not tear:Exists()) then
+		flame:SetTimeout(30)
 	end
 end
 HephaestusSoul:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, HephaestusSoul.PostBlueFlameEffectUpdate, EffectVariant.BLUE_FLAME)
