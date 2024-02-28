@@ -39,11 +39,11 @@ function Collapse:PostPlayerUpdate(player)
             end
             entity:AddVelocity((player.Position - entity.Position):Normalized():Resized(velocityModifier))
         end
-    end
-    for _, entity in pairs(Isaac.FindInRadius(player.Position, 8192, EntityPartition.ENEMY)) do
-        if entity:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
-            entity:TakeDamage(10 + 2.5 * player.Damage, DamageFlag.DAMAGE_COUNTDOWN, EntityRef(player), 15)
-        end
+        for _, entity in pairs(Isaac.FindInRadius(player.Position, 8192, EntityPartition.ENEMY)) do
+            if entity:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
+                entity:TakeDamage(10 + 2.5 * player.Damage, DamageFlag.DAMAGE_COUNTDOWN, EntityRef(player), 15)
+            end
+        end    
     end
 end
 Collapse:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Collapse.PostPlayerUpdate)

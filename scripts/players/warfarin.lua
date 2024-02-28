@@ -10,7 +10,11 @@ if CuerLib then
 end
 
 local function GetDamagePerCharge(player)
-    local charge = 15 + 18 * ty.LEVEL:GetAbsoluteStage() ^ 1.2
+    local stage = ty.LEVEL:GetAbsoluteStage()
+    if ty.GAME:IsGreedMode() then
+        stage = stage * 2
+    end
+    local charge = 16 + 20 * stage ^ 1.2
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.9
     end
