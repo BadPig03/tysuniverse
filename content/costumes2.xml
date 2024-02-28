@@ -4,6 +4,7 @@
 	<costume id="3" anm2path="character_warfarin_wings.anm2" type="none" isFlying="true"/>
 	<costume id="5" anm2path="costume_marriage_certificate_hearts.anm2" type="none"/>
 	<costume id="0" anm2path="costume_hephaestus_soul.anm2" type="passive" isFlying="true"/>
+	<costume id="1" anm2path="costume_absolution.anm2" type="passive"/>
 	<costume id="2" anm2path="costume_guilt.anm2" type="passive"/>
 	<costume id="4" anm2path="costume_anorexia.anm2" type="passive" hasSkinAlt="true"/>
 	<costume id="11" anm2path="" type="passive" overwriteColor="true" skinColor="1" forceBodyColor="true" forceHeadColor="true"/>

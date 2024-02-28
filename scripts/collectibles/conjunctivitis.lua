@@ -20,9 +20,9 @@ end
 local function GetTears(player, tears)
     if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
         if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-            return math.max(0.83 * tears, 30 / 11)
+            return math.max(0.8 * tears, 30 / 11)
         else
-            return 0.83 * tears
+            return 0.8 * tears
         end
     end
     return tears

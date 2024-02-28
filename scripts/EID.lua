@@ -19,13 +19,15 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.ABSOLUTION] = {
         [1] = {
             Name = "赦罪",
-            Desc = "#{{ArrowUp}} 受伤不再造成额外惩罚"..
-            "#{{ArrowUp}} 自伤只造成一半伤害，最低半颗心"
+            Desc = "#{{ArrowUp}} 非自伤的伤害均视作自伤"..
+            "#{{ArrowUp}} 原本属于自伤的伤害来源只造成一半伤害，最低半颗心"..
+            "#{{AngelChance}} 只开启天使房，开启率等同于恶魔房开启率"
         },
         [2] = {
             Name = "Absolution",
-            Desc = "#{{ArrowUp}} Damage taken from all sources won't apply any penalties"..
-            "#{{ArrowUp}} Isaac takes only half damage from self-inflicted damage, and the lowest amount of damage he can take is half a heart"
+            Desc = "#{{ArrowUp}} Damage taken from all sources will be considered as self-inflicted damage"..
+            "#{{ArrowUp}} Damage sources that originally belonged to self-inflicted only deal half damage, at a minimum of half a heart"..
+            "#{{AngelChance}} Spawns Angel Rooms only, with the same chance of spawning as Devil Rooms"
         }
     },
     [ty.CustomCollectibles.GUILT] = {
@@ -44,14 +46,14 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.REWIND] = {
         [1] = {
             Name = "倒带",
-            Desc = "#使用后，随机进入一个与曾进入过的特殊房间种类相同的特殊房间"..
+            Desc = "#使用后，90%概率随机进入一个与曾进入过的特殊房间种类相同的特殊房间，否则随机进入一个房间"..
             "#{{Warning}} 充能数量会因为进入的特殊房间种类不同而产生变化",
             Virtue = "有5%额外概率随机进入一个天使房",
             Belial = "有5%额外概率随机进入一个恶魔房"
         },
         [2] = {
             Name = "Rewind",
-            Desc = "#On use, randomly enters a special room of the same type as previously entered special rooms"..
+            Desc = "#Upon use, there is a 90% chance to randomly enters a special room of the same type as one previously visited; otherwise, randomly enter a room"..
             "#{{Warning}} The charge varies depending on the type of special room entered",
             Virtue = "There is a 5% additional chance to randomly enter an Angel Room",
             Belial = "There is a 5% additional chance to randomly enter a Devil Room"
@@ -269,12 +271,12 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "结膜炎",
             Desc = "#{{ArrowUp}} 泪弹获得拖尾和穿透敌人与障碍物的效果"..
-            "#{{ArrowDown}} 射速修正x83%"
+            "#{{ArrowDown}} 射速修正x80%"
         },
         [2] = {
             Name = "Conjunctivitis",
             Desc = "#{{ArrowUp}} Grants trailing tears that deals extra damage and penetrating tears that travel through enemies and obstacles"..
-            "#{{ArrowDown}} x0.83 Fire rate multiplier"
+            "#{{ArrowDown}} x0.8 Fire rate multiplier"
         }
     },
     [ty.CustomCollectibles.CROWNOFKINGS] = {

@@ -14,7 +14,7 @@ local function GetDamagePerCharge(player)
     if ty.GAME:IsGreedMode() then
         stage = stage * 2
     end
-    local charge = 16 + 20 * stage ^ 1.2
+    local charge = 16 + 19 * stage ^ 1.2
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.9
     end
@@ -71,6 +71,17 @@ local function IsDevilAngelRoomOpened()
         end
     end
     return false
+end
+
+local function GetTears(player, tears)
+    if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
+        if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
+            return math.max(0.85 * tears, 30 / 11)
+        else
+            return 0.85 * tears
+        end
+    end
+    return tears
 end
 
 function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, scale)
@@ -223,13 +234,15 @@ function Warfarin:EvaluateCache(player, cacheFlag)
         local effects = player:GetEffects()
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
             ty.Stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
-            if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-                ty.Stat:SetDamageMultiplier(player, 0.8)
-            end
         elseif cacheFlag == CacheFlag.CACHE_FLYING and player:HasCollectible(CollectibleType.COLLECTIBLE_CHARM_VAMPIRE) then
             player.CanFly = true
-        elseif cacheFlag == CacheFlag.CACHE_TEARFLAG and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-            player.TearFlags = player.TearFlags | TearFlags.TEAR_BURSTSPLIT
+        elseif effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+            if cacheFlag == CacheFlag.CACHE_TEARFLAG then
+                player.TearFlags = player.TearFlags | TearFlags.TEAR_BURSTSPLIT
+            end
+            if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+                ty.Stat:AddTearsModifier(player, function(tears) return GetTears(player, tears) end)
+            end
         end
     end
 end

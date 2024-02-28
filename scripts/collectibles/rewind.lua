@@ -15,7 +15,6 @@ local roomTypeString = {
     [RoomType.ROOM_SACRIFICE] = 'sacrifice',
     [RoomType.ROOM_DEVIL] = 'devil',
     [RoomType.ROOM_ANGEL] = 'angel',
-    [RoomType.ROOM_BOSSRUSH] = 'bossrush',
     [RoomType.ROOM_ISAACS] = 'isaacs',
     [RoomType.ROOM_BARREN] = 'barren',
     [RoomType.ROOM_CHEST] = 'chest',
@@ -26,9 +25,9 @@ local roomTypeString = {
 }
 local roomTypeCharge = {
     [RoomType.ROOM_SHOP] = 5,
-    [RoomType.ROOM_ERROR] = 4,
+    [RoomType.ROOM_ERROR] = 3,
     [RoomType.ROOM_TREASURE] = 8,
-    [RoomType.ROOM_BOSS] = 5,
+    [RoomType.ROOM_BOSS] = 6,
     [RoomType.ROOM_MINIBOSS] = 4,
     [RoomType.ROOM_SECRET] = 6,
     [RoomType.ROOM_SUPERSECRET] = 6,
@@ -39,7 +38,6 @@ local roomTypeCharge = {
     [RoomType.ROOM_SACRIFICE] = 2,
     [RoomType.ROOM_DEVIL] = 12,
     [RoomType.ROOM_ANGEL] = 12,
-    [RoomType.ROOM_BOSSRUSH] = 12,
     [RoomType.ROOM_ISAACS] = 5,
     [RoomType.ROOM_BARREN] = 4,
     [RoomType.ROOM_CHEST] = 5,
@@ -221,6 +219,11 @@ function Rewind:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
 		Isaac.ExecuteCommand("goto s.devil."..RoomConfigHolder.GetRandomRoom(rng:Next(), false, StbType.SPECIAL_ROOMS, RoomType.ROOM_DEVIL).Variant)
 		ty.GAME:StartRoomTransition(GridRooms.ROOM_DEBUG_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.TELEPORT, player, 0)
 		data.Rewind.MaxCharge = 12
+		return { Discharge = true, Remove = false, ShowAnim = true }
+	end
+	if rng:RandomInt(100) < 10 then
+		player:UseActiveItem(CollectibleType.COLLECTIBLE_TELEPORT)
+		data.Rewind.MaxCharge = 3
 		return { Discharge = true, Remove = false, ShowAnim = true }
 	end
 	if #data.Rewind.RoomList == 0 then

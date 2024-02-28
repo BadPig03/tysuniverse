@@ -28,6 +28,13 @@ local function IsDamageSelfDamage(damageFlags)
 	return false
 end
 
+function Absolution:PostUpdate()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) and ty.LEVEL:GetAngelRoomChance() ~= 100 then
+        ty.LEVEL:AddAngelRoomChance(100 - ty.LEVEL:GetAngelRoomChance())
+    end
+end
+Absolution:AddCallback(ModCallbacks.MC_POST_UPDATE, Absolution.PostUpdate)
+
 function Absolution:EntityTakeDamage(entity, amount, flags, source, countdown)
     local player = entity:ToPlayer()
     if player and player:HasCollectible(ty.CustomCollectibles.ABSOLUTION) then
