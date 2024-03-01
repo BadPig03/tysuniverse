@@ -6,7 +6,7 @@
 	<null id="5" name="Marriage Certificate Hearts" persistent="true"/>
 	<null id="6" name="Lost Soul" persistent="true" cache="damage flying"/>
 	<passive id="0" quality="4" craftquality="4" description="God of fire" gfx="collectibles_hephaestus_soul.png" name="Hephaestus' Soul" cache="flying" devilprice="2" shopprice="30" tags="offensive summonable nocantrip"/>
-	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="nolostbr nocantrip"/>
+	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="lazarusshared nocantrip"/>
 	<passive id="2" quality="3" craftquality="3" description="Sink into the quicksand of evil" gfx="collectibles_guilt.png" name="Guilt" devilprice="2" tags="nolostbr nokeeper devil lazarusshared nocantrip"/>
 	<active id="3" quality="3" craftquality="3" description="Seems to have met before" gfx="collectibles_rewind.png" name="Rewind" maxcharges="3" cooldown="440" tags="nogreed offensive nocantrip"/>
 	<passive id="4" quality="2" craftquality="2" description="I can't eat anymore" gfx="collectibles_anorexia.png" name="Anorexia" tags="nolostbr nocantrip"/>

@@ -173,14 +173,14 @@ function Guilt:PostNPCInit(npc)
 end
 Guilt:AddCallback(ModCallbacks.MC_POST_NPC_INIT, Guilt.PostNPCInit, EntityType.ENTITY_FALLEN)
 
-function Guilt:PreDevilApplyItems()
+function Guilt:PostDevilCalculate(chance)
     for _, player in pairs(PlayerManager.GetPlayers()) do
         if player:HasCollectible(ty.CustomCollectibles.GUILT) then
             local data = ty:GetLibData(player)
-            return math.max(0, (ty.GAME:GetDevilRoomDeals() - 2)) * 0.2
+            return chance + math.max(0, (ty.GAME:GetDevilRoomDeals() - 2)) * 0.05
         end
     end
 end
-Guilt:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Guilt.PreDevilApplyItems)
+Guilt:AddCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, Guilt.PostDevilCalculate)
 
 return Guilt

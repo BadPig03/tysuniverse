@@ -21,13 +21,15 @@ EIDInfo.Collectibles = {
             Name = "赦罪",
             Desc = "#{{ArrowUp}} 非自伤的伤害均视作自伤"..
             "#{{ArrowUp}} 原本属于自伤的伤害来源只造成一半伤害，最低半颗心"..
-            "#{{AngelChance}} 只开启天使房，开启率等同于恶魔房开启率"
+            "#{{AngelChance}} 恶魔房开启率转换为天使房开启率，并额外增加20%恶魔房开启率"..
+            "#天使房内多选一的道具拿走后不会导致其他道具消失"
         },
         [2] = {
             Name = "Absolution",
             Desc = "#{{ArrowUp}} Damage taken from all sources will be considered as self-inflicted damage"..
             "#{{ArrowUp}} Damage sources that originally belonged to self-inflicted only deal half damage, at a minimum of half a heart"..
-            "#{{AngelChance}} Spawns Angel Rooms only, with the same chance of spawning as Devil Rooms"
+            "#{{AngelChance}} Spawns Angel Rooms only, with the same chance of spawning as Devil Rooms, and increase the Devil Room spawning chance by 20%"..
+            "#Items in the Angel Room can be taken without causing other items to disappear"
         }
     },
     [ty.CustomCollectibles.GUILT] = {

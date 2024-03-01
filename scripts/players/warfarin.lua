@@ -162,12 +162,16 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_HUD_UPDATE, Warfarin.PostHUDUpdate)
 function Warfarin:PostPickupUpdate(pickup)
     local room = ty.GAME:GetRoom()
     local itemConfig = ty.ITEMCONFIG:GetCollectible(pickup.SubType)
-    if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 or pickup:GetAlternatePedestal() ~= 0 then
+    if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
+    local globalData = ty.GLOBALDATA.BloodSample
     local pickup = pickup:ToPickup()
-    if pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType) then
+    if pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType) then
         pickup:MakeShopItem(-2)
+    end
+    if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then
+        table.insert(globalData.ItemList, pickup.InitSeed)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, Warfarin.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
@@ -293,7 +297,7 @@ function Warfarin:PostDevilCalculate(chance)
         return 1.5 * chance
     end
 end
-Warfarin:AddCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, Warfarin.PostDevilCalculate)
+Warfarin:AddPriorityCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, CallbackPriority.LATE, Warfarin.PostDevilCalculate)
 
 function Warfarin:PreTriggerPlayerDeath(player)
     if player:GetExtraLives() > 0 and player:GetMaxHearts() == 0 and player:GetBrokenHearts() == 12 then

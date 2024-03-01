@@ -28,12 +28,29 @@ local function IsDamageSelfDamage(damageFlags)
 	return false
 end
 
-function Absolution:PostUpdate()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) and ty.LEVEL:GetAngelRoomChance() ~= 100 then
+function Absolution:AddAngelRoomChance()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) and not PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_DUALITY) and ty.LEVEL:GetAngelRoomChance() ~= 100 then
         ty.LEVEL:AddAngelRoomChance(100 - ty.LEVEL:GetAngelRoomChance())
     end
 end
-Absolution:AddCallback(ModCallbacks.MC_POST_UPDATE, Absolution.PostUpdate)
+Absolution:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Absolution.AddAngelRoomChance)
+Absolution:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, Absolution.AddAngelRoomChance, ty.CustomCollectibles.ABSOLUTION)
+
+function Absolution:PostTriggerCollectibleRemoved()
+    if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) and ty.LEVEL:GetAngelRoomChance() == 100 then
+        ty.LEVEL:AddAngelRoomChance(-100)
+    end
+end
+Absolution:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, Absolution.PostTriggerCollectibleRemoved, ty.CustomCollectibles.ABSOLUTION)
+
+function Absolution:PostPickupUpdate(pickup)
+    local room = ty.GAME:GetRoom()
+    local pickup = pickup:ToPickup()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) and room:GetType() == RoomType.ROOM_ANGEL and pickup.OptionsPickupIndex ~= 0 then
+        pickup.OptionsPickupIndex = 0
+    end
+end
+Absolution:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, Absolution.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
 
 function Absolution:EntityTakeDamage(entity, amount, flags, source, countdown)
     local player = entity:ToPlayer()
@@ -46,5 +63,21 @@ function Absolution:EntityTakeDamage(entity, amount, flags, source, countdown)
     end
 end
 Absolution:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Absolution.EntityTakeDamage, EntityType.ENTITY_PLAYER)
+
+function Absolution:FamiliarUpdate(familiar)
+    local familiar = familiar:ToFamiliar()
+    local player = familiar.Player
+    if player:HasCollectible(ty.CustomCollectibles.ABSOLUTION) and player:HasCollectible(CollectibleType.COLLECTIBLE_DAMOCLES_PASSIVE) and familiar.State == 2 and not player:HasInvincibility() then
+        player:UseActiveItem(CollectibleType.COLLECTIBLE_UNICORN_STUMP)
+    end
+end
+Absolution:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Absolution.FamiliarUpdate, FamiliarVariant.DAMOCLES)
+
+function Absolution:PreDevilApplyItems()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) then
+        return 0.2
+    end
+end
+Absolution:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Absolution.PreDevilApplyItems)
 
 return Absolution
