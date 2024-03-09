@@ -11,7 +11,8 @@ local bannedCollectibles = {
     CollectibleType.COLLECTIBLE_INNER_CHILD,
     ty.CustomCollectibles.SCAPEGOAT,
     ty.CustomCollectibles.NOTICEOFCRITICALCONDITION,
-    ty.CustomCollectibles.MARRIAGECERTIFICATE
+    ty.CustomCollectibles.MARRIAGECERTIFICATE,
+    ty.CustomCollectibles.OCEANUSSOUL
 }
 
 local allowCopying = false

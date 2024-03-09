@@ -16,7 +16,7 @@ function ConservativeTreatment:EvaluateCache(player, cacheFlag)
             player.MoveSpeed = statInitValue[1]
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            if 30 / (player.MaxFireDelay + 1) <= 30 / 11 then
+            if 30 / (player.MaxFireDelay + 1) < 30 / 11 then
                 ty.Stat:AddTearsModifier(player, function(tears) return 30 / (statInitValue[2] + 1) end, 99)
             end
         end
