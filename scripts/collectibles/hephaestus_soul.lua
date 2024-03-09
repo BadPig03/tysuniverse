@@ -342,13 +342,11 @@ function HephaestusSoul:UpdateFireJet(effect)
 	elseif effect.FrameCount < 13 then
 		local fireDamage = effectData.DamageValue
 		for _, entity in pairs(Isaac.FindInRadius(effect.Position, 14, EntityPartition.ENEMY)) do
-			if entity:IsActiveEnemy() and entity.Type ~= EntityType.ENTITY_FIREPLACE and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY | EntityFlag.FLAG_CHARM) then
-				if effect.FrameCount == 1 then
-					entity:TakeDamage(fireDamage, DamageFlag.DAMAGE_FIRE, EntityRef(player), 0)
-					DoFireExplosion(target, player, effectData.DamageValue)
-					entity:AddBurn(EntityRef(player), 60, player.Damage)
-					ty.SFXMANAGER:Play(SoundEffect.SOUND_FIREDEATH_HISS)
-				end
+			if entity:IsActiveEnemy() and entity.Type ~= EntityType.ENTITY_FIREPLACE and not entity:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not entity:HasEntityFlags(EntityFlag.FLAG_CHARM) and effect.FrameCount == 1 then
+				entity:TakeDamage(fireDamage, DamageFlag.DAMAGE_FIRE, EntityRef(player), 0)
+				DoFireExplosion(target, player, effectData.DamageValue)
+				entity:AddBurn(EntityRef(player), 60, player.Damage)
+				ty.SFXMANAGER:Play(SoundEffect.SOUND_FIREDEATH_HISS, 0.6)
 			end
 		end
 	end

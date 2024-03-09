@@ -314,7 +314,7 @@ Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTrigg
 function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA
     local room = ty.GAME:GetRoom()
-    if replaceTrapDoor and not ty.LEVEL:IsMirrorWorld() then
+    if replaceTrapDoor and not room:IsMirrorWorld() then
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
         globalData.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)

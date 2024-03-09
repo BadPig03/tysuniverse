@@ -350,7 +350,7 @@ local function GetTears(player, tears)
         return 30 / 11
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
-        tears = tears * 0.5
+        tears = tears * 0.7
     end
     return tears * 0.6
 end
@@ -786,18 +786,19 @@ OceanusSoul:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, OceanusSoul.UpdateCh
 function OceanusSoul:NPCUpdate(npc)
     local npc = npc:ToNPC()
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (ty:IsValidCollider(npc) or npc.Type == EntityType.ENTITY_MOVABLE_TNT) then
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (npc:IsActiveEnemy() and npc.Type ~= EntityType.ENTITY_FIREPLACE and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not npc:HasEntityFlags(EntityFlag.FLAG_CHARM)) or npc.Type == EntityType.ENTITY_MOVABLE_TNT then
         local current = room:GetWaterCurrent()
         if npc:IsFlying() then
-            npc:AddVelocity(current * 2)
-        else
-            npc:AddVelocity(current)
+            if npc.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_NONE then
+                npc.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_WALLS
+            end
         end
+        npc:AddVelocity(current)
         if burningEnemies[npc.Type] == true or burningEnemies[npc.Type] == npc.Variant then
-            npc:TakeDamage(npc.MaxHitPoints / 3, 0, EntityRef(nil), 0)
+            npc:TakeDamage(npc.MaxHitPoints / 3, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(nil), 0)
         end
         if room:GetFrameCount() % 5 == 0 and current:Length() > 0.01 and (npc:CollidesWithGrid() or npc.Mass == 100 or npc:HasEntityFlags(EntityFlag.FLAG_FREEZE) or npc:HasEntityFlags(EntityFlag.FLAG_MIDAS_FREEZE)) then
-            npc:TakeDamage(GetHighestDamageFromAllPlayers() * current:Length(), 0, EntityRef(nil), 0)
+            npc:TakeDamage(GetHighestDamageFromAllPlayers() * current:Length() / 2, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(nil), 0)
         end
     end
 end
