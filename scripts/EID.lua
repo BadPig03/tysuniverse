@@ -471,14 +471,14 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "俄刻阿诺斯之魂",
             Desc = "#{{Water}} 将房间充满水，射击蓄力可以使房间产生水流和可追踪攻击敌人的水柱"..
-            "#水流可推动地面敌人撞到障碍物并受伤，还可以对静止或石化的地面敌人造成伤害"..
+            "#水流可推动敌人撞到障碍物或房间墙壁并受伤，还可以对静止或石化的地面敌人造成伤害"..
             "#{{ArrowUp}} 立即杀死火系的敌人和Boss"..
             "#{{ArrowDown}} -40%射速修正"
         },
         [2] = {
             Name = "Oceanus' Soul",
             Desc = "#{{Water}} Fills the room with water. Shoots to expel strong water flow and spawn water pillars that track and attack enemies"..
-            "#The water flow can push ground enemies into obstacles, causing them damage, and can also harm stationary or frozen ground enemies"..
+            "#The water flow can push enemies into obstacles or walls, causing them damage, and can also harm stationary or frozen ground enemies"..
             "#{{ArrowUp}} Instantly kills burning enemies and Bosses"..
             "#{{ArrowDown}} -40% fire rate multiplier",
         }

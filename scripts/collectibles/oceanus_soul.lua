@@ -168,6 +168,9 @@ local function SpawnLaser(player, index, percent)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MULLIGAN) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_MULLIGAN
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_3_DOLLAR_BILL) or player:HasCollectible(CollectibleType.COLLECTIBLE_FRUIT_CAKE) then
+        laserData.RandomEffect = true
+    end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_EYESHADOW) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_CHARM
     end
@@ -303,16 +306,7 @@ local function GetNearestEnemyInOrder(position)
 	local distance = 8192
     local nearestEnemy = nil
     for _, ent in pairs(Isaac.FindInRadius(position, 8192, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and ent:IsFlying() and (ent.Position - position):Length() < distance then
-            distance = (ent.Position - position):Length()
-            nearestEnemy = ent
-        end
-    end
-    if nearestEnemy then
-        return nearestEnemy
-    end
-    for _, ent in pairs(Isaac.FindInRadius(position, 8192, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and not ent:IsFlying() and (ent.Position - position):Length() < distance then
+        if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
             distance = (ent.Position - position):Length()
             nearestEnemy = ent
         end
@@ -437,6 +431,70 @@ function OceanusSoul:UpdateLaser(effect)
                             Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_PENNY, ent.Position, Vector(0, 0), nil)
                         end
                     end
+                    if effect.FrameCount % 15 == 0 then
+                        if player:HasCollectible(CollectibleType.COLLECTIBLE_HOLY_LIGHT) and rng:RandomFloat() < 1 / math.max(2, 10 - math.floor(0.9 * player.Luck)) then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear.TearFlags = TearFlags.TEAR_LIGHT_FROM_HEAVEN
+                        end
+                        if data.TearFlags & TearFlags.TEAR_SPLIT == TearFlags.TEAR_SPLIT then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear.TearFlags = TearFlags.TEAR_SPLIT
+                        end
+                        if data.TearFlags & TearFlags.TEAR_QUADSPLIT == TearFlags.TEAR_QUADSPLIT then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 0.5)
+                            tear.TearFlags = TearFlags.TEAR_QUADSPLIT
+                        end
+                        if data.TearFlags & TearFlags.TEAR_MULLIGAN == TearFlags.TEAR_MULLIGAN and rng:RandomInt(100) < 17 then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear.TearFlags = TearFlags.TEAR_MULLIGAN
+                        end
+                        if data.TearFlags & TearFlags.TEAR_STICKY == TearFlags.TEAR_STICKY and rng:RandomInt(100) < 25 then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear:ChangeVariant(TearVariant.EXPLOSIVO)
+                            tear.TearFlags = TearFlags.TEAR_STICKY
+                        end
+                        if data.TearFlags & TearFlags.TEAR_EGG == TearFlags.TEAR_EGG and rng:RandomFloat() < 1 / math.max(2, 7 - math.floor(player.Luck)) then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear:ChangeVariant(TearVariant.EGG)
+                            tear.TearFlags = TearFlags.TEAR_EGG
+                        end
+                        if data.TearFlags & TearFlags.TEAR_BOOGER == TearFlags.TEAR_BOOGER and rng:RandomInt(100) < 20 then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear:ChangeVariant(TearVariant.BOOGER)
+                            tear.TearFlags = TearFlags.TEAR_BOOGER
+                        end
+                        if data.GhostPepper and rng:RandomFloat() < 1 / math.max(2, 12 - math.floor(player.Luck)) then
+                            local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, ent.Position, Vector(0, 0), player):ToEffect()
+                            fire:SetTimeout(60)
+                            fire.CollisionDamage = player.Damage * 6
+                        end
+                        if data.TearFlags & TearFlags.TEAR_NEEDLE == TearFlags.TEAR_NEEDLE and rng:RandomFloat() < 1 / math.max(4, 30 - math.floor(2 * player.Luck)) then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear:ChangeVariant(TearVariant.NEEDLE)
+                            tear.TearFlags = TearFlags.TEAR_NEEDLE
+                        end
+                        if data.TearFlags & TearFlags.TEAR_HORN == TearFlags.TEAR_HORN and rng:RandomFloat() < 1 / math.max(5, 20 - math.floor(player.Luck)) then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear.TearFlags = TearFlags.TEAR_HORN
+                        end
+                        if data.TearFlags & TearFlags.TEAR_SPORE == TearFlags.TEAR_SPORE and rng:RandomInt(100) < 25 then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear:ChangeVariant(TearVariant.SPORE)
+                            tear.TearFlags = TearFlags.TEAR_SPORE
+                        end
+                        if data.BirdsEye and rng:RandomFloat() < 1 / math.max(2, 12 - math.floor(player.Luck)) then
+                            local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, ent.Position, Vector(0, 0), player):ToEffect()
+                            fire:SetTimeout(300)
+                            fire.CollisionDamage = player.Damage * 4
+                        end
+                        if data.TearFlags & TearFlags.TEAR_JACOBS == TearFlags.TEAR_JACOBS then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                            tear.TearFlags = TearFlags.TEAR_JACOBS
+                        end
+                        if data.RandomEffect then
+                            local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
+                        end
+                    end
                     if data.Weapon & 1 << 5 == 1 << 5 then
                         if data.BombTimeout == 0 then
                             local bomb = player:FireBomb(effect.Position, Vector(0, 0), player)
@@ -526,67 +584,6 @@ function OceanusSoul:UpdateLaser(effect)
             if effect.FrameCount % 5 == 0 and data.TearFlags & TearFlags.TEAR_SHIELDED == TearFlags.TEAR_SHIELDED and rng:RandomFloat() < 0.5 then
                 for _, ent in pairs(Isaac.FindInRadius(effect.Position, 16 * sprite.Scale.X, EntityPartition.BULLET)) do
                     ent:Die()
-                end
-            end
-            if effect.FrameCount % 15 == 0 then
-                if player:HasCollectible(CollectibleType.COLLECTIBLE_HOLY_LIGHT) and rng:RandomFloat() < 1 / math.max(2, 10 - math.floor(0.9 * player.Luck)) then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear.TearFlags = TearFlags.TEAR_LIGHT_FROM_HEAVEN
-                end
-                if data.TearFlags & TearFlags.TEAR_SPLIT == TearFlags.TEAR_SPLIT then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear.TearFlags = TearFlags.TEAR_SPLIT
-                end
-                if data.TearFlags & TearFlags.TEAR_QUADSPLIT == TearFlags.TEAR_QUADSPLIT then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 0.5)
-                    tear.TearFlags = TearFlags.TEAR_QUADSPLIT
-                end
-                if data.TearFlags & TearFlags.TEAR_MULLIGAN == TearFlags.TEAR_MULLIGAN and rng:RandomInt(100) < 17 then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear.TearFlags = TearFlags.TEAR_MULLIGAN
-                end
-                if data.TearFlags & TearFlags.TEAR_STICKY == TearFlags.TEAR_STICKY and rng:RandomInt(100) < 25 then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear:ChangeVariant(TearVariant.EXPLOSIVO)
-                    tear.TearFlags = TearFlags.TEAR_STICKY
-                end
-                if data.TearFlags & TearFlags.TEAR_EGG == TearFlags.TEAR_EGG and rng:RandomFloat() < 1 / math.max(2, 7 - math.floor(player.Luck)) then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear:ChangeVariant(TearVariant.EGG)
-                    tear.TearFlags = TearFlags.TEAR_EGG
-                end
-                if data.TearFlags & TearFlags.TEAR_BOOGER == TearFlags.TEAR_BOOGER and rng:RandomInt(100) < 20 then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear:ChangeVariant(TearVariant.BOOGER)
-                    tear.TearFlags = TearFlags.TEAR_BOOGER
-                end
-                if data.GhostPepper and rng:RandomFloat() < 1 / math.max(2, 12 - math.floor(player.Luck)) then
-                    local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, effect.Position, Vector(0, 0), player):ToEffect()
-                    fire:SetTimeout(60)
-                    fire.CollisionDamage = player.Damage * 6
-                end
-                if data.TearFlags & TearFlags.TEAR_NEEDLE == TearFlags.TEAR_NEEDLE and rng:RandomFloat() < 1 / math.max(4, 30 - math.floor(2 * player.Luck)) then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear:ChangeVariant(TearVariant.NEEDLE)
-                    tear.TearFlags = TearFlags.TEAR_NEEDLE
-                end
-                if data.TearFlags & TearFlags.TEAR_HORN == TearFlags.TEAR_HORN and rng:RandomFloat() < 1 / math.max(5, 20 - math.floor(player.Luck)) then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear.TearFlags = TearFlags.TEAR_HORN
-                end
-                if data.TearFlags & TearFlags.TEAR_SPORE == TearFlags.TEAR_SPORE and rng:RandomInt(100) < 25 then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear:ChangeVariant(TearVariant.SPORE)
-                    tear.TearFlags = TearFlags.TEAR_SPORE
-                end
-                if data.BirdsEye and rng:RandomFloat() < 1 / math.max(2, 12 - math.floor(player.Luck)) then
-                    local fire = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RED_CANDLE_FLAME, 0, effect.Position, Vector(0, 0), player):ToEffect()
-                    fire:SetTimeout(300)
-                    fire.CollisionDamage = player.Damage * 4
-                end
-                if data.TearFlags & TearFlags.TEAR_JACOBS == TearFlags.TEAR_JACOBS then
-                    local tear = player:FireTear(effect.Position, Vector(0, 0), true, true, false, player, 1)
-                    tear.TearFlags = TearFlags.TEAR_JACOBS
                 end
             end
             if data.TearFlags & TearFlags.TEAR_GROW == TearFlags.TEAR_GROW then
@@ -758,6 +755,9 @@ function OceanusSoul:PostTriggerCollectibleRemoved(player, type)
     for i = 1, count do
         player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_C_SECTION) then
+        player:SetWeapon(Isaac.CreateWeapon(WeaponType.WEAPON_FETUS, player), 1)
+    end
     room:SetWaterCurrent(Vector(0, 0))
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, OceanusSoul.PostTriggerCollectibleRemoved, ty.CustomCollectibles.OCEANUSSOUL)
@@ -786,9 +786,13 @@ OceanusSoul:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, OceanusSoul.UpdateCh
 function OceanusSoul:NPCUpdate(npc)
     local npc = npc:ToNPC()
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and ((ty:IsValidCollider(npc) and not npc:IsFlying()) or npc.Type == EntityType.ENTITY_MOVABLE_TNT) then
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (ty:IsValidCollider(npc) or npc.Type == EntityType.ENTITY_MOVABLE_TNT) then
         local current = room:GetWaterCurrent()
-        npc:AddVelocity(current)
+        if npc:IsFlying() then
+            npc:AddVelocity(current * 2)
+        else
+            npc:AddVelocity(current)
+        end
         if burningEnemies[npc.Type] == true or burningEnemies[npc.Type] == npc.Variant then
             npc:TakeDamage(npc.MaxHitPoints / 3, 0, EntityRef(nil), 0)
         end

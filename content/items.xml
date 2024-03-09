@@ -36,7 +36,7 @@
 	<active id="28" quality="2" craftquality="2" cooldown="60" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" tags="offensive nocantrip"/>
 	<passive id="29" quality="0" craftquality="0" description="It stinks" gfx="collectibles_expired_glue.png" name="Expired Glue" tags="offensive nocantrip"/>
 	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive nocantrip"/>
-	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable nocantrip"/>
+	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive lazarusshared nocantrip"/>
 	<passive id="32" quality="0" craftquality="-1" description="Time to relax" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive nocantrip" hidden="true"/>
 	<active	id="50" quality="0" craftquality="-1" cooldown="30" description="For test purpose only" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>
