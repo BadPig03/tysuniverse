@@ -72,7 +72,7 @@ BloodSacrifice:AddCallback(ModCallbacks.MC_USE_ITEM, BloodSacrifice.UseItem, ty.
 function BloodSacrifice:PostNewRoom()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
-        if data.BloodSacrifice.Respawning then
+        if data.Init and data.BloodSacrifice.Respawning then
             local vesselTable = data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]
             local vessel = GetVesselFromSeed(vesselTable.InitSeed)
             vessel:GetSprite():Play("Wiggle", true)

@@ -126,13 +126,17 @@ end
 MarriageCertificate:AddCallback(ModCallbacks.MC_PRE_ADD_COLLECTIBLE, MarriageCertificate.PreAddCollectible)
 
 function MarriageCertificate:PostAddCollectible(type, charge, firstTime, slot, varData, player)
-    if player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) == 1 then
+    if type == ty.CustomCollectibles.MARRIAGECERTIFICATE and player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) == 1 then
         player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.MARRIAGECERTIFICATEHEARTS).ID)
         ty.HiddenItemManager:CreateHiddenItem(player, CollectibleType.COLLECTIBLE_STRAW_MAN)
         InitSubPlayer(player)
+        ty.ITEMPOOL:RemoveCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN)
+    end
+    if type == CollectibleType.COLLECTIBLE_STRAW_MAN then
+        ty.ITEMPOOL:RemoveCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
     end
 end
-MarriageCertificate:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, MarriageCertificate.PostAddCollectible, ty.CustomCollectibles.MARRIAGECERTIFICATE)
+MarriageCertificate:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, MarriageCertificate.PostAddCollectible)
 
 function MarriageCertificate:PostTriggerCollectibleRemoved(player, type)
     player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.MARRIAGECERTIFICATEHEARTS).ID)
@@ -196,7 +200,10 @@ MarriageCertificate:AddCallback(ModCallbacks.MC_PRE_NEW_ROOM, MarriageCertificat
 function MarriageCertificate:PostNewRoom()
     if ty.LEVEL:HasAbandonedMineshaft() and ty.LEVEL:GetDimension() == Dimension.NORMAL and itemCount > 0 then
         for i = 1, itemCount do
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.CustomCollectibles.MARRIAGECERTIFICATE, ty.GAME:GetRoom():FindFreePickupSpawnPosition(Vector(200, 520), 0, true), Vector(0, 0), nil) 
+            local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.CustomCollectibles.MARRIAGECERTIFICATE, ty.GAME:GetRoom():FindFreePickupSpawnPosition(Vector(200, 520), 0, true), Vector(0, 0), nil):ToPickup()
+            item.ShopItemId = -2
+            item.Price = 0
+            item:RemoveCollectibleCycle()
         end
         itemCount = 0
     end

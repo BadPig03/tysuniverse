@@ -48,14 +48,14 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.REWIND] = {
         [1] = {
             Name = "倒带",
-            Desc = "#使用后，90%概率随机进入一个与曾进入过的特殊房间种类相同的特殊房间，否则随机进入一个房间"..
+            Desc = "#使用后，90%概率随机进入一个与曾进入过的特殊房间种类相同的特殊房间，否则随机进入一个普通房间"..
             "#{{Warning}} 充能数量会因为进入的特殊房间种类不同而产生变化",
             Virtue = "有5%额外概率随机进入一个天使房",
             Belial = "有5%额外概率随机进入一个恶魔房"
         },
         [2] = {
             Name = "Rewind",
-            Desc = "#Upon use, there is a 90% chance to randomly enters a special room of the same type as one previously visited; otherwise, randomly enter a room"..
+            Desc = "#Upon use, there is a 90% chance to randomly enters a special room of the same type as one previously visited; otherwise, randomly enter a normal room"..
             "#{{Warning}} The charge varies depending on the type of special room entered",
             Virtue = "There is a 5% additional chance to randomly enter an Angel Room",
             Belial = "There is a 5% additional chance to randomly enter a Devil Room"
@@ -80,14 +80,14 @@ EIDInfo.Collectibles = {
             Name = "镜像",
             Desc = "#将正常角色转换为对应的堕化角色"..
             "#{{Warning}} 犹大与犹大之影均转换为堕化犹大"..
-            "#复活的拉撒路与以扫无法转换",
+            "#复活的拉撒路、以扫和ff0无法转换",
             Virtue = "生成血量为6的不可发射泪弹的黑色魂火"
         },
         [2] = {
             Name = "Mirroring",
             Desc = "#Transforms the non-tainted character into the corresponding tainted character"..
             "#{{Warning}} Both Judas and Dark Judas are transformed into Tainted Judas"..
-            "#Lazarus Risen and Esau can't be transformed",
+            "#Lazarus Risen, Esau and ff0 can't be transformed",
             Virtue = "Spawns a black wisp with 6 health which can't shoot"
         }
     },
@@ -467,15 +467,31 @@ EIDInfo.Collectibles = {
             "#{{Card}} Randomly spawns a special tarot card every 6 rooms"
         }
     },
+    [ty.CustomCollectibles.OCEANUSSOUL] = {
+        [1] = {
+            Name = "俄刻阿诺斯之魂",
+            Desc = "#{{Water}} 将房间充满水，射击蓄力可以使房间产生水流和可追踪攻击敌人的水柱"..
+            "#水流可推动地面敌人撞到障碍物并受伤，还可以对静止或石化的地面敌人造成伤害"..
+            "#{{ArrowUp}} 立即杀死火系的敌人和Boss"..
+            "#{{ArrowDown}} -40%射速修正"
+        },
+        [2] = {
+            Name = "Oceanus' Soul",
+            Desc = "#{{Water}} Fills the room with water. Shoots to expel strong water flow and spawn water pillars that track and attack enemies"..
+            "#The water flow can push ground enemies into obstacles, causing them damage, and can also harm stationary or frozen ground enemies"..
+            "#{{ArrowUp}} Instantly kills burning enemies and Bosses"..
+            "#{{ArrowDown}} -40% fire rate multiplier",
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
-            Desc = "#{{Trinket13}} 若房间内存在恶魔交易，则使得最近一个恶魔交易免费"..
+            Desc = "#{{Trinket13}} 若房间内存在恶魔交易，则使得最近一个恶魔交易免费并重置为本房间内道具池的道具"..
             "#{{EmptyHeart}} 否则，获得一个空的心之容器"
         },
         [2] = {
             Name = "Blood Sample",
-            Desc = "#{{Trinket13}} If a Devil Deal is present in the room, the nearest Devil Deal becomes free"..
+            Desc = "#{{Trinket13}} If a Devil Deal is present in the room, the nearest Devil Deal becomes free and rerolls into items from the current room's item pool"..
             "#{{Heart}} Otherwise, grants an empty health container"
         }
     },

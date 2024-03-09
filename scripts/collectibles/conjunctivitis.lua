@@ -18,12 +18,11 @@ local function GetTailedDamage(player, tear)
 end
 
 local function GetTears(player, tears)
+    if player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) then
+        return tears
+    end
     if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
-        if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-            return math.max(0.8 * tears, 30 / 11)
-        else
-            return 0.8 * tears
-        end
+        return 0.8 * tears
     end
     return tears
 end
@@ -107,14 +106,16 @@ Conjunctivitis:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Conjunctivitis.PostFi
 
 function Conjunctivitis:PreSFXPlay(id, volume, frameDelay, loop, pitch, pan)
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) then
-        if playSound then
-            playSound = false
-        else
-            return false
+        if id ==  SoundEffect.SOUND_TEARS_FIRE or id == SoundEffect.SOUND_PLOP then
+            if playSound then
+                playSound = false
+            else
+                return false
+            end    
         end
     end
 end
-Conjunctivitis:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Conjunctivitis.PreSFXPlay, SoundEffect.SOUND_TEARS_FIRE)
+Conjunctivitis:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Conjunctivitis.PreSFXPlay)
 
 function Conjunctivitis:PostTearUpdate(tear)
     local tear = tear:ToTear()

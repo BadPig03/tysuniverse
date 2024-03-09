@@ -1,6 +1,6 @@
 local Warfarin = ty:DefineANewClass()
 
-local deadByBrokenHearts = false
+local shouldRevive = false
 local stopHurtSound = false
 local restorePosition = false
 local replaceTrapDoor = false
@@ -14,7 +14,7 @@ local function GetDamagePerCharge(player)
     if ty.GAME:IsGreedMode() then
         stage = stage * 2
     end
-    local charge = 16 + 19 * stage ^ 1.2
+    local charge = 15 + 20 * stage ^ 1.25
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.9
     end
@@ -76,9 +76,9 @@ end
 local function GetTears(player, tears)
     if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
         if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-            return math.max(0.85 * tears, 30 / 11)
+            return math.max(0.8 * tears, 30 / 11)
         else
-            return 0.85 * tears
+            return 0.8 * tears
         end
     end
     return tears
@@ -110,10 +110,12 @@ function Warfarin:PostPlayerUpdate(player)
         data.BloodSample.DamageAmount = data.BloodSample.DamageAmount - damageAmountPerCharge
         player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
     end
-    if player:GetMaxHearts() > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+    if player:GetMaxHearts() + player:GetBoneHearts() > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
-    elseif player:GetMaxHearts() <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+        ItemOverlay.Show(ty.CustomGiantBooks.WARFARINOUT, 3, player)
+    elseif player:GetMaxHearts() + player:GetBoneHearts() <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
+        ItemOverlay.Show(ty.CustomGiantBooks.WARFARININ, 3, player)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
@@ -148,10 +150,10 @@ function Warfarin:PostHUDUpdate()
                     end
                     data.BloodSample.RedHearts = player:GetHearts()
                 end
-                if deadByBrokenHearts then
+                if shouldRevive then
                     player:AddMaxHearts(2)
                     player:AddHearts(2)
-                    deadByBrokenHearts = false
+                    shouldRevive = false
                 end    
             end
         end
@@ -177,8 +179,8 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, Warfarin.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
 
 function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
-    if player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
-        return
+    if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
+        return { Discharge = false, Remove = false, ShowAnim = false }
     end
     local data = ty:GetLibData(player)
     local collectible = GetClosestCollectible(player)
@@ -247,6 +249,9 @@ function Warfarin:EvaluateCache(player, cacheFlag)
             if cacheFlag == CacheFlag.CACHE_FIREDELAY then
                 ty.Stat:AddTearsModifier(player, function(tears) return GetTears(player, tears) end)
             end
+            if cacheFlag == CacheFlag.CACHE_SPEED then
+                player.MoveSpeed = player.MoveSpeed + 0.15
+            end
         end
     end
 end
@@ -294,14 +299,14 @@ Warfarin:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Warfarin.PreSFXPlay, SoundEff
 
 function Warfarin:PostDevilCalculate(chance)
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
-        return 1.5 * chance
+        return chance + 0.36
     end
 end
 Warfarin:AddPriorityCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, CallbackPriority.LATE, Warfarin.PostDevilCalculate)
 
 function Warfarin:PreTriggerPlayerDeath(player)
-    if player:GetExtraLives() > 0 and player:GetMaxHearts() == 0 and player:GetBrokenHearts() == 12 then
-        deadByBrokenHearts = true
+    if (player:GetExtraLives() > 0 or player:GetCard(ActiveSlot.SLOT_PRIMARY) == Card.CARD_SOUL_LAZARUS or player:GetCard(ActiveSlot.SLOT_SECONDARY) == Card.CARD_SOUL_LAZARUS) and player:GetMaxHearts() == 0 then
+        shouldRevive = true
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTriggerPlayerDeath)
@@ -310,10 +315,10 @@ function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA
     local room = ty.GAME:GetRoom()
     if replaceTrapDoor then
-        local crawlSpace = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
         globalData.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)
-        room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
+        room:RemoveGridEntityImmediate(globalData.BloodSample.GridIndex, 0, false)
         replaceTrapDoor = false
     end
 end
@@ -321,7 +326,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_GRID_ENTITY_SPAWN, Warfarin.PostGridEn
 
 function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 then
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not ty.LEVEL:IsAscent() then
         replaceTrapDoor = not IsDevilAngelRoomOpened()
     end
 end
@@ -333,13 +338,19 @@ function Warfarin:PostNewRoom()
         local globalData = ty.GLOBALDATA
         if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
-            room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
+            room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
         end
-        if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and restorePosition then
-            for _, player in pairs(PlayerManager.GetPlayers()) do
-                player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)
+        if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() then
+            if restorePosition then
+                for _, player in pairs(PlayerManager.GetPlayers()) do
+                    player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)
+                end
+                restorePosition = false
             end
-            restorePosition = false
+            room:DestroyGrid(globalData.BloodSample.GridIndex, true)
+            if #Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE) == 0 then
+                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
+            end
         end
     end
 end
@@ -375,7 +386,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostCrawlspace
 
 function Warfarin:PostLadderUpdate(effect)
     local sprite = effect:GetSprite()
-    if sprite:IsFinished("Idle") then
+    if sprite:IsFinished("Idle") and ty.GAME:GetRoom():IsClear() then
         for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
             restorePosition = true
             ty.GAME:StartRoomTransition(ty.GLOBALDATA.BloodSample.BossIndex, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)

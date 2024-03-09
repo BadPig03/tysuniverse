@@ -7,9 +7,13 @@ local function GetDevilFamiliarCollectible(rng)
 		end
 	end
 	local itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, false, rng:Next(), CollectibleType.COLLECTIBLE_DEMON_BABY)
-    ty.ITEMPOOL:RemoveCollectible(itemID)
-    ty.ITEMPOOL:ResetRoomBlacklist()
-    return itemID
+    if ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_FAMILIAR then
+        ty.ITEMPOOL:RemoveCollectible(itemID)
+        ty.ITEMPOOL:ResetRoomBlacklist()
+        return itemID
+    else
+        return CollectibleType.COLLECTIBLE_DEMON_BABY
+    end
 end
 
 local function GetADevilFamiliar(player, rng)

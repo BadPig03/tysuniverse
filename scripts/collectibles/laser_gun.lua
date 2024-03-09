@@ -226,12 +226,12 @@ function LaserGun:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         SpawnPlasmaBall(player, player:GetRecentMovementVector())
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
-    if not data.Laser.IsHolding then
+    if not data.LaserGun.IsHolding then
         player:AnimateCollectible(ty.CustomCollectibles.LASERGUN, "LiftItem")
-        data.Laser.IsHolding = true
+        data.LaserGun.IsHolding = true
     else
         player:AnimateCollectible(ty.CustomCollectibles.LASERGUN, "HideItem")
-        data.Laser.IsHolding = false
+        data.LaserGun.IsHolding = false
     end
     return { Discharge = false, Remove = false, ShowAnim = false }
 end
@@ -239,7 +239,7 @@ LaserGun:AddCallback(ModCallbacks.MC_USE_ITEM, LaserGun.UseItem, ty.CustomCollec
 
 function LaserGun:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
-    if player:HasCollectible(ty.CustomCollectibles.LASERGUN) and data.Laser.IsHolding then
+    if player:HasCollectible(ty.CustomCollectibles.LASERGUN) and data.LaserGun.IsHolding then
         local direction = player:GetShootingInput()
         if not (direction.X == 0 and direction.Y == 0) then
             SpawnPlasmaBall(player, direction)
@@ -248,11 +248,11 @@ function LaserGun:PostPlayerUpdate(player)
             end
             RemoveChargeLaserGun(player)
             player:AnimateCollectible(ty.CustomCollectibles.LASERGUN, "HideItem")
-            data.Laser.IsHolding = false
+            data.LaserGun.IsHolding = false
         end
         if not player:IsHoldingItem() then
             player:AnimateCollectible(ty.CustomCollectibles.LASERGUN, "HideItem")
-            data.Laser.IsHolding = false
+            data.LaserGun.IsHolding = false
         end
     end
 end

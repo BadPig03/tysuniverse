@@ -142,6 +142,8 @@ function ty:GetLaserColor(player)
         color = Color.LaserIpecac
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SACRED_HEART) then
         color = Color(1, 1, 1, 1, 0, 0, 0, 5, 6, 6, 1)
+    elseif player:HasCollectible(CollectibleType.COLLECTIBLE_URANUS) then
+        color = Color(1, 1, 1, 1, 0.1, 0.1, 0.1, 4, 4.4, 6, 1)
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_FIRE_MIND) or player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
         color = Color.LaserFireMind
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SCORPIO) or player:HasCollectible(CollectibleType.COLLECTIBLE_COMMON_COLD) or player:HasCollectible(CollectibleType.COLLECTIBLE_MYSTERIOUS_LIQUID) then
@@ -150,18 +152,20 @@ function ty:GetLaserColor(player)
         color = Color(1, 1, 1, 1, 0, 0, 0, 3, 1.5, 0, 1)
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SPIDER_BITE) then
         color = Color(1, 1, 1, 1, 0, 0, 0, 5.2, 5.2, 5, 1)
-	elseif player:HasCollectible(CollectibleType.COLLECTIBLE_STRANGE_ATTRACTOR) then
-		color = Color(1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0)
+	elseif player:HasCollectible(CollectibleType.COLLECTIBLE_STRANGE_ATTRACTOR) or player:HasCollectible(CollectibleType.COLLECTIBLE_LODESTONE) then
+		color = Color(1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1)
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_ROTTEN_TOMATO) then
         color = Color(1, 1, 1, 1, 0, 0, 0, 5, 1, 0, 1)
 	elseif player:HasCollectible(CollectibleType.COLLECTIBLE_JACOBS_LADDER) then
         color = Color(1, 1, 1, 1, 3.8, 4.9, 6, 1, 0.1, 0.1, 0.1)
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_NUMBER_ONE) then
         color = Color.LaserNumberOne
-    elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SPOON_BENDER) or player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_TELEPATHY_BOOK) then
+    elseif player:HasCollectible(CollectibleType.COLLECTIBLE_SPOON_BENDER) or player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_TELEPATHY_BOOK) or player.TearFlags & TearFlags.TEAR_HOMING == TearFlags.TEAR_HOMING then
         color = Color.LaserHoming
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_EYESHADOW) then
         color = Color(1, 1, 1, 1, 0, 0, 0, 4, 1, 3.5, 1)
+    elseif player:HasCollectible(CollectibleType.COLLECTIBLE_GODS_FLESH) then
+        color = Color(1, 1, 1, 1, 0, 0, 0, 1.2, 1.2, 4, 1)
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_CHOCOLATE_MILK) then
         color = Color.LaserChocolate
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then
@@ -170,6 +174,8 @@ function ty:GetLaserColor(player)
         color = Color.LaserSoy
     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_LUMP_OF_COAL) then
         color = Color.TearCoal
+    elseif player:HasCollectible(CollectibleType.COLLECTIBLE_DARK_MATTER) then
+        color = Color(3, 3, 3, 1, -0.5, -0.5, -0.5, 1, 1, 1, 1)
     end
     if player.TearFlags & TearFlags.TEAR_SPECTRAL == TearFlags.TEAR_SPECTRAL then
         color:SetTint(1.5, 2, 2, 0.5)
@@ -205,14 +211,13 @@ function ty:SpawnFakeSprite(entity, animation)
 end
 
 function ty:RemoveOtherPickupIndex(index)
-    if index == 0 then
-        return
-    end
-    for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP)) do
-        local pickup = ent:ToPickup()
-        if pickup.OptionsPickupIndex == index then
-            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, ent.Position, Vector(0, 0), nil)
-            ent:Remove()
+    if index ~= 0 then
+        for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP)) do
+            local pickup = ent:ToPickup()
+            if pickup.OptionsPickupIndex == index then
+                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, ent.Position, Vector(0, 0), nil)
+                ent:Remove()
+            end
         end
     end
 end

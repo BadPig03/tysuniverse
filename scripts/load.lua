@@ -5,6 +5,7 @@ ty.ClassesList = {
     HiddenItemManager = 'hiddenitemmanager'
 }
 ty.CollectiblesList = {
+    'absence_note',
     'absolution',
     'anorexia',
     'atonement_voucher',
@@ -29,6 +30,7 @@ ty.CollectiblesList = {
     'marriage_certificate',
     'mirroring',
     'notice_of_critical_condition',
+    'oceanus_soul',
     'order',
     'philosophers_staff',
     'rewind',

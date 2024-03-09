@@ -128,7 +128,7 @@ local function SpawnAFlame(player, tear, ludovicoTear)
 			flame.CollisionDamage = tear.BaseDamage * 0.5
 		end
 	else
-		if rng:RandomInt(100) < 100 / math.max(1.5, 7 - math.ceil(player.Luck)) or ludovicoTear then
+		if player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) or ludovicoTear or rng:RandomInt(100) < 100 / math.max(1.5, 7 - math.ceil(player.Luck)) then
 			flame = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLUE_FLAME, 0, tear.Position - Vector(0, 16), tear.Velocity, player):ToEffect()
 			flame:GetSprite():ReplaceSpritesheet(0, "gfx/effects/effect_005_fire_white.png", true)
 			flame.CollisionDamage = tear.BaseDamage * 1.2
@@ -162,12 +162,10 @@ end
 
 function HephaestusSoul:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
-		if cacheFlag == CacheFlag.CACHE_FLYING then
-			player.CanFly = true
-		end
+		player.CanFly = true
     end
 end
-HephaestusSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HephaestusSoul.EvaluateCache)
+HephaestusSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HephaestusSoul.EvaluateCache, CacheFlag.CACHE_FLYING)
 
 function HephaestusSoul:PostFireTear(tear)
 	local tear = tear:ToTear()
@@ -306,7 +304,7 @@ function HephaestusSoul:PostPlayerUpdate(player)
     local playerEffects = player:GetEffects()
     if data.Init and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
 		if ty:IsPlayerFiring(player) then
-			if HasCircle(player) and (player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) or player:HasWeaponType(WeaponType.WEAPON_BOMBS) or player:HasWeaponType(WeaponType.WEAPON_ROCKETS) or player:HasWeaponType(WeaponType.WEAPON_KNIFE) or player:HasWeaponType(WeaponType.WEAPON_BONE) or player:HasWeaponType(WeaponType.WEAPON_NOTCHED_AXE) or player:HasWeaponType(WeaponType.WEAPON_SPIRIT_SWORD)) then
+			if HasCircle(player) and not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) or player:HasWeaponType(WeaponType.WEAPON_BOMBS) or player:HasWeaponType(WeaponType.WEAPON_ROCKETS) or player:HasWeaponType(WeaponType.WEAPON_KNIFE) or player:HasWeaponType(WeaponType.WEAPON_BONE) or player:HasWeaponType(WeaponType.WEAPON_NOTCHED_AXE) or player:HasWeaponType(WeaponType.WEAPON_SPIRIT_SWORD)) then
 				local circleSprite = GetCircle(player):GetSprite()
 				if circleSprite.Scale.X <= GetCircleAttribute(player, "CircleMaxRange") then
 					if player:CanShoot() and player:IsExtraAnimationFinished() then

@@ -30,6 +30,8 @@ ty.CustomCollectibles = {
     PHILOSOPHERSSTAFF = Isaac.GetItemIdByName("Philosopher's Staff"),
     EXPIREDGLUE = Isaac.GetItemIdByName("Expired Glue"),
     TOOLBOX = Isaac.GetItemIdByName("Tool Box"),
+    ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
+    OCEANUSSOUL = Isaac.GetItemIdByName("Oceanus' Soul"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample")
 }
 
@@ -59,7 +61,9 @@ ty.CustomEffects = {
     CROWNOFKINGS = Isaac.GetEntityVariantByName("Crown of Kings"),
     BOBSSTOMACHCHARGEBAR = Isaac.GetEntityVariantByName("Bobs Stomach Charge Bar"),
     WARFARINBLACKMARKETCRAWLSPACE = Isaac.GetEntitySubTypeByName("Warfarin Blackmarket Crawlspace"),
-    WARFARINBLACKMARKETLADDER = Isaac.GetEntityVariantByName("Warfarin Blackmarket Ladder")
+    WARFARINBLACKMARKETLADDER = Isaac.GetEntityVariantByName("Warfarin Blackmarket Ladder"),
+    OCEANUSSOULLASER = Isaac.GetEntityVariantByName("Oceanus Soul Laser"),
+    OCEANUSSOULCHARGEBAR = Isaac.GetEntityVariantByName("Oceanus Soul Charge Bar")
 }
 
 ty.CustomPlayerType = {
@@ -86,7 +90,9 @@ ty.ConstantValues = {
 }
 
 ty.CustomGiantBooks = {
-    THEGOSPELOFJOHN = Isaac.GetGiantBookIdByName("TheGospelOfJohnGiantBook")
+    THEGOSPELOFJOHN = Isaac.GetGiantBookIdByName("TheGospelOfJohnGiantBook"),
+    WARFARININ = Isaac.GetGiantBookIdByName("WarfarinInGiantBook"),
+    WARFARINOUT = Isaac.GetGiantBookIdByName("WarfarinOutGiantBook")
 }
 
 ty.CustomAchievements = {
@@ -94,7 +100,8 @@ ty.CustomAchievements = {
 }
 
 ty.CustomSounds = {
-    WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt")
+    WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt"),
+    OCEANUSSOULFLOW = Isaac.GetSoundIdByName("Oceanus Soul Flow")
 }
 
 ty.CharacterMultipliers = {

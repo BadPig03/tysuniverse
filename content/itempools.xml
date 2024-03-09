@@ -3,6 +3,7 @@
     <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absolution" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="The Gospel of John" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Oceanus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="babyShop">
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -49,6 +50,8 @@
   <Pool Name="greedAngel">
     <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absolution" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="The Gospel of John" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Oceanus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="greedTreasure">
     <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -98,7 +101,6 @@
   <Pool Name="shop">
     <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Order" Weight="0.5" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Atonement Voucher" Weight="1" DecreaseBy="0.25" RemoveOn="0.1"/>
     <Item Name="Wake-up" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Philosopher's Staff" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -112,6 +114,7 @@
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Collapse" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Order" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Conjunctivitis" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Crown Of Kings" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

@@ -74,8 +74,13 @@ function TheGospelOfJohn:UseItem(itemID, rng, player, useFlags, activeSlot, varD
         local pickup = ent:ToPickup()
         if pickup.SubType > 0 and not pickup.SubType ~= CollectibleType.COLLECTIBLE_DADS_NOTE then
             johnUsed = true
-            pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetAngelRoomCollectible(rng))
-            johnUsed = false
+            if pickup:TryFlip() then
+                local seed = pickup.InitSeed
+                pickup:Remove()
+                pickup = ty.GAME:Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, pickup.Position, Vector(0, 0), nil, GetAngelRoomCollectible(rng), seed):ToPickup()
+            else
+                pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetAngelRoomCollectible(rng))
+            end
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, pickup.Position, Vector(0, 0), nil)
             ReplaceItemPrice(pickup)
         end

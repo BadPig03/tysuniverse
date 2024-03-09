@@ -2,6 +2,7 @@
 	<costume id="1" anm2path="costume_hephaestus_soul_fire.anm2" type="none" isFlying="true" priority="1"/>
 	<costume id="2" anm2path="character_warfarin_hair.anm2" type="none" priority="99" />
 	<costume id="3" anm2path="character_warfarin_wings.anm2" type="none" isFlying="true"/>
+	<costume id="4" anm2path="character_warfarin_haemolacria.anm2" type="none"/>
 	<costume id="5" anm2path="costume_marriage_certificate_hearts.anm2" type="none"/>
 	<costume id="0" anm2path="costume_hephaestus_soul.anm2" type="passive" isFlying="true"/>
 	<costume id="1" anm2path="costume_absolution.anm2" type="passive"/>
@@ -13,4 +14,5 @@
 	<costume id="18" anm2path="costume_conjunctivitis.anm2" type="passive"/>
 	<costume id="20" anm2path="costume_marriage_certificate.anm2" type="passive" hasSkinAlt="true"/>
 	<costume id="23" anm2path="" type="passive" overwriteColor="true" skinColor="4" forceBodyColor="true" forceHeadColor="true"/>
+	<costume id="31" anm2path="costume_oceanus_soul.anm2" type="passive" isFlying="true"/>
 </costumes>

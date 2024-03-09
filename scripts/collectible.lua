@@ -30,6 +30,7 @@ local collectibles = {
     [ty.CustomCollectibles.PHILOSOPHERSSTAFF] = { Name="贤者权杖", Description="别碰它！" },
     [ty.CustomCollectibles.EXPIREDGLUE] = { Name="过期胶水", Description="好臭" },
     [ty.CustomCollectibles.TOOLBOX] = { Name="工具箱", Description="里面有什么？" },
+    [ty.CustomCollectibles.OCEANUSSOUL] = { Name="俄刻阿诺斯之魂", Description="海洋化身" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="仅供测试" }
 }
 

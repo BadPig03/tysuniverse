@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w07k"
+ty.VERSION = "02w08a"
 ty.REPENTOGONVERSION = "1.0.6b"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -25,6 +25,8 @@ include("scripts/load.lua")
 
 if EID then
 	include("scripts/EID.lua")
+    local inlineSprite = Sprite("gfx/eid/inline_icons.anm2", true)
+    EID:addIcon("Water", "Water", 0, 10, 10, 0, 0, inlineSprite);
 end
 
 local lastRoomData = {}
@@ -57,28 +59,28 @@ local function GetInitData()
 	if data.Init == nil then
 		data.Init = false
 	end
-    data.ItemQueue = { Frame = -1, ItemID = 0, RoomFrame = -1 }
-    data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
-    data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
-    data.Stat = { Damage = { Multiplier = 1, DamageUp = 0, Flat = 0 }, Speed = { Limit = -1 }, Tears = { TearsUp = 0, Modifiers = {} } }
-    data.HiddenItemManager = { ItemList = {} }
-    data.Guilt = { DealsCount = 0, CurrentFrame = 0, TempFrame = 1, DevilRoomSpawned = false, SoundPlayed = false, DisableDevilRoom = false, RemoveItems = false, RemoveItemList = {}, RemoveItemFrameList = {}, Effected = -1 }
-    data.Rewind = { RoomList = {}, MaxCharge = 3 }
-    data.Mirroring = { PlayerType = -1, OldItemList = {}, Health = 0, Bomb = 0, IsDarkJudas = false, IsLazarus2 = false, Charge = 0, BookOfVirtues = false, MirrorBustedPosition = Vector(0, 0), MirroringSpawned = false }
-    data.Laser = { IsHolding = false }
-    data.Cornucopia = { IsHolding = false, Charge = 0 }
-    data.NoticeOfCriticalCondition = { TempBrokenHearts = 0, Disable = false }
-    data.LumigyroFly = { Count = 0, Target = nil, RotationList = {}, InProtect = false, DepthOffset = -1 }
-    data.TheGospelOfJohn = { Spawned = false }
-    data.Magnifier = { Scale = 1 }
-    data.CrownOfKings = { CanSpawn = false, IsBossChallenge = false, IsBossrush = false, CanRender = true }
-    data.MarriageCertificate = { MainPlayerSeed = -1, SubPlayerSeed = -1, IsAlive = true }
-    data.HadesBlade = { Count = 0 }
+    data.AtonementVoucher = { Effected = false, DevilRoomVisited = false }
     data.BobsStomach = { LastDirectionX = 0, LastDirectionY = 0, Fired = false, CanFire = false }
     data.BloodSacrifice = { UsedCount = {}, VesselList = {}, Respawning = false, PlaySound = false }
-    data.AtonementVoucher = { Effected = false, DevilRoomVisited = false }
-    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, HealthFactor = 1 }
     data.BloodSample = { DamageAmount = 0, RedHearts = 0 }
+    data.Cornucopia = { IsHolding = false, Charge = 0 }
+    data.CrownOfKings = { CanSpawn = false, IsBossChallenge = false, IsBossrush = false, CanRender = true }
+    data.Guilt = { DealsCount = 0, CurrentFrame = 0, TempFrame = 1, DevilRoomSpawned = false, SoundPlayed = false, DisableDevilRoom = false, RemoveItems = false, RemoveItemList = {}, RemoveItemFrameList = {}, Effected = -1 }
+    data.HadesBlade = { Count = 0 }
+    data.HiddenItemManager = { ItemList = {} }
+    data.ItemQueue = { Frame = -1, ItemID = 0, RoomFrame = -1 }
+    data.LaserGun = { IsHolding = false }
+    data.LumigyroFly = { Count = 0, Target = nil, RotationList = {}, InProtect = false, DepthOffset = -1 }
+    data.Magnifier = { Scale = 1 }
+    data.MarriageCertificate = { MainPlayerSeed = -1, SubPlayerSeed = -1, IsAlive = true }
+    data.Mirroring = { PlayerType = -1, OldItemList = {}, Health = 0, Bomb = 0, IsDarkJudas = false, IsLazarus2 = false, Charge = 0, BookOfVirtues = false, MirrorBustedPosition = Vector(0, 0), MirroringSpawned = false }
+    data.NoticeOfCriticalCondition = { TempBrokenHearts = 0, Disable = false }
+    data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
+    data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
+    data.Rewind = { RoomList = {}, MaxCharge = 3 }
+    data.Stat = { Damage = { Multiplier = 1, DamageUp = 0, Flat = 0 }, Speed = { Limit = -1 }, Tears = { TearsUp = 0, Modifiers = {} } }
+    data.TheGospelOfJohn = { Spawned = false }
+    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, HealthFactor = 1 }
     return data
 end
 
@@ -97,10 +99,12 @@ local function GetGlobalInitData()
         return list
     end
     local data = {}
-    data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731 } }
-    data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
-    data.ExpiredGlue = {}
     data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {} }
+    data.ExpiredGlue = {}
+    data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731 } }
+    data.OceanusSoul = { Strength = 0, RoomList = {} }
+    data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
+    data.TheGospelOfJohn = {}
     return data
 end
 
@@ -125,11 +129,6 @@ local function RewindPlayerData()
         end
     end
     ty.GLOBALDATA = ty:TableCopyTo(lastRoomData["GlobalData"])
-    if Options.Language == "zh" then
-        Console.PrintWarning("数据恢复中...")
-    else
-        Console.PrintWarning("Data is recovering...")
-    end
 end
 
 function ty:PostPlayerInit(player)
