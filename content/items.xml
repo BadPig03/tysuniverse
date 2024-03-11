@@ -25,7 +25,7 @@
 	<passive id="17" quality="2" craftquality="2" description="Prevents from becoming worse" gfx="collectibles_conservative_treatment.png" name="Conservative Treatment" cache="all" tags="syringe offensive"/>
 	<passive id="18" quality="4" craftquality="4" description="Increased tear production" gfx="collectibles_conjunctivitis.png" name="Conjunctivitis" devilprice="2" shopprice="30" cache="tearflag firedelay shotspeed" tags="offensive"/>
 	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown of Kings" tags="nogreed offensive nocantrip"/>
-	<passive id="20" quality="3" craftquality="3" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom nolostbr nokeeper"/>
+	<passive id="20" quality="3" craftquality="3" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
 	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive nocantrip"/>
 	<active id="22" quality="3" craftquality="3" description="Sinister motive" gfx="collectibles_hades_blade.png" name="Hades Blade" maxcharges="5" cache="damage" tags="offensive nocantrip"/>
 	<passive id="23" quality="2" craftquality="2" description="Amlost leaking out" gfx="collectibles_bobs_stomach.png" name="Bob's Stomach" tags="bob offensive nocantrip"/>

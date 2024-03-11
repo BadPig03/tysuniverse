@@ -12,53 +12,6 @@ local function FindMinHealthEnemy(position)
     return minHealthEnemy
 end
 
-function Magnifier:PostUsePill(pillEffect, player, useFlags, pillColor)
-    local data = ty:GetLibData(player)
-    local giantFlag = 1
-    if pillColor & PillColor.PILL_GIANT_FLAG == PillColor.PILL_GIANT_FLAG then
-        giantFlag = 2
-    end
-    if pillEffect == PillEffect.PILLEFFECT_LARGER then
-        data.PlayerSize.Larger = data.PlayerSize.Larger + giantFlag
-    elseif pillEffect == PillEffect.PILLEFFECT_SMALLER then
-        data.PlayerSize.Smaller = data.PlayerSize.Smaller + giantFlag
-    end
-end
-Magnifier:AddCallback(ModCallbacks.MC_USE_PILL, Magnifier.PostUsePill)
-
-function Magnifier:PostUseHugeGrowthCard(card, player, useFlags)
-    local data = ty:GetLibData(player)
-    if data.PlayerSize.HugeGrowth == 0 then
-        data.PlayerSize.HugeGrowth = 1
-    end
-end
-Magnifier:AddCallback(ModCallbacks.MC_USE_CARD, Magnifier.PostUseHugeGrowthCard, Card.CARD_HUGE_GROWTH)
-
-function Magnifier:ResetHugeGrowthScale()
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        local data = ty:GetLibData(player)
-        if data.Init and data.PlayerSize.HugeGrowth == 1 then
-            data.PlayerSize.HugeGrowth = 0
-        end    
-    end
-end
-Magnifier:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Magnifier.ResetHugeGrowthScale)
-
-function Magnifier:PostPlayerUpdate(player)
-    local data = ty:GetLibData(player)
-    if data.Init then
-        local size = 1
-        local effects = player:GetEffects()
-        size = size * 0.5 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_PLUTO) + effects:GetCollectibleEffectNum(CollectibleType.COLLECTIBLE_INNER_CHILD))
-        size = size * 0.8 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_BINKY) + player:GetCollectibleNum(CollectibleType.COLLECTIBLE_MINI_MUSH) + data.PlayerSize.Smaller)
-        size = size * 1.2 ^ player:GetCollectibleNum(CollectibleType.COLLECTIBLE_LEO)
-        size = size * 1.25 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_MAGIC_MUSHROOM) + data.PlayerSize.Larger)
-        size = size * 1.6 ^ data.PlayerSize.HugeGrowth
-        data.PlayerSize.Scale = size
-    end
-end
-Magnifier:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Magnifier.PostPlayerUpdate)
-
 function Magnifier:EvaluateCache(player, cacheFlag)
     local data = ty:GetLibData(player)
     local count = math.min(1, player:GetCollectibleNum(ty.CustomCollectibles.MAGNIFIER) + player:GetEffects():GetCollectibleEffectNum(ty.CustomCollectibles.MAGNIFIER))
@@ -80,60 +33,48 @@ function Magnifier:FamiliarUpdate(familiar)
     elseif GetPtrHash(target) ~= GetPtrHash(familiarData.Target) then
         familiarData.Target = target
     end
-    familiar:FollowPosition(familiarData.Target.Position - Vector(0, 2 * familiarData.Target.Size))
+    if familiarData.Target:ToPlayer() then
+        familiar:FollowParent()
+    else
+        familiar:FollowPosition(familiarData.Target.Position - Vector(0, 2 * familiarData.Target.Size))
+    end
 end
 Magnifier:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Magnifier.FamiliarUpdate, ty.CustomEntities.MAGNIFIER)
 
-function Magnifier:PostRender()
-    local flag = false
-    for _, familiar in pairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, ty.CustomEntities.MAGNIFIER)) do
-        local familiarData = ty:GetLibData(familiar)
-        if familiarData.Target then
-            for _, ent in pairs(Isaac.FindInRadius(familiar.Position + Vector(0, 2 * familiarData.Target.Size), 256, EntityPartition.ENEMY | EntityPartition.PLAYER)) do
-                if ent:ToNPC() and ty:IsValidCollider(ent) then
-                    local npc = ent:ToNPC()
-                    local npcData = ty:GetLibData(npc)
-                    local originScale = 1
-                    if npc:IsChampion() then
-                        originScale = 1.15
-                    end
-                    local scale = 1 + (128 - math.min((familiar.Position + Vector(0, 2 * familiarData.Target.Size) - ent.Position):Length(), 128)) / 128
-                    npc.Scale = originScale * scale
-                    npc.SizeMulti = Vector(1, 1) * originScale * math.max(1, scale ^ 0.75)
-                    npcData.Scale = scale
-                end
-                if ent:ToPlayer() then
-                    local player = ent:ToPlayer()
-                    local playerData = ty:GetLibData(player)
-                    local originScale = playerData.PlayerSize.Scale
-                    local scale = 1 + (128 - math.min((familiar.Position + Vector(0, 2 * familiarData.Target.Size) - ent.Position):Length(), 128)) / 256
-                    player.SpriteScale = Vector(1, 1) * originScale * scale
-                    player.SizeMulti = Vector(1, 1) * originScale * math.max(1, scale ^ 0.95)
-                    playerData.Magnifier.Scale = scale
-                end
-            end
-        end
-        flag = true
+function Magnifier:PostFamiliarRender(familiar)
+    local familiarData = ty:GetLibData(familiar)
+    local player = familiar.Player
+    if not familiarData.Target then
+        return
     end
-    if not flag then
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            local data = ty:GetLibData(player)
-            if data.Init and data.Magnifier.Scale ~= 1 then
-                local originScale = data.PlayerSize.Scale
-                player.SpriteScale = Vector(1, 1) * originScale
-                player.SizeMulti = Vector(1, 1) * originScale
-                data.Magnifier.Scale = 1
+    for _, ent in pairs(Isaac.FindInRadius(familiar.Position + Vector(0, 2 * familiarData.Target.Size), 256, EntityPartition.ENEMY)) do
+        if ent:ToNPC() and ty:IsValidCollider(ent) then
+            local npc = ent:ToNPC()
+            local npcData = ty:GetLibData(npc)
+            local originScale = 1
+            if npc:IsChampion() then
+                originScale = 1.15
+            end
+            local scale = 1 + (128 - math.min((familiar.Position + Vector(0, 2 * familiarData.Target.Size) - ent.Position):Length(), 128)) / 128
+            npc.Scale = originScale * scale
+            npc.SizeMulti = Vector(1, 1) * originScale * math.max(1, scale ^ 0.75)
+            npcData.Scale = scale
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+                npcData.Bffs = 1.5
+            else
+                npcData.Bffs = 1
             end
         end
     end
 end
-Magnifier:AddCallback(ModCallbacks.MC_POST_RENDER, Magnifier.PostRender)
+Magnifier:AddCallback(ModCallbacks.MC_POST_FAMILIAR_RENDER, Magnifier.PostFamiliarRender, ty.CustomEntities.MAGNIFIER)
 
 function Magnifier:TakeDamage(entity, amount, flags, source, countdown)
     if entity:ToNPC() then
-        local npc = entity:ToNPC()
-        local npcData = ty:GetLibData(npc)
-        return { Damage = amount * (npcData.Scale or 1) }
+        local npcData = ty:GetLibData(entity)
+        if npcData.Scale and npcData.Bffs then
+            return { Damage = amount * (npcData.Scale * npcData.Bffs or 1) }
+        end
     end
 end
 Magnifier:AddCallback(ModCallbacks.MC_ENTITY_TAKE_DMG, Magnifier.TakeDamage)

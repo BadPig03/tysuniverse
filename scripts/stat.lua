@@ -232,4 +232,51 @@ function Stat:EvaluateCache(player, cache)
 end
 Stat:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, CallbackPriority.LATE, Stat.EvaluateCache)
 
+function Stat:PostUsePill(pillEffect, player, useFlags, pillColor)
+    local data = ty:GetLibData(player)
+    local giantFlag = 1
+    if pillColor & PillColor.PILL_GIANT_FLAG == PillColor.PILL_GIANT_FLAG then
+        giantFlag = 2
+    end
+    if pillEffect == PillEffect.PILLEFFECT_LARGER then
+        data.PlayerSize.Larger = data.PlayerSize.Larger + giantFlag
+    elseif pillEffect == PillEffect.PILLEFFECT_SMALLER then
+        data.PlayerSize.Smaller = data.PlayerSize.Smaller + giantFlag
+    end
+end
+Stat:AddCallback(ModCallbacks.MC_USE_PILL, Stat.PostUsePill)
+
+function Stat:PostUseHugeGrowthCard(card, player, useFlags)
+    local data = ty:GetLibData(player)
+    if data.PlayerSize.HugeGrowth == 0 then
+        data.PlayerSize.HugeGrowth = 1
+    end
+end
+Stat:AddCallback(ModCallbacks.MC_USE_CARD, Stat.PostUseHugeGrowthCard, Card.CARD_HUGE_GROWTH)
+
+function Stat:ResetHugeGrowthScale()
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        local data = ty:GetLibData(player)
+        if data.Init and data.PlayerSize.HugeGrowth == 1 then
+            data.PlayerSize.HugeGrowth = 0
+        end    
+    end
+end
+Stat:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Stat.ResetHugeGrowthScale)
+
+function Stat:PostPlayerUpdate(player)
+    local data = ty:GetLibData(player)
+    if data.Init then
+        local size = 1
+        local effects = player:GetEffects()
+        size = size * 0.5 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_PLUTO) + effects:GetCollectibleEffectNum(CollectibleType.COLLECTIBLE_INNER_CHILD))
+        size = size * 0.8 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_BINKY) + player:GetCollectibleNum(CollectibleType.COLLECTIBLE_MINI_MUSH) + data.PlayerSize.Smaller)
+        size = size * 1.2 ^ player:GetCollectibleNum(CollectibleType.COLLECTIBLE_LEO)
+        size = size * 1.25 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_MAGIC_MUSHROOM) + data.PlayerSize.Larger)
+        size = size * 1.6 ^ data.PlayerSize.HugeGrowth
+        data.PlayerSize.Scale = size
+    end
+end
+Stat:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Stat.PostPlayerUpdate)
+
 return Stat

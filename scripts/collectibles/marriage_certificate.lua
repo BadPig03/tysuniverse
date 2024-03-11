@@ -86,7 +86,7 @@ local function IsSubPlayer(player)
 end
 
 function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, varData, player)
-    if allowCopying and IsSubPlayer(player) then
+    if allowCopying and IsSubPlayer(player) and type ~= CollectibleType.COLLECTIBLE_DOGMA then
         GetMainPlayer(player):AddCollectible(type)
         return false
     end
@@ -95,7 +95,7 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
             player:GetOtherTwin():AddCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
             return false
         elseif player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B then
-            return false
+            return CollectibleType.COLLECTIBLE_BIRTHRIGHT
         end
     end
     if player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) and type == CollectibleType.COLLECTIBLE_ESAU_JR then

@@ -6,26 +6,23 @@ function PhilosophersStaff:UseItem(itemID, rng, player, useFlags, activeSlot, va
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
-    for i = player:GetMaxTrinkets() - 1, 0, -1 do
-        local trinket = player:GetTrinket(i)
-        if trinket > 0 then
-            player:TryRemoveTrinket(trinket)
-            flag = true
-            for i = 1, 3 + rng:RandomInt(5) do
-                local subType = CoinSubType.COIN_PENNY
-                if rng:RandomInt(100) < 10 then
-                    subType = rng:RandomInt(CoinSubType.COIN_NICKEL, CoinSubType.COIN_GOLDEN + 1)
-                end
-                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
+    for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET)) do
+        ty.SFXMANAGER:Play(SoundEffect.SOUND_GOLD_HEART, 0.6)
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, ent.Position, Vector(0, 0), nil)
+        local crater = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_CRATER, 0, ent.Position, Vector(0, 0), nil)
+        crater:GetSprite().Color:SetColorize(6,4.5,0.2,2)
+        ty.GAME:SpawnParticles(ent.Position, EffectVariant.COIN_PARTICLE, 25, 7)
+        for i = 1, 4 + rng:RandomInt(4) do
+            local subType = CoinSubType.COIN_PENNY
+            if rng:RandomInt(100) < 10 then
+                subType = rng:RandomInt(CoinSubType.COIN_NICKEL, CoinSubType.COIN_GOLDEN + 1)
             end
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
         end
+        ent:Remove()
+        flag = true
     end
     if flag then
-        ty.SFXMANAGER:Play(SoundEffect.SOUND_GOLD_HEART)
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, player.Position, Vector(0, 0), nil)
-        local crater = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_CRATER, 0, player.Position, Vector(0, 0), nil)
-        crater:GetSprite().Color:SetColorize(6,4.5,0.2,2)
-        ty.GAME:SpawnParticles(player.Position, EffectVariant.COIN_PARTICLE, 25, 7)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then
             player:AddWisp(CollectibleType.COLLECTIBLE_GOLDEN_RAZOR, player.Position, true)
         end

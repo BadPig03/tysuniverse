@@ -1,6 +1,6 @@
 local Warfarin = ty:DefineANewClass()
 
-local shouldRevive = false
+local shouldReviveWithRedHearts = false
 local stopHurtSound = false
 local restorePosition = false
 local replaceTrapDoor = false
@@ -42,21 +42,9 @@ local function GetClosestCollectible(player)
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
-        if pickup:IsShopItem() and pickup.Price < 0 and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/broken_heart_deal.anm2" and (pickup.Position - player.Position):Length() < minDistance then
+        if pickup:IsShopItem() and pickup.Price < 0 and pickup.ShopItemId ~= -16 and (pickup.Position - player.Position):Length() < minDistance then
             minDistance = (pickup.Position - player.Position):Length()
             collectible = pickup
-        end
-    end
-    return collectible
-end
-
-local function GetClosestEmptyPedestal(player)
-    local minDistance = 8192
-    local collectible = nil
-    for _, pickup in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, 0)) do
-        if (pickup.Position - player.Position):Length() < minDistance then
-            minDistance = (pickup.Position - player.Position):Length()
-            collectible = pickup:ToPickup()
         end
     end
     return collectible
@@ -110,51 +98,65 @@ function Warfarin:PostPlayerUpdate(player)
         data.BloodSample.DamageAmount = data.BloodSample.DamageAmount - damageAmountPerCharge
         player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
     end
-    if player:GetMaxHearts() + player:GetBoneHearts() > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+    if player:GetMaxHearts() + player:GetBoneHearts() * 2 > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
         ItemOverlay.Show(ty.CustomGiantBooks.WARFARINOUT, 3, player)
-    elseif player:GetMaxHearts() + player:GetBoneHearts() <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+    elseif player:GetMaxHearts() + player:GetBoneHearts() * 2 <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
         ItemOverlay.Show(ty.CustomGiantBooks.WARFARININ, 3, player)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
+function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 and (addHealthType & AddHealthType.SOUL == AddHealthType.SOUL or addHealthType & AddHealthType.BLACK == AddHealthType.BLACK) then
+        for i = 1, amount do
+            if player:GetActiveItem(ActiveSlot.SLOT_PRIMARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) < 12 then
+                player:AddActiveCharge(1, ActiveSlot.SLOT_PRIMARY, true, false, true)
+            elseif player:GetActiveItem(ActiveSlot.SLOT_SECONDARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_SECONDARY) < 12 then
+                player:AddActiveCharge(1, ActiveSlot.SLOT_SECONDARY, true, false, true)
+            else
+                player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
+            end
+        end
+        return 0
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_PRE_PLAYER_ADD_HEARTS, Warfarin.PrePlayerAddHearts)
+
+function Warfarin:PostPlayerAddHearts(player, amount, addHealthType, _)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 and player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and addHealthType & AddHealthType.RED == AddHealthType.RED then
+        return amount * 2
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_ADD_HEARTS, Warfarin.PostPlayerAddHearts)
+
+function Warfarin:PreTriggerPlayerDeath(player)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and player:GetExtraLives() > 0 and player:GetMaxHearts() + player:GetBoneHearts() == 0 then
+        shouldReviveWithRedHearts = true
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTriggerPlayerDeath)
+
 function Warfarin:PostHUDUpdate()
     for _, player in pairs(PlayerManager.GetPlayers()) do
-        if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
-            local data = ty:GetLibData(player)
-            if data.Init then
-                if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) and player:GetBlackHearts() > 0 then
-                    player:AddMaxHearts(2)
-                    player:AddHearts(2)
-                end
-                if player:HasCollectible(CollectibleType.COLLECTIBLE_ALABASTER_BOX) and player:GetSoulHearts() + player:GetBlackHearts() > 0 then
-                    for i = 1, 2 do
-                        if player:GetActiveItem(ActiveSlot.SLOT_PRIMARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX then
-                            player:DropCollectible(CollectibleType.COLLECTIBLE_ALABASTER_BOX, GetClosestEmptyPedestal(player), true)
-                        end
-                    end
-                end
-                if player:GetSoulHearts() > 0 then
-                    player:AddActiveCharge(player:GetSoulHearts(), ActiveSlot.SLOT_POCKET, true, true, true)
-                    player:AddSoulHearts(-player:GetSoulHearts())
-                end
-                if player:GetBlackHearts() > 0 then
-                    player:AddActiveCharge(player:GetSoulHearts(), ActiveSlot.SLOT_POCKET, true, true, true)
-                    player:AddBlackHearts(-player:GetBlackHearts())
-                end
-                if not ty.PERSISTENTDATA.GlowingHourglass and not ty.PERSISTENTDATA.Rewind and player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-                    if player:GetHearts() > data.BloodSample.RedHearts then
-                        player:AddHearts(player:GetHearts() - data.BloodSample.RedHearts)
-                    end
-                    data.BloodSample.RedHearts = player:GetHearts()
-                end
-                if shouldRevive then
-                    player:AddMaxHearts(2)
-                    player:AddHearts(2)
-                    shouldRevive = false
-                end    
+        local data = ty:GetLibData(player)
+        if data.Init and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
+            if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) and player:GetBlackHearts() > 0 then
+                player:AddMaxHearts(2)
+                player:AddHearts(2)
+            end
+            if shouldReviveWithRedHearts then
+                player:AddSoulHearts(-99)
+                player:AddMaxHearts(2)
+                player:AddHearts(2)
+                shouldReviveWithRedHearts = false
+            end
+            if player:GetSoulHearts() > 0 then
+                player:AddSoulHearts(-player:GetSoulHearts())
+            end
+            if player:GetBlackHearts() > 0 then
+                player:AddBlackHearts(-player:GetBlackHearts())
             end
         end
     end
@@ -202,13 +204,6 @@ Warfarin:AddCallback(ModCallbacks.MC_USE_ITEM, Warfarin.UseItem, ty.CustomCollec
 
 function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
-        local itemConfig = ty.ITEMCONFIG:GetCollectible(type)
-        player:AddActiveCharge(itemConfig.AddSoulHearts + itemConfig.AddBlackHearts, ActiveSlot.SLOT_POCKET, true, true, true)
-        player:AddSoulHearts(-itemConfig.AddSoulHearts)
-        player:AddBlackHearts(-itemConfig.AddBlackHearts)
-        if player:GetHearts() <= 6 then
-            player:AddHearts(itemConfig.AddHearts)
-        end
         if type == CollectibleType.COLLECTIBLE_ABADDON then
             player:AddMaxHearts(2)
             player:AddHearts(2)
@@ -303,13 +298,6 @@ function Warfarin:PostDevilCalculate(chance)
     end
 end
 Warfarin:AddPriorityCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, CallbackPriority.LATE, Warfarin.PostDevilCalculate)
-
-function Warfarin:PreTriggerPlayerDeath(player)
-    if (player:GetExtraLives() > 0 or player:GetCard(ActiveSlot.SLOT_PRIMARY) == Card.CARD_SOUL_LAZARUS or player:GetCard(ActiveSlot.SLOT_SECONDARY) == Card.CARD_SOUL_LAZARUS) and player:GetMaxHearts() == 0 then
-        shouldRevive = true
-    end
-end
-Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTriggerPlayerDeath)
 
 function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA

@@ -1,21 +1,5 @@
 local ChocolatePancake = ty:DefineANewClass()
 
-local function IsItemValid(pickup)
-    if pickup:IsShopItem() and pickup.Type == EntityType.ENTITY_PICKUP and pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE and pickup.Touched == false then
-        return true
-    end
-    return false
-end
-
-local function ReplaceItemPrice(pickup)
-    pickup.ShopItemId = -3
-    pickup.Price = PickupPrice.PRICE_FREE
-    pickup.AutoUpdatePrice = false
-    local sprite = pickup:GetPriceSprite()
-    sprite:Load("gfx/items/shops/chocolate_pancake_deal.anm2", true)
-    sprite:Play("Idle", true)
-end
-
 function ChocolatePancake:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) and player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
         local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.CHOCOLATEPANCAKE)
@@ -35,12 +19,15 @@ ChocolatePancake:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ChocolatePancake.Ev
 function ChocolatePancake:PostPickupUpdate(pickup)
     local pickup = pickup:ToPickup()
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) and room:GetType() ~= RoomType.ROOM_SHOP then
-        if IsItemValid(pickup) and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/chocolate_pancake_deal.anm2" and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/broken_heart_deal.anm2" then
-            ReplaceItemPrice(pickup)
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) then
+        if pickup:IsShopItem() and not pickup.Touched and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/chocolate_pancake_deal.anm2" and pickup.ShopItemId ~= -16 and pickup.Price < 0 then
+            pickup.ShopItemId = -3
+            local sprite = pickup:GetPriceSprite()
+            sprite:Load("gfx/items/shops/chocolate_pancake_deal.anm2", true)
+            sprite:Play("Idle", true)
         end
     else
-        if IsItemValid(pickup) and pickup.ShopItemId == -3 and not pickup.AutoUpdatePrice and pickup.Price == PickupPrice.PRICE_FREE and pickup:GetPriceSprite():GetFilename() == "gfx/items/shops/chocolate_pancake_deal.anm2" then
+        if pickup:IsShopItem() and not pickup.Touched and pickup.ShopItemId == -3 and pickup.Price == PickupPrice.PRICE_FREE and pickup:GetPriceSprite():GetFilename() == "gfx/items/shops/chocolate_pancake_deal.anm2" then
             pickup.ShopItemId = -2
             pickup.AutoUpdatePrice = true
         end
@@ -48,9 +35,18 @@ function ChocolatePancake:PostPickupUpdate(pickup)
 end
 ChocolatePancake:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, ChocolatePancake.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
 
+function ChocolatePancake:GetShopItemPrice(variant, subType, shopItemId, price)
+    if shopItemId == -3 then
+        return PickupPrice.PRICE_FREE
+    end
+end
+ChocolatePancake:AddCallback(ModCallbacks.MC_GET_SHOP_ITEM_PRICE, ChocolatePancake.GetShopItemPrice, PickupVariant.PICKUP_COLLECTIBLE)
+
+local pickedUp = false
+
 function ChocolatePancake:PostPickupShopPurchase(pickup, player, moneySpent)
     local pickup = pickup:ToPickup()
-    if pickup.ShopItemId == -3 and moneySpent == PickupPrice.PRICE_FREE then
+    if pickup.ShopItemId == -3 and (moneySpent == PickupPrice.PRICE_FREE or pickedUp) then
         if player:HasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) then
             player:RemoveCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE)
         else
@@ -64,5 +60,21 @@ function ChocolatePancake:PostPickupShopPurchase(pickup, player, moneySpent)
     end
 end
 ChocolatePancake:AddCallback(ModCallbacks.MC_POST_PICKUP_SHOP_PURCHASE, ChocolatePancake.PostPickupShopPurchase, PickupVariant.PICKUP_COLLECTIBLE)
+
+function ChocolatePancake:PrePickupCollision(pickup, collider, low)
+    local player = collider:ToPlayer()
+    local pickup = pickup:ToPickup()
+    if player and (player:GetPlayerType() == PlayerType.PLAYER_THESOUL or player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B or player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN_B) and pickup.ShopItemId == -3 and player:CanPickupItem() then
+        pickedUp = true
+    end
+end
+ChocolatePancake:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, ChocolatePancake.PrePickupCollision, PickupVariant.PICKUP_COLLECTIBLE)
+
+function ChocolatePancake:PrePlayerAddHearts(player, amount, addHealthType, _)
+    if pickedUp and amount < 0 and addHealthType & AddHealthType.SOUL == AddHealthType.SOUL and (player:GetPlayerType() == PlayerType.PLAYER_THESOUL or player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN_B) then
+        return 0
+    end
+end
+ChocolatePancake:AddCallback(ModCallbacks.MC_PRE_PLAYER_ADD_HEARTS, ChocolatePancake.PrePlayerAddHearts)
 
 return ChocolatePancake

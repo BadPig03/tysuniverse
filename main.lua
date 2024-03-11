@@ -1,7 +1,7 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w08d"
-ty.REPENTOGONVERSION = "1.0.6b"
+ty.VERSION = "02w09a"
+ty.REPENTOGONVERSION = "1.0.7"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
 ty.ITEMPOOL = ty.GAME:GetItemPool()
@@ -79,7 +79,6 @@ local function GetInitData()
     data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Stat = { Damage = { Multiplier = 1, DamageUp = 0, Flat = 0 }, Speed = { Limit = -1 }, Tears = { TearsUp = 0, Modifiers = {} } }
-    data.TheGospelOfJohn = { Spawned = false }
     data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, HealthFactor = 1 }
     return data
 end
@@ -100,6 +99,7 @@ local function GetGlobalInitData()
     end
     local data = {}
     data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {} }
+    data.ChocolatePancake = {}
     data.ExpiredGlue = {}
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731 } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
@@ -252,23 +252,9 @@ function ty:PostRender()
         ty.LANAPIXEL:DrawStringUTF8(versionInfo, Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(versionInfo) - 1, 0, KColor(1, 1, 1, 1))
         for _, player in pairs(PlayerManager.GetPlayers()) do
             local controllerIndex = player.ControllerIndex
-            if Input.IsActionPressed(ButtonAction.ACTION_DROP, controllerIndex) then 
-                if Input.IsActionTriggered(ButtonAction.ACTION_MAP, controllerIndex) then
-                    player:UseActiveItem(CollectibleType.COLLECTIBLE_GLOWING_HOUR_GLASS)
-                    break
-                elseif Input.IsActionTriggered(ButtonAction.ACTION_RESTART, controllerIndex) then
-                    Isaac.ExecuteCommand("rewind")
-                    break
-                end
-            end
-        end
-        if HPBars then
-            if Options.Language == "zh" then
-                local warningString = "检测到冲突mod: Enhanced Boss Bars!"
-                ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()) - 15, 1, 1, KColor(1, 0, 0, 1))
-            else
-                local warningString = "Conflicting mod detected: Enhanced Boss Bars!"
-                ty.PFTEMP:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.PFTEMP:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.PFTEMP:GetBaselineHeight()) - 15, 1, 1, KColor(1, 0, 0, 1))
+            if Input.IsActionPressed(ButtonAction.ACTION_DROP, controllerIndex) and Input.IsActionTriggered(ButtonAction.ACTION_RESTART, controllerIndex) then
+                player:UseActiveItem(CollectibleType.COLLECTIBLE_GLOWING_HOUR_GLASS)
+                break
             end
         end
     end

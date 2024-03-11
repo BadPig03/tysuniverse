@@ -183,26 +183,6 @@ function ty:GetLaserColor(player)
     return color
 end
 
-function ty:IsCollectibleBlind(pickup)
-    local entitySprite = pickup:GetSprite()
-	local name = entitySprite:GetAnimation()
-	if name ~= "Idle" and name ~= "ShopIdle" then
-		return false
-	end
-	questionMarkSprite:SetFrame(name, entitySprite:GetFrame())
-	for i = -1, 1, 1 do
-		for j = -40, 10, 5 do
-			local qColor = questionMarkSprite:GetTexel(Vector(i, j), Vector(0, 0), 1, 1)
-			local chestColor = questionMarkSprite:GetTexel(Vector(i, j + 5), Vector(0, 0), 1, 1)
-			local eColor = entitySprite:GetTexel(Vector(i, j), Vector(0, 0), 1, 1)
-			if (qColor.Red ~= eColor.Red or qColor.Green ~= eColor.Green or qColor.Blue ~= eColor.Blue) and (chestColor.Red ~= eColor.Red or chestColor.Green ~= eColor.Green or chestColor.Blue ~= eColor.Blue) then
-				return false
-			end
-		end
-	end
-	return true
-end
-
 function ty:SpawnFakeSprite(entity, animation)
     local effect = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.EMPTYHELPER, 0, entity.Position, Vector(0, 0), nil)
     local sprite = effect:GetSprite()

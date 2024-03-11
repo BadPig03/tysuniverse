@@ -102,8 +102,8 @@ local function GetPickupCharge(pickup, player, real)
         table.insert(cycleList, pickup.SubType)
         local charge = 0
         for _, item in pairs(cycleList) do
-            if not real and pickup.State == 1 then
-                return -1
+            if not real and pickup:IsBlind(false) then
+                return -16
             end
             if item > 0 then
                 local itemConfigCollectible = ty.ITEMCONFIG:GetCollectible(item)
@@ -207,8 +207,8 @@ local function RenderPickupChargeNum(player)
                 if room:IsMirrorWorld() then
                     x = Isaac.GetScreenWidth() - pickupPos.X - 3
                 end
-                if charge == -1 then
-                    ty.PFTEMP:DrawString("?", x, y, KColor(1, 1, 1, 1), 5, true)
+                if charge < 0 then
+                    ty.PFTEMP:DrawString("?", x, y, kColor, 5, true)
                 else
                     if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE then
                         ty.PFTEMP:DrawString(charge, x, y, kColor, 5, true)
@@ -236,14 +236,6 @@ function Cornucopia:PostRender()
     end
 end
 Cornucopia:AddCallback(ModCallbacks.MC_POST_RENDER, Cornucopia.PostRender)
-
-function Cornucopia:PostPickupUpdate(pickup)
-    local pickup = pickup:ToPickup()
-    if pickup.Wait == 20 and ty:IsCollectibleBlind(pickup) then
-        pickup.State = 1
-    end
-end
-Cornucopia:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, Cornucopia.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
 
 function Cornucopia:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
@@ -313,6 +305,9 @@ function Cornucopia:PrePickupCollision(pickup, collider, low)
         if data.Cornucopia.IsHolding and data.Cornucopia.Charge < GetMaxCharge(player) then
             local charge = GetPickupCharge(pickup, player, true)
             if charge then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_9_VOLT) then
+                    charge = charge + 1
+                end
                 data.Cornucopia.Charge = data.Cornucopia.Charge + charge
                 if data.Cornucopia.Charge >= GetMaxCharge(player) then
                     data.Cornucopia.Charge = GetMaxCharge(player)

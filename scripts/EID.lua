@@ -153,17 +153,17 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.LUMIGYROFLY] = {
         [1] = {
             Name = "霓旋蝇",
-            Desc = "#{{ArrowUp}} 生成三只围绕角色或敌人旋转并阻挡泪弹的霓旋蝇"..
+            Desc = "#生成三只围绕角色或敌人旋转的霓旋蝇"..
             "#自动寻找最近的敌人攻击，直到敌人死亡"..
-            "#{{Damage}} 霓旋蝇对接触的敌人造成每秒10点伤害"..
-            "#{{Warning}} 当角色血量过低时进入护主模式"
+            "#{{Damage}} 霓旋蝇对接触的敌人造成每秒10点破甲伤害"..
+            "#{{Warning}} 当角色血量过低时进入可阻挡泪弹的护主模式"
         },
         [2] = {
             Name = "Lumigyro Fly",
-            Desc = "#{{ArrowUp}} Spawns three lumigyro flies that orbit around Isaac or enemies"..
+            Desc = "#Spawns three lumigyro flies that orbit around Isaac or enemies"..
             "#Automatically finds the nearest enemy to attack until the enemy is dead"..
-            "#{{Damage}} It deals 10 damage per second to enemies it comes in contact with"..
-            "#{{Warning}} When Isaac is low on health, they will protect Isaac and deal no damage to enemies"
+            "#{{Damage}} It deals 10 armor-ignoring damage per second to enemies it comes in contact with"..
+            "#{{Warning}} When Isaac is low on health, they will protect Isaac by blocking projectiles"
         }
     },
     [ty.CustomCollectibles.COLLAPSE] = {
@@ -216,13 +216,13 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.MAGNIFIER] = {
         [1] = {
             Name = "放大镜",
-            Desc = "#获得一个会自动寻找血量最少的敌人的放大镜跟班，同时放大周围的敌人与角色"..
-            "#{{Warning}} 会导致其碰撞体积和受到的伤害增大"
+            Desc = "#自动寻找离角色最近的敌人，同时放大周围的敌人"..
+            "#{{Warning}} 会导致敌人的碰撞体积和受到的伤害增大"
         },
         [2] = {
             Name = "Magnifer",
-            Desc = "#Gains a familiar that seeks out the enemy with the lowest health, and can magnify the enemies and players around it"..
-            "#{{Warning}} The collision size will be magnified, and the damage received will also increase"
+            Desc = "#Seeks out the enemy with the lowest health, and can magnify enemies around it"..
+            "#{{Warning}} For enemies, the collision size will be magnified, and the damage received will also increase"
         }
     },
     [ty.CustomCollectibles.SCAPEGOAT] = {
@@ -262,11 +262,13 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.CONSERVATIVETREATMENT] = {
         [1] = {
             Name = "保守疗法",
-            Desc = "#{{ArrowUp}} 角色的属性值不会低于{{Player0}}以撒的属性初始值"
+            Desc = "#{{ArrowUp}} 角色的属性值不会低于{{Player0}}以撒的属性初始值"..
+            "#{{Heart}} 如果角色少于三颗心之容器，则补充至三颗心之容器"
         },
         [2] = {
             Name = "Conservative Treatment",
-            Desc = "#{{ArrowUp}} The character's attribute values will not be lower than {{Player0}}Isaac's initial attribute values"
+            Desc = "#{{ArrowUp}} The character's attribute values will not be lower than {{Player0}}Isaac's initial attribute values"..
+            "#{{Heart}} If Isaac has fewer than three heart containers, then he will be replenished to three heart containers"
         }
     },
     [ty.CustomCollectibles.CONJUNCTIVITIS] = {
@@ -324,17 +326,17 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.HADESBLADE] = {
         [1] = {
             Name = "冥府之刃",
-            Desc = "#{{Heart}} 使用时，移除一个心之容器"..
+            Desc = "#{{Heart}} 使用时，若为红心角色，则移除一个心之容器"..
+            "#{{Conjoined}} 生成一个来自恶魔房道具池的跟班"..
             "#{{SoulHeart}} 若为魂心角色，则移除两个魂心"..
             "#{{BoneHeart}} 优先扣除骨心"..
-            "#{{Conjoined}} 生成一个来自恶魔房道具池的跟班"..
             "#{{Warning}} 如果恶魔房道具池过空，则生成{{Collectible113}}恶魔宝宝",
             Virtue = "生成血量为10，伤害为2的红色魂火",
             Belial = "额外获得0.2伤害提升"
         },
         [2] = {
             Name = "Hades Blade",
-            Desc = "#{{Heart}} Upon use, removes one red heart container"..
+            Desc = "#{{Heart}} Upon use, for red heart characters, removes one red heart container"..
             "#{{SoulHeart}} For soul heart characters, two soul hearts are removed instead"..
             "#{{BoneHeart}} Bone hearts are removed first"..
             "#{{Conjoined}} Grants a familiar selected from the Devil Room pool"..
@@ -433,14 +435,16 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "贤者权杖",
             Desc = "#{{ArrowUp}} 持有时，角色身上的饰品会转化为对应金饰品"..
-            "#使用后，摧毁角色身上的全部饰品，每摧毁一个饰品将生成3-8个随机硬币",
+            "#击杀敌人时有4%的概率掉落随机饰品"..
+            "#使用后，摧毁房间内的所有饰品，每摧毁一个饰品将生成4-8个随机硬币",
             Virtue = "15%概率发射点金术眼泪",
             Belial = "额外生成3个随机硬币",
         },
         [2] = {
             Name = "Philosopher's Staff",
             Desc = "#{{ArrowUp}} When held, trinkets on Isaac will transform into their corresponding golden trinkets"..
-            "#Upon use, consume all trinkets on Isaac. For each trinket consumed, spawns 3-8 random coins",
+            "Enemies have 4% chance to drop a trinket on death"..
+            "#Upon use, consume all trinkets in the room. For each trinket consumed, spawns 4-8 random coins",
             Virtue = "15% chance for {{Collectible202}} Midas' Touch tears",
             Belial = "Spawns 3 random coins"
         }

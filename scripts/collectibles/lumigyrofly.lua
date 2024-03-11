@@ -39,6 +39,18 @@ local function IsPlayerDying(player)
     return false
 end
 
+local function GetNearestEnemy(position)
+	local distance = 384
+    local nearestEnemy = nil
+    for _, ent in pairs(Isaac.FindInRadius(position, 384, EntityPartition.ENEMY)) do
+        if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
+            distance = (ent.Position - position):Length()
+            nearestEnemy = ent
+        end
+    end
+    return nearestEnemy
+end
+
 function Lumigyrofly:EvaluateCache(player, cacheFlag)
     local data = ty:GetLibData(player)
     local count = player:GetCollectibleNum(ty.CustomCollectibles.LUMIGYROFLY) + player:GetEffects():GetCollectibleEffectNum(ty.CustomCollectibles.LUMIGYROFLY)
@@ -67,7 +79,7 @@ function Lumigyrofly:PostPlayerUpdate(player)
         else
             data.LumigyroFly.InProtect = false
             if data.LumigyroFly.Target == nil or data.LumigyroFly.Target:IsDead() or not data.LumigyroFly.Target:IsVulnerableEnemy() or data.LumigyroFly.Target:ToPlayer() then
-                local tempTarget = ty:GetNearestEnemy((data.LumigyroFly.Target and data.LumigyroFly.Target.Position) or player.Position)
+                local tempTarget = GetNearestEnemy((data.LumigyroFly.Target and data.LumigyroFly.Target.Position) or player.Position)
                 if tempTarget == nil then
                     data.LumigyroFly.Target = player
                     data.LumigyroFly.DepthOffset = -1     
@@ -98,14 +110,24 @@ function Lumigyrofly:PostPlayerUpdate(player)
                 local degree = math.pi * data.LumigyroFly.RotationList[currentCount] / 180
                 local size = data.LumigyroFly.Target.Size
                 if data.LumigyroFly.Target:ToPlayer() then
-                    size = size * 1.5
+                    size = size * 1.8
                 end
-                local targetPosition = data.LumigyroFly.Target.Position + size * Vector(math.sin(degree), math.cos(degree))
-                familiar:FollowPosition(targetPosition)
-                if (targetPosition - familiar.Position):Length() > size then
-                    familiar:AddVelocity((targetPosition - familiar.Position):Normalized():Resized(3))
+                if data.LumigyroFly.InProtect then
+                    local targetPosition = data.LumigyroFly.Target.Position + size * Vector(math.sin(degree), math.cos(degree))
+                    familiar:FollowPosition(targetPosition)
+                    if (targetPosition - familiar.Position):Length() > size * 1.2 then
+                        familiar:AddVelocity((targetPosition - familiar.Position):Normalized():Resized(1))
+                    else
+                        familiar.Velocity = targetPosition - familiar.Position
+                    end
                 else
-                    familiar.Velocity = targetPosition - familiar.Position
+                    local targetPosition = data.LumigyroFly.Target.Position + size * Vector(math.sin(degree), math.cos(degree))
+                    familiar:FollowPosition(targetPosition)
+                    if (targetPosition - familiar.Position):Length() > size then
+                        familiar:AddVelocity((targetPosition - familiar.Position):Normalized():Resized(3))
+                    else
+                        familiar.Velocity = targetPosition - familiar.Position
+                    end    
                 end
                 currentCount = currentCount + 1
             end
@@ -124,19 +146,22 @@ function Lumigyrofly:FamiliarUpdate(familiar)
     if sprite:IsFinished("Appear") then
         sprite:Play("FlyAroundPlayer", true)
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_HIVE_MIND) and not player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+        sprite.Scale = Vector(1.25, 1.25)
+    end
 end
 Lumigyrofly:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Lumigyrofly.FamiliarUpdate, ty.CustomEntities.LUMIGYROFLY)
 
 function Lumigyrofly:PreFamiliarCollision(familiar, collider, low)
     local player = familiar.Player
     local data = ty:GetLibData(player)
-    if collider:IsEnemy() and not data.LumigyroFly.InProtect then
+    if collider:IsEnemy() then
         if collider.Type == EntityType.ENTITY_ARMYFLY or collider.Type == EntityType.ENTITY_FLY or collider.Type == EntityType.ENTITY_ATTACKFLY or collider.Type == EntityType.ENTITY_RING_OF_FLIES or collider.Type == EntityType.ENTITY_SWARM or collider.Type == EntityType.ENTITY_WILLO then
             collider:Die()
             return nil
         end
         local damage = 3
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) or player:HasCollectible(CollectibleType.COLLECTIBLE_HIVE_MIND) then
             damage = damage * 2
         end
         if ty.GAME:GetFrameCount() % 6 == 0 then
@@ -144,7 +169,7 @@ function Lumigyrofly:PreFamiliarCollision(familiar, collider, low)
         end
         return nil
     end
-    if collider.Type == EntityType.ENTITY_PROJECTILE then
+    if data.LumigyroFly.InProtect and collider.Type == EntityType.ENTITY_PROJECTILE then
         collider:Die()
     end
 end

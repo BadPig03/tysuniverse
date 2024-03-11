@@ -37,4 +37,12 @@ function ConservativeTreatment:EvaluateCache(player, cacheFlag)
 end
 ConservativeTreatment:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ConservativeTreatment.EvaluateCache)
 
+function ConservativeTreatment:PostAddCollectible(type, charge, firstTime, slot, varData, player)
+    if player:GetMaxHearts() < 6 then
+        player:AddMaxHearts(6 - player:GetMaxHearts())
+        player:AddHearts(math.max(0, 6 - player:GetHearts()))
+    end
+end
+ConservativeTreatment:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, ConservativeTreatment.PostAddCollectible, ty.CustomCollectibles.CONSERVATIVETREATMENT)
+
 return ConservativeTreatment

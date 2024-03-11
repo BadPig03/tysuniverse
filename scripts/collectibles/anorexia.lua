@@ -9,7 +9,7 @@ function Anorexia:PostPlayerUpdate(player)
 			if item and item:HasTags(ItemConfig.TAG_FOOD) then
 				local newType = ty:GetCollectibleFromCurrentRoom(true, ItemConfig.TAG_FOOD | ItemConfig.TAG_QUEST, player:GetCollectibleRNG(ty.CustomCollectibles.ANOREXIA))
 				if pickup.SubType ~= newType then
-					pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newType, false, false, false)
+					pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newType, true, false, false)
 					Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, pickup.Position, Vector(0, 0), nil)
 				end
 			end

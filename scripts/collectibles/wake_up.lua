@@ -150,4 +150,16 @@ function WakeUp:PostEntityKill(entity)
 end
 WakeUp:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, WakeUp.PostEntityKill, EntityType.ENTITY_DOGMA)
 
+function WakeUp:PreChangeRoom(roomIndex, dimension)
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        local data = ty:GetLibData(player)
+        if data.WakeUp.DetectDogma and ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 then
+            if (roomIndex == 82 or roomIndex == 94 or roomIndex == 95) and dimension == Dimension.NORMAL then
+                return {84, Dimension.NORMAL}
+            end
+        end
+    end
+end
+WakeUp:AddCallback(ModCallbacks.MC_PRE_CHANGE_ROOM, WakeUp.PreChangeRoom)
+
 return WakeUp
