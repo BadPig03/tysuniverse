@@ -53,10 +53,8 @@ local function InitSubPlayer(player)
     local subPlayerData = ty:GetLibData(subPlayer)
     local playerData = ty:GetLibData(player)
     subPlayerData.MarriageCertificate.MainPlayerSeed = player.InitSeed
-    subPlayerData.MarriageCertificate.SubPlayerSeed = -1
     subPlayerData.MarriageCertificate.IsAlive = true
     playerData.MarriageCertificate.MainPlayerSeed = -1
-    playerData.MarriageCertificate.SubPlayerSeed = subPlayer.InitSeed
     playerData.MarriageCertificate.IsAlive = true
     subPlayer:ChangePlayerType(PlayerType.PLAYER_EVE)
     subPlayer:AddMaxHearts(-2)
@@ -79,10 +77,7 @@ end
 
 local function IsSubPlayer(player)
     local data = ty:GetLibData(player)
-    if data.MarriageCertificate.MainPlayerSeed ~= -1 and data.MarriageCertificate.SubPlayerSeed == -1 then
-        return true
-    end
-    return false
+    return data.MarriageCertificate.MainPlayerSeed ~= -1
 end
 
 function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, varData, player)

@@ -3,19 +3,18 @@ local TheGospelOfJohn = ty:DefineANewClass()
 local pickedUp = false
 
 local function GetAngelRoomCollectible(rng)
-	for itemID = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
-		if ItemConfig.Config.IsValidCollectible(itemID) and ty.ITEMCONFIG:GetCollectible(itemID).Quality < 3 then
-			ty.ITEMPOOL:AddRoomBlacklist(itemID)
-		end
-	end
-	local itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_ANGEL, false, rng:Next(), CollectibleType.COLLECTIBLE_SERAPHIM)
-	if ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3 then
-		ty.ITEMPOOL:RemoveCollectible(itemID)
-		ty.ITEMPOOL:ResetRoomBlacklist()
-		return itemID
-    else
-        return CollectibleType.COLLECTIBLE_SERAPHIM
-	end
+    local itemID
+    repeat
+        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
+            if ItemConfig.Config.IsValidCollectible(i) and ty.ITEMCONFIG:GetCollectible(i).Quality < 3 then
+                ty.ITEMPOOL:AddRoomBlacklist(i)
+            end
+        end
+        itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_ANGEL, false, rng:Next(), CollectibleType.COLLECTIBLE_SERAPHIM)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3
+    ty.ITEMPOOL:RemoveCollectible(itemID)
+    ty.ITEMPOOL:ResetRoomBlacklist()
+    return itemID
 end
 
 function TheGospelOfJohn:UseItem(itemID, rng, player, useFlags, activeSlot, varData)

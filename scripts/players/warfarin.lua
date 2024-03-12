@@ -14,7 +14,7 @@ local function GetDamagePerCharge(player)
     if ty.GAME:IsGreedMode() then
         stage = stage * 2
     end
-    local charge = 15 + 20 * stage ^ 1.25
+    local charge = 15 + 20 * stage ^ 1.8
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.9
     end
@@ -42,7 +42,7 @@ local function GetClosestCollectible(player)
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
-        if pickup:IsShopItem() and pickup.Price < 0 and pickup.ShopItemId ~= -16 and (pickup.Position - player.Position):Length() < minDistance then
+        if pickup:IsShopItem() and pickup.Price < 0 and pickup.ShopItemId ~= -4 and (pickup.Position - player.Position):Length() < minDistance then
             minDistance = (pickup.Position - player.Position):Length()
             collectible = pickup
         end
@@ -109,27 +109,24 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
 function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
-    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 and (addHealthType & AddHealthType.SOUL == AddHealthType.SOUL or addHealthType & AddHealthType.BLACK == AddHealthType.BLACK) then
-        for i = 1, amount do
-            if player:GetActiveItem(ActiveSlot.SLOT_PRIMARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) < 12 then
-                player:AddActiveCharge(1, ActiveSlot.SLOT_PRIMARY, true, false, true)
-            elseif player:GetActiveItem(ActiveSlot.SLOT_SECONDARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_SECONDARY) < 12 then
-                player:AddActiveCharge(1, ActiveSlot.SLOT_SECONDARY, true, false, true)
-            else
-                player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 then
+        if addHealthType & AddHealthType.SOUL == AddHealthType.SOUL or addHealthType & AddHealthType.BLACK == AddHealthType.BLACK then
+            for i = 1, amount do
+                if player:GetActiveItem(ActiveSlot.SLOT_PRIMARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) < 12 then
+                    player:AddActiveCharge(1, ActiveSlot.SLOT_PRIMARY, true, false, true)
+                elseif player:GetActiveItem(ActiveSlot.SLOT_SECONDARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_SECONDARY) < 12 then
+                    player:AddActiveCharge(1, ActiveSlot.SLOT_SECONDARY, true, false, true)
+                else
+                    player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
+                end
             end
+            return 0
+        elseif player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and addHealthType & AddHealthType.RED == AddHealthType.RED then
+            return amount * 2
         end
-        return 0
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_PLAYER_ADD_HEARTS, Warfarin.PrePlayerAddHearts)
-
-function Warfarin:PostPlayerAddHearts(player, amount, addHealthType, _)
-    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 and player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and addHealthType & AddHealthType.RED == AddHealthType.RED then
-        return amount * 2
-    end
-end
-Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_ADD_HEARTS, Warfarin.PostPlayerAddHearts)
 
 function Warfarin:PreTriggerPlayerDeath(player)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and player:GetExtraLives() > 0 and player:GetMaxHearts() + player:GetBoneHearts() == 0 then

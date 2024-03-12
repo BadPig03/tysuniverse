@@ -292,11 +292,15 @@ local function SpawnLaser(player, index, percent)
     laser:GetSprite().Color = GetDefaultLaserColor(player)
     laserSprite:Play("Start", true)
     laser.Velocity = GetLastDirection(player):Resized(player.ShotSpeed * 4)
-    local whirlPool = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WHIRLPOOL, 0, player.Position, Vector(0, 0), laser):ToEffect()
-    whirlPool:GetSprite().Scale = Vector(0.75, 0.75)
-    whirlPool:FollowParent(laser)
-    whirlPool:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
-    whirlPool:AddMagnetized(EntityRef(player), 90)
+    if IsInValidRoom(ty.GAME:GetRoom()) then
+        local whirlPool = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WHIRLPOOL, 0, player.Position, Vector(0, 0), laser):ToEffect()
+        whirlPool:GetSprite().Scale = Vector(0.75, 0.75)
+        whirlPool:FollowParent(laser)
+        whirlPool:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
+        whirlPool:AddMagnetized(EntityRef(player), 100)
+    else
+        laserData.Homing = true
+    end
 end
 
 local function GetLaserCount(player)
@@ -405,12 +409,28 @@ function OceanusSoul:UpdateLaser(effect)
                 end
             end
             if data.Delay == 0 then
-                if enemy:ToPlayer() then
-                    if effect.Velocity:Length() >= player.ShotSpeed * 2 then
-                        effect:AddVelocity(-effect.Velocity:Resized(0.08))
+                if data.Homing or data.TearFlags & TearFlags.TEAR_HOMING == TearFlags.TEAR_HOMING then
+                    if enemy:ToPlayer() then
+                        effect:AddVelocity(-effect.Velocity:Resized(0.04))
+                    else
+                        if effect.Velocity:Length() < player.ShotSpeed * 5 then
+                            local targetPosition = enemy.Position
+                            if data.TearFlags & TearFlags.TEAR_ORBIT == TearFlags.TEAR_ORBIT then
+                                targetPosition = targetPosition + Vector(math.sin(data.RotationAngle), math.cos(data.RotationAngle)) * enemy.Size * 0.5
+                            end
+                            effect:AddVelocity((targetPosition - effect.Position):Normalized():Resized(player.ShotSpeed * 0.8))
+                        else
+                            effect:AddVelocity(-effect.Velocity:Resized(0.4))
+                        end
                     end
                 else
-                    effect:AddVelocity(-effect.Velocity:Resized(0.03))
+                    if enemy:ToPlayer() then
+                        if effect.Velocity:Length() >= player.ShotSpeed * 2 then
+                            effect:AddVelocity(-effect.Velocity:Resized(0.08))
+                        end
+                    else
+                        effect:AddVelocity(-effect.Velocity:Resized(0.03))
+                    end
                 end
             else
                 data.Delay = data.Delay - 1
@@ -431,7 +451,7 @@ function OceanusSoul:UpdateLaser(effect)
             for _, ent in pairs(Isaac.FindInRadius(effect.Position, 16 * sprite.Scale.X, EntityPartition.ENEMY)) do
                 if ent:IsActiveEnemy() and ent.Type ~= EntityType.ENTITY_FIREPLACE and not ent:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not ent:HasEntityFlags(EntityFlag.FLAG_CHARM) then
                     if ent.FrameCount % 3 == 0 then
-                        local damage = player.Damage * sprite.Scale.X  * 0.8
+                        local damage = player.Damage * sprite.Scale.X  * 0.75
                         if data.Weapon & 1 << 3 == 1 << 3 then
                             damage = damage * 1.5
                         end

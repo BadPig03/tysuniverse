@@ -1,19 +1,18 @@
 local HadesBlade = ty:DefineANewClass()
 
 local function GetDevilFamiliarCollectible(rng)
-	for itemID = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
-		if ItemConfig.Config.IsValidCollectible(itemID) and ty.ITEMCONFIG:GetCollectible(itemID).Type ~= ItemType.ITEM_FAMILIAR then
-			ty.ITEMPOOL:AddRoomBlacklist(itemID)
-		end
-	end
-	local itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, false, rng:Next(), CollectibleType.COLLECTIBLE_DEMON_BABY)
-    if ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_FAMILIAR then
-        ty.ITEMPOOL:RemoveCollectible(itemID)
-        ty.ITEMPOOL:ResetRoomBlacklist()
-        return itemID
-    else
-        return CollectibleType.COLLECTIBLE_DEMON_BABY
-    end
+    local itemID = 1
+    repeat
+        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
+            if ItemConfig.Config.IsValidCollectible(i) and ty.ITEMCONFIG:GetCollectible(i).Type ~= ItemType.ITEM_FAMILIAR then
+                ty.ITEMPOOL:AddRoomBlacklist(i)
+            end
+        end
+        itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, false, rng:Next(), CollectibleType.COLLECTIBLE_DEMON_BABY)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_FAMILIAR
+    ty.ITEMPOOL:RemoveCollectible(itemID)
+    ty.ITEMPOOL:ResetRoomBlacklist()
+    return itemID
 end
 
 local function GetADevilFamiliar(player, rng)

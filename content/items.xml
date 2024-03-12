@@ -18,7 +18,7 @@
 	<familiar id="10" quality="3" craftquality="3" description="They're more violent" gfx="collectibles_lumigyrofly.png" name="Lumigyro Fly" cache="familiars" tags="fly offensive"/>
 	<passive id="11" quality="0" craftquality="0" description="I'm attractive" gfx="collectibles_collapse.png" name="Collapse" tags="nolostbr offensive"/>
 	<passive id="12" quality="2" craftquality="2" description="More goods... but at what cost?" gfx="collectibles_cursed_treasure.png" name="Cursed Treasure" tags="offensive"/>
-	<active	id="13" quality="4" craftquality="4" cooldown="60" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="6" devilprice="2" shopprice="30" name="The Gospel of John" tags="angel book nokeeper offensive"/>
+	<active	id="13" quality="4" craftquality="4" cooldown="60" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="8" devilprice="2" shopprice="30" name="The Gospel of John" tags="angel book nokeeper offensive"/>
 	<familiar id="14" quality="2" craftquality="2" description="Bigger than ever" gfx="collectibles_magnifier.png" name="Magnifier" cache="familiars" tags="offensive uniquefamiliar"/>
 	<passive id="15" quality="3" craftquality="3" description="Takes on all sins and impurities" gfx="collectibles_scapegoat.png" name="Scapegoat" tags="nocantrip"/>
 	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppysfood.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>

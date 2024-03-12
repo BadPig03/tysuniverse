@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w09a"
+ty.VERSION = "02w09b"
 ty.REPENTOGONVERSION = "1.0.7"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -72,7 +72,7 @@ local function GetInitData()
     data.LaserGun = { IsHolding = false }
     data.LumigyroFly = { Count = 0, Target = nil, RotationList = {}, InProtect = false, DepthOffset = -1 }
     data.Magnifier = { Scale = 1 }
-    data.MarriageCertificate = { MainPlayerSeed = -1, SubPlayerSeed = -1, IsAlive = true }
+    data.MarriageCertificate = { MainPlayerSeed = -1, IsAlive = true }
     data.Mirroring = { PlayerType = -1, OldItemList = {}, Health = 0, Bomb = 0, IsDarkJudas = false, IsLazarus2 = false, Charge = 0, BookOfVirtues = false, MirrorBustedPosition = Vector(0, 0), MirroringSpawned = false }
     data.NoticeOfCriticalCondition = { TempBrokenHearts = 0, Disable = false }
     data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
@@ -99,12 +99,10 @@ local function GetGlobalInitData()
     end
     local data = {}
     data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {} }
-    data.ChocolatePancake = {}
     data.ExpiredGlue = {}
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731 } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
     data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
-    data.TheGospelOfJohn = {}
     return data
 end
 
