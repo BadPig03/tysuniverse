@@ -40,9 +40,9 @@ local function IsPlayerDying(player)
 end
 
 local function GetNearestEnemy(position)
-	local distance = 384
+	local distance = 192
     local nearestEnemy = nil
-    for _, ent in pairs(Isaac.FindInRadius(position, 384, EntityPartition.ENEMY)) do
+    for _, ent in pairs(Isaac.FindInRadius(position, 192, EntityPartition.ENEMY)) do
         if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
             distance = (ent.Position - position):Length()
             nearestEnemy = ent
@@ -165,7 +165,7 @@ function Lumigyrofly:PreFamiliarCollision(familiar, collider, low)
             damage = damage * 2
         end
         if ty.GAME:GetFrameCount() % 6 == 0 then
-            collider:TakeDamage(damage, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(familiar), 0)
+            collider:TakeDamage(damage, 0, EntityRef(familiar), 0)
         end
         return nil
     end

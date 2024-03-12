@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w09b"
+ty.VERSION = "02w09c"
 ty.REPENTOGONVERSION = "1.0.7"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -149,6 +149,9 @@ function ty:PostGameStarted(continued)
         ty.GLOBALDATA = ty:TableCopyTo(data["GlobalData"])
     else
         ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
+        --[[if ImGui and ImGui.ElementExists("MainWindow") then
+            ImGui.SetVisible("MainWindow", true)
+        end]]
     end
     ResetInitData()
 end
@@ -258,3 +261,12 @@ function ty:PostRender()
     end
 end
 ty:AddCallback(ModCallbacks.MC_POST_RENDER, ty.PostRender)
+
+if REPENTOGON then
+    if not ImGui.ElementExists("MainWindow") then
+        ty.IMGUIWINDOW = ImGui.CreateWindow("MainWindow", "ty的宇宙mod提示!")
+        ImGui.AddText("MainWindow", "欢迎下载ty的宇宙mod进行体验测试!\n\n请注意：\n本mod仍在内测，可能会遇到兼容性问题或bug。\n请及时在群内向作者反映报错！\n同时，请常检查群内mod是否有更新并及时更新！\n\n祝你玩的愉快！", true)
+        ImGui.AddButton("MainWindow", "MainWindowButton", "确定", function() ImGui.SetVisible("MainWindow", false) end)
+        ImGui.SetWindowSize("MainWindow", 640, 360)
+    end
+end

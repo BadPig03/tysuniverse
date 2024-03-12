@@ -14,7 +14,7 @@ local function GetDamagePerCharge(player)
     if ty.GAME:IsGreedMode() then
         stage = stage * 2
     end
-    local charge = 15 + 20 * stage ^ 1.8
+    local charge = 15 + 20 * stage ^ 1.5
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.9
     end
@@ -324,6 +324,7 @@ function Warfarin:PostNewRoom()
         if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
             room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
+            room:RemoveGridEntityImmediate(room:GetGridIndex(Vector(200, 160)), 0, false)
         end
         if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() then
             if restorePosition then

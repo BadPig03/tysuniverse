@@ -155,14 +155,14 @@ EIDInfo.Collectibles = {
             Name = "霓旋蝇",
             Desc = "#生成三只围绕角色或敌人旋转的霓旋蝇"..
             "#自动寻找最近的敌人攻击，直到敌人死亡"..
-            "#{{Damage}} 霓旋蝇对接触的敌人造成每秒10点破甲伤害"..
+            "#{{Damage}} 霓旋蝇对接触的敌人造成每秒10点伤害"..
             "#{{Warning}} 当角色血量过低时进入可阻挡泪弹的护主模式"
         },
         [2] = {
             Name = "Lumigyro Fly",
             Desc = "#Spawns three lumigyro flies that orbit around Isaac or enemies"..
             "#Automatically finds the nearest enemy to attack until the enemy is dead"..
-            "#{{Damage}} It deals 10 armor-ignoring damage per second to enemies it comes in contact with"..
+            "#{{Damage}} It deals 10 damage per second to enemies it comes in contact with"..
             "#{{Warning}} When Isaac is low on health, they will protect Isaac by blocking projectiles"
         }
     },
