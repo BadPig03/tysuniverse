@@ -135,6 +135,9 @@ local function SpawnLaser(player, index, percent)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
         laserData.Weapon = laserData.Weapon | 1 << 5
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) then
+        laserData.Weapon = laserData.Weapon | 1 << 8
+    end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
         laserData.Weapon = laserData.Weapon | 1 << 9
     end
@@ -166,7 +169,7 @@ local function SpawnLaser(player, index, percent)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MULLIGAN) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_MULLIGAN
     end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_3_DOLLAR_BILL) or player:HasCollectible(CollectibleType.COLLECTIBLE_FRUIT_CAKE) then
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_3_DOLLAR_BILL) or player:HasCollectible(CollectibleType.COLLECTIBLE_FRUIT_CAKE) or player:HasCollectible(CollectibleType.COLLECTIBLE_PLAYDOUGH_COOKIE) then
         laserData.RandomEffect = true
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_EYESHADOW) then
@@ -180,6 +183,7 @@ local function SpawnLaser(player, index, percent)
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_RUBBER_CEMENT) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_BOUNCE
+        laserData.RubberCement = 0
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_ANTI_GRAVITY) then
         laserData.Delay = laserData.Delay + 60
@@ -205,6 +209,12 @@ local function SpawnLaser(player, index, percent)
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MYSTERIOUS_LIQUID) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP
+    end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_CONTINUUM) then
+        laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_CONTINUUM
+        if not player:HasCollectible(CollectibleType.COLLECTIBLE_RUBBER_CEMENT) then
+            laser.GridCollisionClass = EntityGridCollisionClass.GRIDCOLL_NONE
+        end
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_GODS_FLESH) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_GODS_FLESH
@@ -238,6 +248,9 @@ local function SpawnLaser(player, index, percent)
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_URANUS) then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_ICE
+    end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_OCULAR_RIFT) then
+        laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_OCCULT
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRDS_EYE) then
         laserData.BirdsEye = true
@@ -283,7 +296,7 @@ local function SpawnLaser(player, index, percent)
     end
     laser:GetSprite().Color = GetDefaultLaserColor(player)
     laserSprite:Play("Start", true)
-    laser.Velocity = player:GetLastDirection():Resized(player.ShotSpeed * 6)
+    laser.Velocity = player:GetLastDirection():Resized(player.ShotSpeed * 4) + player:GetMovementVector():Resized(player.ShotSpeed * 2)
     if IsInValidRoom(ty.GAME:GetRoom()) then
         local whirlPool = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WHIRLPOOL, 0, laser.Position, Vector(0, 0), laser):ToEffect()
         whirlPool:GetSprite().Scale = laserSprite.Scale * 0.75
@@ -294,6 +307,9 @@ local function SpawnLaser(player, index, percent)
         whirlPoolParticle:GetSprite().Scale = laserSprite.Scale * 0.65
         whirlPoolParticle:FollowParent(whirlPool)
         whirlPoolParticle:GetSprite().Color = Color(1, 1, 1, 0.8)
+        if laserData.Weapon & 1 << 8 == 1 << 8 then
+            whirlPoolParticle:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
+        end
     else
         laserData.Homing = true
     end
@@ -320,6 +336,13 @@ local function SpawnLasers(player, percent)
     end
 end
 
+local function SetPlayerWeapon(player)
+    local mainWeapon = player:GetWeapon(1)
+    if mainWeapon and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_BONE and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_NOTCHED_AXE and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_URN_OF_SOULS and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_UMBILICAL_WHIP then
+        Isaac.DestroyWeapon(mainWeapon)
+    end
+end
+
 local function GetNearestEnemyInOrder(position)
 	local distance = 256
     local nearestEnemy = nil
@@ -330,13 +353,6 @@ local function GetNearestEnemyInOrder(position)
         end
     end
     return nearestEnemy
-end
-
-local function SetPlayerWeapon(player)
-    local mainWeapon = player:GetWeapon(1)
-    if mainWeapon and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_BONE and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_NOTCHED_AXE and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_URN_OF_SOULS and mainWeapon:GetWeaponType() ~= WeaponType.WEAPON_UMBILICAL_WHIP then
-        Isaac.DestroyWeapon(mainWeapon)
-    end
 end
 
 local function DoFlushEnemies(player)
@@ -397,18 +413,12 @@ function OceanusSoul:UpdateLaser(effect)
             else
                 enemy = GetNearestEnemyInOrder(effect.Position) or player
             end
-            if data.TearFlags & TearFlags.TEAR_BOUNCE == TearFlags.TEAR_BOUNCE then
-                if (not room:IsPositionInRoom(effect.Position + Vector(0, 8), 0) and room:IsPositionInRoom(effect.Position + Vector(0, -8), 0)) or (not room:IsPositionInRoom(effect.Position + Vector(0, -8), 0) and room:IsPositionInRoom(effect.Position + Vector(0, 8), 0)) then
-                    effect.Velocity = Vector(effect.Velocity.X, -effect.Velocity.Y)
-                end
-                if (not room:IsPositionInRoom(effect.Position + Vector(8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0)) or (not room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(8, 0), 0)) then
-                    effect.Velocity = Vector(-effect.Velocity.X, effect.Velocity.Y)
-                end
-            end
             if data.Delay == 0 then
                 if data.Homing or data.TearFlags & TearFlags.TEAR_HOMING == TearFlags.TEAR_HOMING then
                     if enemy:ToPlayer() then
-                        effect:AddVelocity(-effect.Velocity:Resized(0.04))
+                        if effect.Velocity:Length() >= player.ShotSpeed * 2 then
+                            effect:AddVelocity(-effect.Velocity:Resized(0.06))
+                        end
                     else
                         if effect.Velocity:Length() < player.ShotSpeed * 6 then
                             local targetPosition = enemy.Position
@@ -423,7 +433,7 @@ function OceanusSoul:UpdateLaser(effect)
                 else
                     if enemy:ToPlayer() then
                         if effect.Velocity:Length() >= player.ShotSpeed * 2 then
-                            effect:AddVelocity(-effect.Velocity:Resized(0.08))
+                            effect:AddVelocity(-effect.Velocity:Resized(0.06))
                         end
                     else
                         effect:AddVelocity(-effect.Velocity:Resized(0.03))
@@ -431,6 +441,38 @@ function OceanusSoul:UpdateLaser(effect)
                 end
             else
                 data.Delay = data.Delay - 1
+            end
+            if data.TearFlags & TearFlags.TEAR_BOUNCE == TearFlags.TEAR_BOUNCE then
+                if data.RubberCement > 0 then
+                    data.RubberCement = data.RubberCement - 1
+                else
+                    if (not room:IsPositionInRoom(effect.Position + Vector(0, 8), 0) and room:IsPositionInRoom(effect.Position + Vector(0, -8), 0)) or (not room:IsPositionInRoom(effect.Position + Vector(0, -8), 0) and room:IsPositionInRoom(effect.Position + Vector(0, 8), 0)) then
+                        effect.Velocity = Vector(effect.Velocity.X, -effect.Velocity.Y)
+                        data.RubberCement = 5
+                    end
+                    if (not room:IsPositionInRoom(effect.Position + Vector(8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0)) or (not room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(8, 0), 0)) then
+                        effect.Velocity = Vector(-effect.Velocity.X, effect.Velocity.Y)
+                        data.RubberCement = 5
+                    end    
+                end
+            elseif data.TearFlags & TearFlags.TEAR_CONTINUUM == TearFlags.TEAR_CONTINUUM then
+                local roomSize = room:GetGridSize()
+                local roomWidth = room:GetGridWidth()
+                if room:GetGridIndex(effect.Position) == -1 and not data.Continuum then
+                    local clampedGridIndex = room:GetClampedGridIndex(effect.Position)
+                    if clampedGridIndex % roomWidth == 0 then
+                        effect.Position = room:GetGridPosition(clampedGridIndex + roomWidth - 1) + Vector(40, effect.Position.Y - room:GetGridPosition(clampedGridIndex).Y)
+                    elseif clampedGridIndex % roomWidth == roomWidth - 1 then
+                        effect.Position = room:GetGridPosition(clampedGridIndex - roomWidth + 1) + Vector(-40, effect.Position.Y - room:GetGridPosition(clampedGridIndex).Y)
+                    elseif clampedGridIndex <= roomWidth - 1 then
+                        effect.Position = room:GetGridPosition(clampedGridIndex + roomSize - roomWidth) + Vector(effect.Position.X - room:GetGridPosition(clampedGridIndex).X, 40)
+                    elseif clampedGridIndex >= roomSize - roomWidth then
+                        effect.Position = room:GetGridPosition(clampedGridIndex - roomSize + roomWidth) + Vector(effect.Position.X - room:GetGridPosition(clampedGridIndex).X, -40)
+                    end
+                    data.Continuum = true
+                elseif room:GetGridIndex(effect.Position) ~= -1 and data.Continuum then
+                    data.Continuum = false
+                end
             end
             if effect.FrameCount % 5 == 0 and data.TearFlags & TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP == TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_GREEN, 0, effect.Position, Vector(0, 0), player)
@@ -449,14 +491,14 @@ function OceanusSoul:UpdateLaser(effect)
             end
             for _, ent in pairs(Isaac.FindInRadius(effect.Position, 24 * sprite.Scale.X, EntityPartition.ENEMY)) do
                 if ent:IsActiveEnemy() and ent.Type ~= EntityType.ENTITY_FIREPLACE and not ent:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not ent:HasEntityFlags(EntityFlag.FLAG_CHARM) then
-                    local damage = player.Damage * sprite.Scale.X / 2
+                    local damage = player.Damage * sprite.Scale.X / 3
                     if data.Weapon & 1 << 3 == 1 << 3 then
                         damage = damage * 1.5
                     end
                     if data.ChocolateMilk then
-                        damage = damage * (0.6 + data.Percent ^ 0.8)
+                        damage = damage * (0.6 + data.Percent)
                     else
-                        damage = damage * math.max(0.4, data.Percent ^ 0.8)
+                        damage = damage * math.max(0.4, data.Percent)
                     end
                     if player:HasCollectible(CollectibleType.COLLECTIBLE_APPLE) and rng:RandomFloat() < 1 / math.max(1, 15 - math.floor(player.Luck)) then
                         damage = damage * 4
@@ -532,6 +574,9 @@ function OceanusSoul:UpdateLaser(effect)
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
                             tear:ChangeVariant(TearVariant.GRIDENT)
                             tear.TearFlags = TearFlags.TEAR_JACOBS
+                        end
+                        if data.TearFlags & TearFlags.TEAR_OCCULT == TearFlags.TEAR_OCCULT and rng:RandomFloat() < 1 / math.max(5, 20 - math.floor(player.Luck)) then
+                            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.RIFT, 0, ent.Position, Vector(0, 0), player)
                         end
                         if data.RandomEffect then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
@@ -801,15 +846,15 @@ OceanusSoul:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, OceanusSoul.UpdateCh
 function OceanusSoul:NPCUpdate(npc)
     local npc = npc:ToNPC()
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and not npc:IsFlying() and (npc:IsActiveEnemy() and npc.Type ~= EntityType.ENTITY_FIREPLACE and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not npc:HasEntityFlags(EntityFlag.FLAG_CHARM)) or npc.Type == EntityType.ENTITY_MOVABLE_TNT then
-        local current = room:GetWaterCurrent()
-        if IsInValidRoom(room) then
-            npc:AddVelocity(current)
-        end
+    local current = room:GetWaterCurrent()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (npc:IsActiveEnemy() and npc.Type ~= EntityType.ENTITY_FIREPLACE and not npc:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not npc:HasEntityFlags(EntityFlag.FLAG_CHARM)) or npc.Type == EntityType.ENTITY_MOVABLE_TNT then
         if burningEnemies[npc.Type] == true or burningEnemies[npc.Type] == npc.Variant then
             npc:TakeDamage(npc.MaxHitPoints / 3, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(Isaac.GetPlayer()), 0)
         end
-        if room:GetFrameCount() % 5 == 0 and current:Length() > 0.01 and (npc:CollidesWithGrid() or npc.Mass == 100 or npc:HasEntityFlags(EntityFlag.FLAG_FREEZE) or npc:HasEntityFlags(EntityFlag.FLAG_MIDAS_FREEZE)) then
+        if IsInValidRoom(room) and not npc:IsFlying() then
+            npc:AddVelocity(current)
+        end
+        if room:GetFrameCount() % 5 == 0 and current:Length() > 0.01 and (npc:CollidesWithGrid() or npc.Mass >= 100 or npc:HasEntityFlags(EntityFlag.FLAG_FREEZE) or npc:HasEntityFlags(EntityFlag.FLAG_MIDAS_FREEZE)) then
             npc:TakeDamage(GetHighestDamageFromAllPlayers() * current:Length(), DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(Isaac.GetPlayer()), 0)
         end
     end

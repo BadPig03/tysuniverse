@@ -482,7 +482,7 @@ EIDInfo.Collectibles = {
         [2] = {
             Name = "Oceanus' Soul",
             Desc = "#{{Water}} Fills the room with water. Shoots to expel strong water flow and spawn water pillars that attract objects"..
-            "#The water flow can push enemies into obstacles or walls, causing them damage, and can also harm stationary or frozen ground enemies"..
+            "#The water flow can push enemies into obstacles or walls, causing them damage, and can also harm stationary or petrified ground enemies"..
             "#{{ArrowUp}} Instantly kills burning enemies and Bosses"..
             "#{{ArrowDown}} -40% fire rate multiplier",
         }
