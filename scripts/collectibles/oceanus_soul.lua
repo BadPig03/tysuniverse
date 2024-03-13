@@ -118,7 +118,7 @@ local function SpawnLaser(player, index, percent)
         laserSprite.Scale = Vector(scale, scale)
         ty.SFXMANAGER:Play(SoundEffect.SOUND_LASERRING_STRONG, 0.6, 2, false, 1 / scale, 0)
     else
-        local scale = math.max(0.4, percent ^ 0.8)
+        local scale = math.max(0.5, percent ^ 0.8)
         laserSprite.Scale = Vector(scale, scale)
         ty.SFXMANAGER:Play(SoundEffect.SOUND_LASERRING_STRONG, 0.6, 2, false, 1 / scale, 0)
     end
@@ -135,11 +135,17 @@ local function SpawnLaser(player, index, percent)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
         laserData.Weapon = laserData.Weapon | 1 << 5
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+        laserData.Weapon = laserData.Weapon | 1 << 6
+    end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_LUDOVICO_TECHNIQUE) then
         laserData.Weapon = laserData.Weapon | 1 << 8
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
         laserData.Weapon = laserData.Weapon | 1 << 9
+    end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD) then
+        laserData.Weapon = laserData.Weapon | 1 << 13
     end
     if player.TearFlags & TearFlags.TEAR_HOMING == TearFlags.TEAR_HOMING then
         laserData.TearFlags = laserData.TearFlags | TearFlags.TEAR_HOMING
@@ -382,7 +388,10 @@ local function GetTears(player, tears)
         return 30 / 11
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
-        tears = tears / 0.4
+        tears = tears * 2
+    end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+        tears = tears * 0.8
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
         tears = tears * 0.7
@@ -490,7 +499,7 @@ function OceanusSoul:UpdateLaser(effect)
                 room:DamageGrid(gridIndex, 10)
             end
             for _, ent in pairs(Isaac.FindInRadius(effect.Position, 24 * sprite.Scale.X, EntityPartition.ENEMY)) do
-                if ent:IsActiveEnemy() and ent.Type ~= EntityType.ENTITY_FIREPLACE and not ent:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not ent:HasEntityFlags(EntityFlag.FLAG_CHARM) then
+                if ent.Type == EntityType.ENTITY_MOVABLE_TNT or (ent:IsActiveEnemy() and ent.Type ~= EntityType.ENTITY_FIREPLACE and not ent:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not ent:HasEntityFlags(EntityFlag.FLAG_CHARM)) then
                     local damage = player.Damage * sprite.Scale.X / 3
                     if data.Weapon & 1 << 3 == 1 << 3 then
                         damage = damage * 1.5
@@ -505,7 +514,11 @@ function OceanusSoul:UpdateLaser(effect)
                     elseif player:HasCollectible(CollectibleType.COLLECTIBLE_TOUGH_LOVE) and rng:RandomFloat() < 1 / math.max(1, 10 - math.floor(player.Luck)) then
                         damage = damage * 3.2
                     end
-                    ent:TakeDamage(damage, 0, EntityRef(player), 0)
+                    if data.Weapon & 1 << 5 == 1 << 5 or data.Weapon & 1 << 6 == 1 << 6 then
+                        ent:TakeDamage(damage, DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(player), 0)
+                    else
+                        ent:TakeDamage(damage, 0, EntityRef(player), 0)
+                    end
                     if player:HasCollectible(CollectibleType.COLLECTIBLE_HEAD_OF_THE_KEEPER) and rng:RandomInt(100) < 5 then
                         Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, CoinSubType.COIN_PENNY, ent.Position, Vector(0, 0), nil)
                     end
@@ -630,7 +643,7 @@ function OceanusSoul:UpdateLaser(effect)
                     end
                 end
             end
-            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_KNIFE, KnifeVariant.MOMS_KNIFE, 0)) do
+            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_KNIFE, KnifeVariant.MOMS_KNIFE, KnifeSubType.PROJECTILE)) do
                 if ent.Parent and GetPtrHash(ent.Parent) == GetPtrHash(effect) then
                     local knife = ent:ToKnife()
                     if data.Timeout <= 10 and not knife:IsFlying() then
@@ -648,10 +661,10 @@ function OceanusSoul:UpdateLaser(effect)
                 end
             end
             if data.TearFlags & TearFlags.TEAR_GROW == TearFlags.TEAR_GROW then
-                sprite.Scale = Vector(1, 1) + Vector(0.05, 0.05) * effect.FrameCount / 30
+                sprite.Scale = sprite.Scale + Vector(1 / 300, 1 / 300)
             end
             if data.TearFlags & TearFlags.TEAR_SHRINK == TearFlags.TEAR_SHRINK then
-                sprite.Scale = Vector(1.5, 1.5) - Vector(0.1, 0.1) * effect.FrameCount / 30
+                sprite.Scale = sprite.Scale - Vector(1 / 200, 1 / 200)
             end
             data.Timeout = data.Timeout - 1
         else
@@ -854,7 +867,7 @@ function OceanusSoul:NPCUpdate(npc)
         if IsInValidRoom(room) and not npc:IsFlying() then
             npc:AddVelocity(current)
         end
-        if room:GetFrameCount() % 5 == 0 and current:Length() > 0.01 and (npc:CollidesWithGrid() or npc.Mass >= 100 or npc:HasEntityFlags(EntityFlag.FLAG_FREEZE) or npc:HasEntityFlags(EntityFlag.FLAG_MIDAS_FREEZE)) then
+        if IsInValidRoom(room) and room:GetFrameCount() % 5 == 0 and current:Length() > 0.01 and (npc:CollidesWithGrid() or (npc:IsVulnerableEnemy() and (npc.Mass >= 100 or npc:HasEntityFlags(EntityFlag.FLAG_FREEZE) or npc:HasEntityFlags(EntityFlag.FLAG_MIDAS_FREEZE)))) then
             npc:TakeDamage(GetHighestDamageFromAllPlayers() * current:Length(), DamageFlag.DAMAGE_IGNORE_ARMOR, EntityRef(Isaac.GetPlayer()), 0)
         end
     end
