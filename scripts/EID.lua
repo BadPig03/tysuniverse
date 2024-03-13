@@ -487,6 +487,22 @@ EIDInfo.Collectibles = {
             "#{{ArrowDown}} -40% fire rate multiplier",
         }
     },
+    [ty.CustomCollectibles.ABSENCENOTE] = {
+        [1] = {
+            Name = "请假条",
+            Desc = "#每当角色睡觉或进入下一层时获得一颗胶囊"..
+            "#{{Pill}} 每使用4种不同颜色的胶囊或12次任意胶囊，直接获得一个随机疾病道具"..
+            "#{{Pill14}} 金胶囊视作单独的颜色，并算作使用1次"..
+            "#大胶囊视作单独的颜色，并算作使用2次",
+        },
+        [2] = {
+            Name = "Absence Note",
+            Desc = "#Grants a pill whenever Isaac sleeps or is on a new floor"..
+            "#{{Pill}} Obtains a random disease item directly by using 4 different colored pills or any pill 12 times"..
+            "#{{Pill14}} Gold pills are considered as a separate color and count as using once"..
+            "#Horse pills are considered as a separate color and count as using twice",
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
@@ -503,8 +519,8 @@ EIDInfo.Collectibles = {
 
 local icons = Sprite("gfx/eid/player_icons.anm2", true)
 EID:addIcon("Player"..ty.CustomPlayerType.WARFARIN, "Players", 0, 16, 16, 0, 0, icons)
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用副手主动时，若房间内不存在恶魔交易，则额外恢复一颗红心", "ff0", "zh_cn")
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} When using the pocket active, if there is no Devil Deal in the room, heals ff0 one red heart", "ff0", "en_us")
+EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用副手主动时，若房间内不存在恶魔交易，则额外恢复一颗红心 #{{ArrowUp}} 心上限数量增加到9个", "ff0", "zh_cn")
+EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} When using the pocket active, if there is no Devil Deal in the room, heals herself one red heart #{{ArrowUp}} The max amount of heart containers is raised to 9", "ff0", "en_us")
 
 for ID, descTable in pairs(EIDInfo.Collectibles) do
     for i = 1, 2 do

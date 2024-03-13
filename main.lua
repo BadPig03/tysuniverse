@@ -1,7 +1,7 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w09e"
-ty.REPENTOGONVERSION = "1.0.7"
+ty.VERSION = "02w10a"
+ty.REPENTOGONVERSION = "1.0.7a"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
 ty.ITEMPOOL = ty.GAME:GetItemPool()
@@ -59,6 +59,7 @@ local function GetInitData()
 	if data.Init == nil then
 		data.Init = false
 	end
+    data.AbsenceNote = { Colors = {}, Count = 0, Triggered = false }
     data.AtonementVoucher = { Effected = false, DevilRoomVisited = false }
     data.BobsStomach = { LastDirectionX = 0, LastDirectionY = 0, Fired = false, CanFire = false }
     data.BloodSacrifice = { UsedCount = {}, VesselList = {}, Respawning = false, PlaySound = false }
@@ -98,9 +99,9 @@ local function GetGlobalInitData()
         return list
     end
     local data = {}
-    data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {} }
+    data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {}, InTriggered = false, OutTriggered = false }
     data.ExpiredGlue = {}
-    data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731 } }
+    data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731, ty.CustomCollectibles.ANOREXIA, ty.CustomCollectibles.CONSERVATIVETREATMENT, ty.CustomCollectibles.CONJUNCTIVITIS } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
     data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
     return data

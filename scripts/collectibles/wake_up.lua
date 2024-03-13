@@ -81,7 +81,7 @@ function WakeUp:PostNewRoom()
 	local room = ty.GAME:GetRoom()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
-        if data.WakeUp.Used then
+        if data.WakeUp.Used and ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetStageType() == StageType.STAGETYPE_WOTL and ty.LEVEL:GetCurrentRoomIndex() == 84 then
             local itemPoolType = nil
             if data.WakeUp.VirtueTriggered then
                 itemPoolType = ItemPoolType.POOL_ANGEL
@@ -106,16 +106,15 @@ end
 WakeUp:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, WakeUp.PostNewRoom)
 
 function WakeUp:PostNewLevel()
-    if ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 then
-        return
-    end
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        local data = ty:GetLibData(player)
-        data.WakeUp.Used = false
-        data.WakeUp.VirtueTriggered = false
-        data.WakeUp.BelialTriggered = false
-        data.WakeUp.DetectDogma = false
-        data.WakeUp.Time = -1
+    if ty.LEVEL:GetAbsoluteStage() ~= LevelStage.STAGE8 then
+        for _, player in pairs(PlayerManager.GetPlayers()) do
+            local data = ty:GetLibData(player)
+            data.WakeUp.Used = false
+            data.WakeUp.VirtueTriggered = false
+            data.WakeUp.BelialTriggered = false
+            data.WakeUp.DetectDogma = false
+            data.WakeUp.Time = -1
+        end    
     end
 end
 WakeUp:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, WakeUp.PostNewLevel)

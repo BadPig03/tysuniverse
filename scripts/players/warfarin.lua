@@ -12,7 +12,7 @@ end
 local function GetDamagePerCharge(player)
     local stage = ty.LEVEL:GetAbsoluteStage()
     if ty.GAME:IsGreedMode() then
-        stage = stage * 2
+        stage = ty.LEVEL:GetStage() * 1.6
     end
     local charge = 15 + 20 * stage ^ 1.5
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
@@ -72,6 +72,14 @@ local function GetTears(player, tears)
     return tears
 end
 
+local function GetHeartLimit(player)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+        return 18
+    else
+        return 12
+    end
+end
+
 function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, scale)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and slot == ActiveSlot.SLOT_POCKET and scale == 1 then
         local hudOffset = Options.HUDOffset
@@ -84,6 +92,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin
 
 function Warfarin:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
+    local globalData = ty.GLOBALDATA
     if not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.FF0UNLOCKED) and player:GetMaxHearts() >= 24 then
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.FF0UNLOCKED)
     end
@@ -100,10 +109,16 @@ function Warfarin:PostPlayerUpdate(player)
     end
     if player:GetMaxHearts() + player:GetBoneHearts() * 2 > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
-        ItemOverlay.Show(ty.CustomGiantBooks.WARFARINOUT, 3, player)
+        if not globalData.BloodSample.OutTriggered then
+            ItemOverlay.Show(ty.CustomGiantBooks.WARFARINOUT, 3, player)
+            globalData.BloodSample.OutTriggered = true
+        end
     elseif player:GetMaxHearts() + player:GetBoneHearts() * 2 <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
-        ItemOverlay.Show(ty.CustomGiantBooks.WARFARININ, 3, player)
+        if not globalData.BloodSample.InTriggered then
+            ItemOverlay.Show(ty.CustomGiantBooks.WARFARININ, 3, player)
+            globalData.BloodSample.InTriggered = true
+        end
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
@@ -123,10 +138,20 @@ function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
             return 0
         elseif player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and addHealthType & AddHealthType.RED == AddHealthType.RED then
             return amount * 2
+        elseif addHealthType & AddHealthType.MAX == AddHealthType.MAX then
+            return math.min(amount, GetHeartLimit(player) - player:GetMaxHearts() - player:GetBoneHearts() * 2)
         end
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_PLAYER_ADD_HEARTS, Warfarin.PrePlayerAddHearts)
+
+function Warfarin:PrePickupCollision(pickup, collider, low)
+    local player = collider:ToPlayer()
+    if player and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and pickup.SubType == HeartSubType.HEART_BONE and player:GetMaxHearts() + player:GetBoneHearts() * 2 >= GetHeartLimit(player) then
+        return { Collide = true, SkipCollisionEffects = true }
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, Warfarin.PrePickupCollision, PickupVariant.PICKUP_HEART)
 
 function Warfarin:PreTriggerPlayerDeath(player)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and player:GetExtraLives() > 0 and player:GetMaxHearts() + player:GetBoneHearts() == 0 then
@@ -154,6 +179,9 @@ function Warfarin:PostHUDUpdate()
             end
             if player:GetBlackHearts() > 0 then
                 player:AddBlackHearts(-player:GetBlackHearts())
+            end
+            if player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then 
+                player:AddBoneHearts((GetHeartLimit(player) - player:GetMaxHearts() - player:GetBoneHearts() * 2) / 2)
             end
         end
     end
@@ -211,6 +239,9 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         end
         if type == CollectibleType.COLLECTIBLE_BLOOD_BAG then
             player:AddHearts(99)
+        end
+        if (type == CollectibleType.COLLECTIBLE_MARROW or type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) and player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then
+            player:AddBoneHearts(-1)
         end
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
     end
@@ -337,6 +368,10 @@ function Warfarin:PostNewRoom()
             if #Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE) == 0 then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
             end
+        end
+        if globalData.BloodSample then
+            globalData.BloodSample.InTriggered = false
+            globalData.BloodSample.OutTriggered = false    
         end
     end
 end

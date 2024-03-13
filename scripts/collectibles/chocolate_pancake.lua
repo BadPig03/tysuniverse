@@ -20,8 +20,10 @@ function ChocolatePancake:PostPickupUpdate(pickup)
     local pickup = pickup:ToPickup()
     local room = ty.GAME:GetRoom()
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) then
-        if pickup:IsShopItem() and not pickup.Touched and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/chocolate_pancake_deal.anm2" and pickup.ShopItemId ~= -16 and pickup.Price < 0 then
+        if pickup:IsShopItem() and not pickup.Touched and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/chocolate_pancake_deal.anm2" and pickup.ShopItemId ~= -4 and pickup.Price < 0 then
             pickup.ShopItemId = -3
+            pickup.AutoUpdatePrice = false
+            pickup.Price = PickupPrice.PRICE_FREE
             local sprite = pickup:GetPriceSprite()
             sprite:Load("gfx/items/shops/chocolate_pancake_deal.anm2", true)
             sprite:Play("Idle", true)

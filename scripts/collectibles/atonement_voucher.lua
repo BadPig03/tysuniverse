@@ -53,7 +53,7 @@ AtonementVoucher:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, AtonementVouche
 function AtonementVoucher:PostDevilCalculate()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
-        if data.AtonementVoucher.Effected then
+        if data.AtonementVoucher and data.AtonementVoucher.Effected then
             return 0
         end
     end

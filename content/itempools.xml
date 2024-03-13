@@ -11,6 +11,7 @@
   </Pool>
   <Pool Name="beggar">
 		<Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="boss">
     <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -25,10 +26,12 @@
     <Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Expired Glue" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="demonBeggar">
 		<Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="devil">
     <Item Name="Guilt" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

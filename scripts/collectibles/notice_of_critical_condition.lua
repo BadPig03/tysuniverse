@@ -62,16 +62,22 @@ local function SpawnDamageEffect(player)
 end
 
 local function GetItemFromPool(player)
-    local rng = player:GetCollectibleRNG(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION)
     local data = ty.GLOBALDATA
-    local index = rng:RandomInt(#data.NoticeOfCriticalCondition.ItemList) + 1
-    local item = data.NoticeOfCriticalCondition.ItemList[index]
-	if ty.ITEMPOOL:HasCollectible(item) then
-		table.remove(data.NoticeOfCriticalCondition.ItemList, index)
-		return item
-	else
-		return GetItemFromPool(player)
-	end
+    local rng = player:GetCollectibleRNG(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION)
+    local validItems = {}
+    for _, item in pairs(data.NoticeOfCriticalCondition.ItemList) do
+        if ty.ITEMPOOL:HasCollectible(item) then
+            table.insert(validItems, item)
+        end
+    end
+    if #validItems > 0 then
+        local index = rng:RandomInt(#validItems) + 1
+        local selected_item = validItems[index]
+        table.remove(data.NoticeOfCriticalCondition.ItemList, selected_item)
+        return selected_item
+    else
+        return CollectibleType.COLLECTIBLE_BREAKFAST
+    end
 end
 
 function NoticeOfCriticalCondition:PostHUDRender()
@@ -185,7 +191,7 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 				end
 			end
 			if sprite:IsFinished("GainPill") then
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, rng:RandomInt(13) + 1, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 16), 0, true), Vector(0, 0), nil)
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 16), 0, true), Vector(0, 0), nil)
 				sprite:Play("Idle", true)
 				ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN)
 				slotData.BrokenChance = math.max(0, slotData.BrokenChance - 5)
