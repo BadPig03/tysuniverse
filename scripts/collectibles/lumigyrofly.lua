@@ -27,7 +27,7 @@ local function IsPlayerDying(player)
         end
         return 2
     end
-	if player:GetPlayerType() == PlayerType.PLAYER_THELOST or player:GetPlayerType() == PlayerType.PLAYER_THELOST_B then
+	if player:GetHealthType() == HealthType.LOST then
         if effects:GetCollectibleEffectNum(CollectibleType.COLLECTIBLE_HOLY_MANTLE) == 0 and not player:HasInvincibility() then
             return true
         end

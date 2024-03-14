@@ -11,6 +11,7 @@ ty.CollectiblesList = {
     'atonement_voucher',
     'blood_sacrifice',
     'bobs_stomach',
+    'bone_in_fish_steak',
     'chocolate_pancake',
     'collapse',
     'conjunctivitis',

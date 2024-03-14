@@ -26,6 +26,14 @@ function ty:IsValueInTable(value, origin)
 	return false
 end
 
+function ty:RemoveValueInTable(value, origin)
+	for _, item in pairs(origin) do
+		if value == item then
+			table.remove(origin, _)
+		end
+	end
+end
+
 function ty:IsPlayerFiring(player)
     local controllerIndex = player.ControllerIndex
 	if Input.IsActionPressed(ButtonAction.ACTION_SHOOTUP, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTDOWN, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTRIGHT, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTLEFT, controllerIndex) then
@@ -39,15 +47,6 @@ function ty:GetPlayerFromTear(tear)
         return tear.SpawnerEntity:ToPlayer()
     elseif tear.SpawnerEntity and tear.SpawnerEntity:ToFamiliar() and (tear.SpawnerEntity.Variant == FamiliarVariant.CAINS_OTHER_EYE or tear.SpawnerEntity.Variant == FamiliarVariant.INCUBUS or tear.SpawnerEntity.Variant == FamiliarVariant.FATES_REWARD or tear.SpawnerEntity.Variant == FamiliarVariant.TWISTED_BABY or tear.SpawnerEntity.Variant == FamiliarVariant.BLOOD_BABY or tear.SpawnerEntity.Variant == FamiliarVariant.UMBILICAL_BABY) and tear.SpawnerEntity:ToFamiliar().Player and tear.SpawnerEntity:ToFamiliar().Player:ToPlayer() then
         return tear.SpawnerEntity:ToFamiliar().Player:ToPlayer()
-    end
-    return nil
-end
-
-function ty:GetPlayerFromInitSeed(seed)
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        if player.InitSeed == seed then
-            return player
-        end
     end
     return nil
 end

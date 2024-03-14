@@ -12,7 +12,7 @@ local function GetItemFromPool(player)
     if #validItems > 0 then
         local index = rng:RandomInt(#validItems) + 1
         local selected_item = validItems[index]
-        table.remove(data.NoticeOfCriticalCondition.ItemList, selected_item)
+        ty:RemoveValueInTable(selected_item, data.NoticeOfCriticalCondition.ItemList)
         return selected_item
     else
         return CollectibleType.COLLECTIBLE_BREAKFAST

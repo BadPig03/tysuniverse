@@ -54,7 +54,6 @@ function TheGospelOfJohn:PostPickupUpdate(pickup)
             sprite:Load("gfx/items/shops/broken_heart_deal.anm2", true)
             sprite:SetFrame("Hearts", ty.ITEMCONFIG:GetCollectible(pickup.SubType).Quality - 2)
             pickup.AutoUpdatePrice = false
-            pickup.Price = PickupPrice.PRICE_FREE
         end
         if #pickup:GetCollectibleCycle() > 0 then
             pickup:RemoveCollectibleCycle()

@@ -32,6 +32,7 @@ local collectibles = {
     [ty.CustomCollectibles.TOOLBOX] = { Name="工具箱", Description="里面有什么？" },
     [ty.CustomCollectibles.OCEANUSSOUL] = { Name="俄刻阿诺斯之魂", Description="海洋化身" },
     [ty.CustomCollectibles.ABSENCENOTE] = { Name="请假条", Description="按时吃药" },
+    [ty.CustomCollectibles.BONEINFISHSTEAK] = { Name="带骨鱼排", Description="小心地吃" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="仅供测试" }
 }
 

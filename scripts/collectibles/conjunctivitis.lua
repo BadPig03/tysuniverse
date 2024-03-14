@@ -18,7 +18,7 @@ local function GetTailedDamage(player, tear)
 end
 
 local function GetTears(player, tears)
-    if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
+    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
         return 30 / 11
     end
     if player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) then

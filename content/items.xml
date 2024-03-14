@@ -38,5 +38,6 @@
 	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared"/>
 	<passive id="32" quality="2" craftquality="2" description="Take medicine on time" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive"/>
+	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay" tags="food nolostbr"/>
 	<active	id="50" quality="0" craftquality="-1" cooldown="30" description="For test purpose only" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>

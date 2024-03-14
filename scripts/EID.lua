@@ -140,14 +140,12 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "病危通知书",
             Desc = "#{{Pill}} 使用好胶囊时有20%的概率消除一颗碎心"..
-            "#{{BrokenHeart}} 每到新层时获得两颗碎心，有概率生成一台碎心交易机"..
-            "#{{Warning}} 献血机和赌博机有概率被替换成碎心交易机"
+            "#{{BrokenHeart}} 每到新层时获得两颗碎心，有概率生成一位医疗护士"
         },
         [2] = {
             Name = "Notice Of Critical Condition",
             Desc = "#{{Pill}} Taking positive pills has 20% chance to remove a broken heart"..
-            "#{{BrokenHeart}} Upon a new floor, grants 2 broken hearts. And there is a chance to spawn a Broken Heart Machine in the starting room"..
-            "#There is a chance for Blood Donation Machine and Slot Machine to be replaced by Broken Heart Machine"
+            "#{{BrokenHeart}} Upon a new floor, grants 2 broken hearts. And there is a chance to spawn a Healing Beggar in the starting room"
         }
     },
     [ty.CustomCollectibles.LUMIGYROFLY] = {
@@ -501,6 +499,22 @@ EIDInfo.Collectibles = {
             "#{{Pill}} Obtains a random disease item directly by using 4 different colored pills or any pill 12 times"..
             "#{{Pill14}} Gold pills are considered as a separate color and count as using once"..
             "#Horse pills are considered as a separate color and count as using twice",
+        }
+    },
+    [ty.CustomCollectibles.BONEINFISHSTEAK] = {
+        [1] = {
+            Name = "带骨鱼排",
+            Desc = "#{{ArrowUp}} +1心之容器"..
+            "#每当角色拾取'食物'标签道具或者吞下任何饰品时："..
+            "#{{Collectible486}} 使角色受伤但不掉血"..
+            "#{{Tears}} 永久+0.2射速修正"
+        },
+        [2] = {
+            Name = "Bone-in Fish Steak",
+            Desc = "#{{ArrowUp}} +1 Health up"..
+            "Whenever Isaac picks up an item which contains the 'food' tag or consumes any trinket"..
+            "#{{Collectible486}} Causes Isaac to take damage without taking away health"..
+            "#{{Tears}} +0.2 Fire rate permanently"
         }
     },
     [ty.CustomCollectibles.BLOODSAMPLE] = {

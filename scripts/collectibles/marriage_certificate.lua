@@ -19,6 +19,16 @@ local allowCopying = false
 local extraBlackHearts = false
 local itemCount = 0
 
+
+local function GetPlayerFromInitSeed(seed)
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        if player.InitSeed == seed then
+            return player
+        end
+    end
+    return nil
+end
+
 local function GetCollectiblesList(player)
     local list = {}
     for itemID, count in pairs(player:GetCollectiblesList()) do
@@ -72,7 +82,7 @@ end
 
 local function GetMainPlayer(player)
     local data = ty:GetLibData(player)
-    return ty:GetPlayerFromInitSeed(data.MarriageCertificate.MainPlayerSeed)
+    return GetPlayerFromInitSeed(data.MarriageCertificate.MainPlayerSeed)
 end
 
 local function IsSubPlayer(player)

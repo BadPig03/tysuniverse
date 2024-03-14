@@ -30,8 +30,9 @@ ty.CustomCollectibles = {
     PHILOSOPHERSSTAFF = Isaac.GetItemIdByName("Philosopher's Staff"),
     EXPIREDGLUE = Isaac.GetItemIdByName("Expired Glue"),
     TOOLBOX = Isaac.GetItemIdByName("Tool Box"),
-    ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
     OCEANUSSOUL = Isaac.GetItemIdByName("Oceanus' Soul"),
+    ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
+    BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample")
 }
 
@@ -72,7 +73,7 @@ ty.CustomPlayerType = {
 }
 
 ty.CustomEntities = {
-    NOTICEOFCRITICALCONDITIONMACHINE = Isaac.GetEntityVariantByName("Notice Of Critical Condition Machine"),
+    HEALINGBEGGAR = Isaac.GetEntityVariantByName("Healing Beggar"),
     LUMIGYROFLY = Isaac.GetEntityVariantByName("Lumigyro Fly"),
     TREASUREGHOST = Isaac.GetEntityTypeByName("Treasure Ghost"),
     CURSEDCOIN = Isaac.GetEntitySubTypeByName("Cursed Coin"),

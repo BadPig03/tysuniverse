@@ -42,10 +42,10 @@ function HadesBlade:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
-    if player:GetPlayerType() == PlayerType.PLAYER_THELOST or player:GetPlayerType() == PlayerType.PLAYER_THELOST_B then
+    if player:GetHealthType() == HealthType.LOST then
         GetADevilFamiliar(player, rng)
         return { Discharge = true, Remove = true, ShowAnim = false }
-    elseif player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY or player:GetPlayerType() == PlayerType.PLAYER_BLACKJUDAS or player:GetPlayerType() == PlayerType.PLAYER_BLUEBABY_B or player:GetPlayerType() == PlayerType.PLAYER_BETHANY_B or player:GetPlayerType() == PlayerType.PLAYER_THESOUL or player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B or player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN_B then
+    elseif player:GetHealthType() == HealthType.SOUL then
         if player:GetBoneHearts() > 0 then
             player:AddBoneHearts(-1)
             GetADevilFamiliar(player, rng)
@@ -55,13 +55,13 @@ function HadesBlade:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
             GetADevilFamiliar(player, rng)
             return { Discharge = true, Remove = false, ShowAnim = false }
         end
-    elseif player:GetPlayerType() == PlayerType.PLAYER_KEEPER or player:GetPlayerType() == PlayerType.PLAYER_KEEPER_B then
+    elseif player:GetHealthType() == HealthType.COIN then
         if player:GetNumCoins() >= 20 then
             player:AddCoins(-20)
             GetADevilFamiliar(player, rng)
             return { Discharge = true, Remove = false, ShowAnim = false }
         end
-    elseif player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN then
+    elseif player:GetHealthType() == HealthType.BONE then
         player:AddBoneHearts(-1)
         GetADevilFamiliar(player, rng)
         return { Discharge = true, Remove = false, ShowAnim = false }
