@@ -1,7 +1,7 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w10c"
-ty.REPENTOGONVERSION = "1.0.7a"
+ty.VERSION = "02w10d"
+ty.REPENTOGONVERSION = "1.0.7c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
 ty.ITEMPOOL = ty.GAME:GetItemPool()
@@ -36,10 +36,10 @@ local esauJRReset = false
 local function MeetsVersion(targetVersion)
     local version = {}
     local target = {}
-    for num in REPENTOGON.Version:gsub("a", ".1"):gsub("b", ".2"):gmatch("%d+") do
+    for num in REPENTOGON.Version:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gmatch("%d+") do
         table.insert(version, tonumber(num))
     end
-    for num in targetVersion:gsub("a", ".1"):gsub("b", ".2"):gmatch("%d+") do
+    for num in targetVersion:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gmatch("%d+") do
         table.insert(target, tonumber(num))
     end
     for i = 1, math.max(#version, #target) do

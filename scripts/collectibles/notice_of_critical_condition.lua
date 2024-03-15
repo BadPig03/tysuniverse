@@ -29,7 +29,7 @@ local function GetRenderOffset()
 	if ty.GAME:IsHardMode() or ty.GAME:IsGreedMode() or ty.GAME:AchievementUnlocksDisallowed() then
 		coords = coords + Vector(0, 16)
 	end
-	if PlanetariumChance or REPENTOGON then
+	if PlanetariumChance or Options.StatHUDPlanetarium then
         coords = coords + Vector(0, 11)
     end
 	coords = coords + ty.GAME.ScreenShakeOffset + Options.HUDOffset * Vector(20, 12)
