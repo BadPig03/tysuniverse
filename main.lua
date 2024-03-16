@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w10f"
+ty.VERSION = "02w10g"
 ty.REPENTOGONVERSION = "1.0.7c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -20,7 +20,6 @@ ty.GLOBALDATA = {}
 ty.PERSISTENTDATA = { Rewind = false, GlowingHourglass = false }
 
 local json = require("json")
-
 include("scripts/load.lua")
 
 if EID then
@@ -231,7 +230,7 @@ ty:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, ty.PostNewRoom)
 
 function ty:PostRender()
     if REPENTOGON then
-        if ty.GAME:GetFrameCount() < 150 then
+        if ty.GAME:GetFrameCount() < 120 then
             if Options.Language == "zh" then
                 local warningString = "请注意群内是否有新版本可用!"
                 ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))

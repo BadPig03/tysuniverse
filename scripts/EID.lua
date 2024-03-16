@@ -551,8 +551,8 @@ EIDInfo.Collectibles = {
 
 local icons = Sprite("gfx/eid/player_icons.anm2", true)
 EID:addIcon("Player"..ty.CustomPlayerType.WARFARIN, "Players", 0, 16, 16, 0, 0, icons)
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用副手主动时，若房间内不存在恶魔交易，则额外恢复一颗红心 #{{ArrowUp}} 心上限数量增加到9个", "ff0", "zh_cn")
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} When using the pocket active, if there is no Devil Deal in the room, heals herself one red heart #{{ArrowUp}} The max amount of heart containers is raised to 9", "ff0", "en_us")
+EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用血液样本时额外恢复一颗红心 #{{ArrowUp}} 心上限数量增加到9个", "ff0", "zh_cn")
+EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} Heals one red heart when using the Blood Sample #{{ArrowUp}} The max amount of heart containers is raised to 9", "ff0", "en_us")
 
 for ID, descTable in pairs(EIDInfo.Collectibles) do
     for i = 1, 2 do

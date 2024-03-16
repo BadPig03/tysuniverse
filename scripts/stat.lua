@@ -231,7 +231,7 @@ function Stat:EvaluateCache(player, cache)
     end
 end
 Stat:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, CallbackPriority.LATE, Stat.EvaluateCache)
-
+--[[
 function Stat:PostUsePill(pillEffect, player, useFlags, pillColor)
     local data = ty:GetLibData(player)
     local giantFlag = 1
@@ -266,7 +266,7 @@ Stat:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Stat.ResetHugeGrowthScale)
 
 function Stat:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
-    if data.Init then
+    if data.Init and data.PlayerSize then
         local size = 1
         local effects = player:GetEffects()
         size = size * 0.5 ^ (player:GetCollectibleNum(CollectibleType.COLLECTIBLE_PLUTO) + effects:GetCollectibleEffectNum(CollectibleType.COLLECTIBLE_INNER_CHILD))
@@ -278,5 +278,5 @@ function Stat:PostPlayerUpdate(player)
     end
 end
 Stat:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Stat.PostPlayerUpdate)
-
+]]
 return Stat

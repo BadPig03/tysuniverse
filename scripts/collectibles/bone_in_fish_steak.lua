@@ -24,6 +24,7 @@ function BoneInFishSteak:PostAddCollectible(type, charge, firstTime, slot, varDa
         if item and item:HasTags(ItemConfig.TAG_FOOD) then
             data.BoneInFishSteak.TearsUp = data.BoneInFishSteak.TearsUp + 1
             player:TakeDamage(1, DamageFlag.DAMAGE_RED_HEARTS | DamageFlag.DAMAGE_FAKE, EntityRef(player), 15)
+            player:StopExtraAnimation()
             player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY, true)
         end
     end
@@ -41,6 +42,7 @@ function BoneInFishSteak:PostPlayerUpdate(player)
             data.BoneInFishSteak.TearsUp = data.BoneInFishSteak.TearsUp + trinketsCount - data.BoneInFishSteak.TrinketsCount
             data.BoneInFishSteak.TrinketsCount = trinketsCount
             player:TakeDamage(1, DamageFlag.DAMAGE_RED_HEARTS | DamageFlag.DAMAGE_FAKE, EntityRef(player), 15)
+            player:StopExtraAnimation()
             player:AddCacheFlags(CacheFlag.CACHE_FIREDELAY, true)
         end
     end
