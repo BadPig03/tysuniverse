@@ -48,7 +48,7 @@ function Magnifier:PostFamiliarRender(familiar)
         return
     end
     for _, ent in pairs(Isaac.FindInRadius(familiar.Position + Vector(0, 2 * familiarData.Target.Size), 256, EntityPartition.ENEMY)) do
-        if ent:ToNPC() and ty:IsValidCollider(ent) then
+        if ent:ToNPC() and ent:IsActiveEnemy() then
             local npc = ent:ToNPC()
             local npcData = ty:GetLibData(npc)
             local originScale = 1

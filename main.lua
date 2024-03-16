@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w10d"
+ty.VERSION = "02w10f"
 ty.REPENTOGONVERSION = "1.0.7c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -36,10 +36,10 @@ local esauJRReset = false
 local function MeetsVersion(targetVersion)
     local version = {}
     local target = {}
-    for num in REPENTOGON.Version:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gmatch("%d+") do
+    for num in REPENTOGON.Version:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gsub("d", ".4"):gmatch("%d+") do
         table.insert(version, tonumber(num))
     end
-    for num in targetVersion:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gmatch("%d+") do
+    for num in targetVersion:gsub("a", ".1"):gsub("b", ".2"):gsub("c", ".3"):gsub("d", ".4"):gmatch("%d+") do
         table.insert(target, tonumber(num))
     end
     for i = 1, math.max(#version, #target) do
@@ -101,10 +101,11 @@ local function GetGlobalInitData()
     end
     local data = {}
     data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {}, InTriggered = false, OutTriggered = false }
-    data.ExpiredGlue = {}
+    data.ChocolatePancake = {}
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, Disabled = false, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731, ty.CustomCollectibles.ANOREXIA, ty.CustomCollectibles.CONSERVATIVETREATMENT, ty.CustomCollectibles.CONJUNCTIVITIS } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
     data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
+    data.TheGospelOfJohn = {}
     return data
 end
 
@@ -151,9 +152,6 @@ function ty:PostGameStarted(continued)
         ty.GLOBALDATA = ty:TableCopyTo(data["GlobalData"])
     else
         ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
-        --[[if ImGui and ImGui.ElementExists("MainWindow") then
-            ImGui.SetVisible("MainWindow", true)
-        end]]
     end
     ResetInitData()
 end
@@ -263,12 +261,3 @@ function ty:PostRender()
     end
 end
 ty:AddCallback(ModCallbacks.MC_POST_RENDER, ty.PostRender)
-
-if REPENTOGON then
-    if not ImGui.ElementExists("MainWindow") then
-        ty.IMGUIWINDOW = ImGui.CreateWindow("MainWindow", "ty的宇宙mod提示!")
-        ImGui.AddText("MainWindow", "欢迎下载ty的宇宙mod进行体验测试!\n\n请注意：\n本mod仍在内测，可能会遇到兼容性问题或bug。\n请及时在群内向作者反映报错！\n同时，请常检查群内mod是否有更新并及时更新！\n\n祝你玩的愉快！", true)
-        ImGui.AddButton("MainWindow", "MainWindowButton", "确定", function() ImGui.SetVisible("MainWindow", false) end)
-        ImGui.SetWindowSize("MainWindow", 640, 360)
-    end
-end

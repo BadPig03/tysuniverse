@@ -73,14 +73,6 @@ local function GetItemFromPool(player)
     end
 end
 
-function NoticeOfCriticalCondition:PreEntitySpawn(type, variant, subType, position, velocity, spawner, seed)
-	local data = ty.GLOBALDATA
-	if type == EntityType.ENTITY_SLOT and data.NoticeOfCriticalCondition.MachineList[tostring(seed)] == nil then
-		data.NoticeOfCriticalCondition.MachineList[tostring(seed)] = ty:TableCopyTo(GetInitData())
-	end
-end
-NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_PRE_ENTITY_SPAWN, NoticeOfCriticalCondition.PreEntitySpawn)
-
 function NoticeOfCriticalCondition:PostHUDRender()
 	local data = ty.GLOBALDATA
     if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) or not data.NoticeOfCriticalCondition or not ty.HUD:IsVisible() or not Options.FoundHUD or (ty.GAME:GetRoom():GetType() == RoomType.ROOM_DUNGEON and ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8) or ty.GAME:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD) or ty.GAME:IsGreedMode() then
@@ -114,7 +106,7 @@ NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, NoticeOfC
 
 function NoticeOfCriticalCondition:PostNewLevel()
 	local data = ty.GLOBALDATA
-	if data.NoticeOfCriticalCondition and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
+	if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
 		data.NoticeOfCriticalCondition.MachineList = {}
 		if not data.NoticeOfCriticalCondition.Disabled then
 			AddChance(data, 30)
@@ -154,6 +146,10 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 	local slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 	local room = ty.GAME:GetRoom()
 	local sprite = slot:GetSprite()
+	if slotData == nil then
+		data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:TableCopyTo(GetInitData())
+		slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
+	end
 	if slotData.IsBroken then
 		if sprite:IsFinished("Broken") then
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)

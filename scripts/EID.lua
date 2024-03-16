@@ -450,11 +450,15 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.EXPIREDGLUE] = {
         [1] = {
             Name = "过期胶水",
-            Desc = "#将所有硬币替换为黏性镍币"
+            Desc = "#每0.2秒，有2%的概率将硬币(镍币概率翻倍)替换为黏性镍币"..
+            "#被炸的黏性镍币也可能被替换为黏性镍币"..
+            "#{{Warning}} 替换后会重置消失时间"
         },
         [2] = {
             Name = "Expired Glue",
-            Desc = "#Replace all coins with the Sticky Nickel"
+            Desc = "#Every 0.2 seconds, there is a 2% chance that any coin (nickel coin with a doubled probability) will be replaced with a sticky nickel coin",
+            "#The sticky nickel coin that has been exploded may also be replaced with a sticky nickel coin"..
+            "#{{Warning}} After replacement, the disappearance time will be reset"
         }
     },
     [ty.CustomCollectibles.TOOLBOX] = {
@@ -507,28 +511,42 @@ EIDInfo.Collectibles = {
             Desc = "#{{ArrowUp}} +1心之容器"..
             "#每当角色拾取'食物'标签道具或者吞下任何饰品时："..
             "#{{Collectible486}} 使角色受伤但不掉血"..
-            "#{{Tears}} 永久+0.2射速修正"
+            "#{{Tears}} 永久+0.2射速修正",
+            BingeEater = "{{ArrowUp}} +1额外伤害"..
+            "#{{Collectible664}} {{ArrowUp}} +1幸运"..
+            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
         },
         [2] = {
             Name = "Bone-in Fish Steak",
             Desc = "#{{ArrowUp}} +1 Health up"..
             "Whenever Isaac picks up an item which contains the 'food' tag or consumes any trinket"..
             "#{{Collectible486}} Causes Isaac to take damage without taking away health"..
-            "#{{Tears}} +0.2 Fire rate permanently"
+            "#{{Tears}} +0.2 Fire rate permanently",
+            BingeEater = "{{ArrowUp}} +1 extra Damage"..
+            "#{{Collectible664}} {{ArrowUp}} +1 Luck"..
+            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
-            Desc = "#{{Trinket13}} 若房间内存在恶魔交易，则使得最近一个恶魔交易免费并重置为本房间内道具池的道具"..
-            "#{{EmptyHeart}} 否则，获得一个空的心之容器"
+            Desc = "#{{EmptyHeart}} 获得一个空的心之容器"
         },
         [2] = {
             Name = "Blood Sample",
-            Desc = "#{{Trinket13}} If a Devil Deal is present in the room, the nearest Devil Deal becomes free and rerolls into items from the current room's item pool"..
-            "#{{Heart}} Otherwise, grants an empty health container"
+            Desc = "#{{EmptyHeart}} Grants an empty health container"
         }
     },
+    [ty.CustomCollectibles.BLOODYDICE] = {
+        [1] = {
+            Name = "血之骰",
+            Desc = "#将最近一个恶魔交易免费并重置为本房间内道具池的道具",
+        },
+        [2] = {
+            Name = "Bloody Dice",
+            Desc = "#Makes the nearest Devil Deal free and rerolls into items from the current room's item pool",
+        }
+    }
 }
 
 local icons = Sprite("gfx/eid/player_icons.anm2", true)

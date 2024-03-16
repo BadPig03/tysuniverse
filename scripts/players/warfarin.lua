@@ -38,11 +38,11 @@ local function IsCollectibleHasNoItemPool(collectibleType)
 end
 
 local function GetClosestCollectible(player)
-    local minDistance = 8192
+    local minDistance = 96
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
-        if pickup:IsShopItem() and pickup.Price < 0 and pickup.ShopItemId ~= -4 and (pickup.Position - player.Position):Length() < minDistance then
+        if pickup:IsShopItem() and pickup.Price < 0 and pickup.Price ~= PickupPrice.PRICE_FREE and (pickup.Position - player.Position):Length() < minDistance then
             minDistance = (pickup.Position - player.Position):Length()
             collectible = pickup
         end
@@ -120,8 +120,28 @@ function Warfarin:PostPlayerUpdate(player)
             globalData.BloodSample.InTriggered = true
         end
     end
+    local collectible = GetClosestCollectible(player)
+    local charge = player:GetActiveCharge(ActiveSlot.SLOT_POCKET) + player:GetBatteryCharge(ActiveSlot.SLOT_POCKET)
+    if collectible then
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
+            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
+            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+        end
+    else
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
+            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
+            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+        end
+    end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
+
+function Warfarin:PostPlayerRender(player)
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
+        player.Color = Color(1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0)
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, Warfarin.PostPlayerRender)
 
 function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 then
@@ -209,23 +229,27 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
-    local data = ty:GetLibData(player)
-    local collectible = GetClosestCollectible(player)
-    if collectible then
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, collectible.Position, Vector(0, 0), nil)
-        collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType))
-        collectible.ShopItemId = -2
-        collectible.Price = 0
-    else
+    if itemID == ty.CustomCollectibles.BLOODYDICE then
+        local collectible = GetClosestCollectible(player)
+        if collectible then
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, collectible.Position, Vector(0, 0), nil)
+            collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType))
+            collectible.ShopItemId = -2
+            collectible.Price = 0
+            return { Discharge = true, Remove = false, ShowAnim = true }
+        else
+            return { Discharge = false, Remove = false, ShowAnim = false }
+        end
+    elseif itemID == ty.CustomCollectibles.BLOODSAMPLE then
         ty.SFXMANAGER:Play(SoundEffect.SOUND_SUPERHOLY, 0.6)
         player:AddMaxHearts(2)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
             player:AddHearts(2)
         end
+        return { Discharge = true, Remove = false, ShowAnim = true }
     end
-    return { Discharge = true, Remove = false, ShowAnim = true }
 end
-Warfarin:AddCallback(ModCallbacks.MC_USE_ITEM, Warfarin.UseItem, ty.CustomCollectibles.BLOODSAMPLE)
+Warfarin:AddCallback(ModCallbacks.MC_USE_ITEM, Warfarin.UseItem)
 
 function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
@@ -243,10 +267,36 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         if (type == CollectibleType.COLLECTIBLE_MARROW or type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) and player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then
             player:AddBoneHearts(-1)
         end
+        if type == CollectibleType.COLLECTIBLE_SPIRIT_OF_THE_NIGHT or type == CollectibleType.COLLECTIBLE_DEAD_DOVE then
+            player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
+            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
+            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
+            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+        end
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, Warfarin.PostAddCollectible)
+
+function Warfarin:PostTriggerCollectibleRemoved(player, type)
+    if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
+	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+	end
+    if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
+	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+	end
+    if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
+	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+	end
+end
+Warfarin:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, Warfarin.PostTriggerCollectibleRemoved)
 
 function Warfarin:PostPickupShopPurchase(pickup, player, moneySpent)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then

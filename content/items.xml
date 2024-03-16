@@ -1,10 +1,13 @@
 <items gfxroot="gfx/items/" deathanm2="gfx/deathitems.anm2" version="1">
-	<null id="1" name="Hephaestus' Soul Fire" persistent="true" cache="flying"/>
-	<null id="2" name="Warfarin Hair" persistent="true"/>
-	<null id="3" name="Warfarin Wings" persistent="true"/>
-	<null id="4" name="Warfarin Haemolacria" persistent="true" cache="tearflag firedelay damage speed"/>
-	<null id="5" name="Marriage Certificate Hearts" persistent="true"/>
-	<null id="6" name="Lost Soul" persistent="true" cache="damage flying"/>
+	<null id="1" name="Hephaestus' Soul Fire" persistent="true"/>
+	<null id="2" name="Marriage Certificate Hearts" persistent="true"/>
+	<null id="3" name="Lost Soul" persistent="true" cache="damage flying"/>
+	<null id="4" name="Warfarin Hair" persistent="true"/>
+	<null id="5" name="Warfarin Wings" persistent="true" cache="flying"/>
+	<null id="6" name="Warfarin Haemolacria" persistent="true" cache="tearflag firedelay damage speed"/>
+	<null id="7" name="Warfarin Magic 8 Ball" persistent="true"/>
+	<null id="8" name="Warfarin Ceremonial Robes" persistent="true"/>
+	<null id="9" name="Warfarin Moms Wig" persistent="true"/>
 	<passive id="0" quality="4" craftquality="4" description="God of fire" gfx="collectibles_hephaestus_soul.png" name="Hephaestus' Soul" cache="flying" devilprice="2" shopprice="30" tags="offensive summonable"/>
 	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="lazarusshared"/>
 	<passive id="2" quality="3" craftquality="3" description="Sink into the quicksand of evil" gfx="collectibles_guilt.png" name="Guilt" devilprice="2" tags="nolostbr nokeeper devil lazarusshared"/>
@@ -38,6 +41,7 @@
 	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared"/>
 	<passive id="32" quality="2" craftquality="2" description="Take medicine on time" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive"/>
-	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay" tags="food nolostbr"/>
-	<active	id="50" quality="0" craftquality="-1" cooldown="30" description="For test purpose only" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay speed damage luck" tags="food nolostbr"/>
+	<active	id="50" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="51" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>

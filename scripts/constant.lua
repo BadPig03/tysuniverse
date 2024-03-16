@@ -33,7 +33,8 @@ ty.CustomCollectibles = {
     OCEANUSSOUL = Isaac.GetItemIdByName("Oceanus' Soul"),
     ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
     BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
-    BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample")
+    BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
+    BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
 
 ty.CustomChallenges = {
@@ -47,11 +48,14 @@ ty.CustomCostumes = {
 
 ty.CustomNullItems = {
     HEPHAESTUSSOUL = Isaac.GetNullItemIdByName("Hephaestus' Soul Fire"),
+    MARRIAGECERTIFICATEHEARTS = Isaac.GetNullItemIdByName("Marriage Certificate Hearts"),
+    LOSTSOUL = Isaac.GetNullItemIdByName("Lost Soul"),
     WARFARINHAIR = Isaac.GetNullItemIdByName("Warfarin Hair"),
     WARFARINWINGS = Isaac.GetNullItemIdByName("Warfarin Wings"),
     WARFARINHAEMOLACRIA = Isaac.GetNullItemIdByName("Warfarin Haemolacria"),
-    MARRIAGECERTIFICATEHEARTS = Isaac.GetNullItemIdByName("Marriage Certificate Hearts"),
-    LOSTSOUL = Isaac.GetNullItemIdByName("Lost Soul"),
+    WARFARINMAGIC8BALL= Isaac.GetNullItemIdByName("Warfarin Magic 8 Ball"),
+    WARFARINCEREMONIALROBES= Isaac.GetNullItemIdByName("Warfarin Ceremonial Robes"),
+    WARFARINMOMSWIG= Isaac.GetNullItemIdByName("Warfarin Moms Wig")
 }
 
 ty.CustomEffects = {

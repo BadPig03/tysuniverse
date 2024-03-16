@@ -33,7 +33,8 @@ local collectibles = {
     [ty.CustomCollectibles.OCEANUSSOUL] = { Name="俄刻阿诺斯之魂", Description="海洋化身" },
     [ty.CustomCollectibles.ABSENCENOTE] = { Name="请假条", Description="按时吃药" },
     [ty.CustomCollectibles.BONEINFISHSTEAK] = { Name="带骨鱼排", Description="小心地吃" },
-    [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="仅供测试" }
+    [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
+    [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 
 function ty:ItemQueueUpdate(player)

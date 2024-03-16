@@ -120,4 +120,11 @@ function CursedTreasure:PostPickupCollision(pickup, collider, low)
 end
 CursedTreasure:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, CursedTreasure.PostPickupCollision, PickupVariant.PICKUP_COIN)
 
+function CursedTreasure:PrePickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
+    if pickup.Variant == PickupVariant.PICKUP_COIN and pickup.SubType == ty.CustomEntities.CURSEDCOIN then
+        return false
+    end
+end
+CursedTreasure:AddCallback(ModCallbacks.MC_PRE_PICKUP_MORPH, CursedTreasure.PrePickupMorph)
+
 return CursedTreasure

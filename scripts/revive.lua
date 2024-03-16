@@ -36,7 +36,7 @@ end
 
 function Revive:IsReviving(player)
     local data = ty:GetLibData(player)
-    return data.ReviveTable.IsDead
+    return (data.ReviveTable and data.ReviveTable.IsDead) or false
 end
 
 function Revive:GetVanillaReviveAnimation(player)
