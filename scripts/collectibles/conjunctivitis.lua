@@ -24,6 +24,7 @@ local function GetTears(player, tears)
     if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
         return 30 / 11
     end
+    return tears
 end
 
 local function FireNewTear(player, tear)

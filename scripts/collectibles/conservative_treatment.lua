@@ -1,6 +1,6 @@
 local ConservativeTreatment = ty:DefineANewClass()
 
-local statInitValue = { 
+local statInitValue = {
     [1] = 1,
     [2] = 10,
     [3] = 3.5,
@@ -15,10 +15,8 @@ function ConservativeTreatment:EvaluateCache(player, cacheFlag)
         if cacheFlag == CacheFlag.CACHE_SPEED and player.MoveSpeed < statInitValue[1] then
             player.MoveSpeed = statInitValue[1]
         end
-        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            if 30 / (player.MaxFireDelay + 1) < 30 / 11 then
-                ty.Stat:AddTearsModifier(player, function(tears) return 30 / (statInitValue[2] + 1) end, 99)
-            end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY and 30 / (player.MaxFireDelay + 1) < 30 / 11 then
+            ty.Stat:AddTearsModifier(player, function(tears) return 30 / (statInitValue[2] + 1) end, 99)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE and player.Damage < statInitValue[3] then
             player.Damage = statInitValue[3]

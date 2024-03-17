@@ -33,7 +33,8 @@ end
 Telescope:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, Telescope.EvaluateCache)
 
 function Telescope:PrePlanetariumApplyStagePenalty()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.TELESCOPE) and ty.LEVEL:GetAbsoluteStage() ~= LevelStage.STAGE4_3 then
+    local stage = ty.LEVEL:GetAbsoluteStage()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.TELESCOPE) and stage ~= LevelStage.STAGE4_3 and stage ~= LevelStage.STAGE8 then
         return false
     end
 end
@@ -41,7 +42,7 @@ Telescope:AddCallback(ModCallbacks.MC_PRE_PLANETARIUM_APPLY_STAGE_PENALTY, Teles
 
 function Telescope:PostPlanetariumCalculate(chance)
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.TELESCOPE) then
-        return math.max(0, GetAvarageLuck() / 24)
+        return math.min(1, math.max(0, GetAvarageLuck() / 24))
     end
 end
 Telescope:AddCallback(ModCallbacks.MC_POST_PLANETARIUM_CALCULATE, Telescope.PostPlanetariumCalculate)

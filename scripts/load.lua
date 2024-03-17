@@ -44,6 +44,9 @@ ty.CollectiblesList = {
 ty.PlayersList = {
     'warfarin'
 }
+ty.ChallengesList = {
+    'glue_prohibition'
+}
 
 ty.GlobalDataName = "_TY_GLOBAL_"
 ty.DataName = "_TY_"
@@ -72,6 +75,12 @@ for _, title in pairs(ty.PlayersList) do
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
     print("ty's Universe [+REPENTOGON]: Player "..title.." has loaded!")
+end
+for _, title in pairs(ty.ChallengesList) do
+    local class = include("scripts.challenges."..title)
+	table.insert(ty.LoadedLua, class)
+	ty[_] = class
+    print("ty's Universe [+REPENTOGON]: Challenges "..title.." has loaded!")
 end
 for _, title in pairs(ty.LoadedLua) do
     title:Register()

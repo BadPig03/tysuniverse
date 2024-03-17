@@ -105,6 +105,10 @@ ty.CustomAchievements = {
     FF0UNLOCKED = Isaac.GetAchievementIdByName("ff0_unlocked")
 }
 
+ty.CustomChallenges = {
+    GLUEPROHIBITION = Isaac.GetChallengeIdByName("Glue Prohibition")
+}
+
 ty.CustomSounds = {
     WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt"),
     OCEANUSSOULFLOW = Isaac.GetSoundIdByName("Oceanus Soul Flow")
