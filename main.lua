@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w10g"
+ty.VERSION = "02w11a"
 ty.REPENTOGONVERSION = "1.0.7c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -99,6 +99,7 @@ local function GetGlobalInitData()
         return list
     end
     local data = {}
+    data.Init = true
     data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {}, InTriggered = false, OutTriggered = false }
     data.ChocolatePancake = {}
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, Disabled = false, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731, ty.CustomCollectibles.ANOREXIA, ty.CustomCollectibles.CONSERVATIVETREATMENT, ty.CustomCollectibles.CONJUNCTIVITIS } }
@@ -131,8 +132,22 @@ local function RewindPlayerData()
     ty.GLOBALDATA = ty:TableCopyTo(lastRoomData["GlobalData"])
 end
 
+if not ty.GLOBALDATA.Init and Isaac.IsInGame() then
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
+        player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
+        if player:GetFlippedForm() then
+            local player = player:GetFlippedForm()
+            ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
+            player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
+        end
+    end
+    ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
+    ResetInitData()
+end
+
 function ty:PostPlayerInit(player)
-	ty:SetLibData(player, GetInitData())
+	ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
 end
 ty:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, ty.PostPlayerInit)
 

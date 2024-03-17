@@ -9,14 +9,6 @@ local function GetSmeltedTrinketCounts(player)
     return count
 end
 
-function BoneInFishSteak:EvaluateCache(player, cacheFlag)
-	if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) then
-        local data = ty:GetLibData(player)
-		ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.BoneInFishSteak.TearsUp end)
-	end
-end
-BoneInFishSteak:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, BoneInFishSteak.EvaluateCache, CacheFlag.CACHE_FIREDELAY)
-
 function BoneInFishSteak:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     local data = ty:GetLibData(player)
     if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) or type == ty.CustomCollectibles.BONEINFISHSTEAK then
@@ -60,6 +52,10 @@ function BoneInFishSteak:EvaluateCache(player, cacheFlag)
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
             player.Luck = player.Luck + collectibleNum
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            local data = ty:GetLibData(player)
+            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.BoneInFishSteak.TearsUp end)
         end
     end
 end

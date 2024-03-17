@@ -18,6 +18,9 @@ function ty:TableCopyTo(origin)
 end
 
 function ty:IsValueInTable(value, origin)
+    if origin == nil then
+        return false
+    end
 	for _, item in pairs(origin) do
 		if value == item then
 			return true
@@ -27,6 +30,9 @@ function ty:IsValueInTable(value, origin)
 end
 
 function ty:RemoveValueInTable(value, origin)
+    if origin == nil then
+        return
+    end
 	for _, item in pairs(origin) do
 		if value == item then
 			table.remove(origin, _)

@@ -33,6 +33,7 @@ ty.CustomCollectibles = {
     OCEANUSSOUL = Isaac.GetItemIdByName("Oceanus' Soul"),
     ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
     BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
+    TELESCOPE = Isaac.GetItemIdByName("Telescope"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }

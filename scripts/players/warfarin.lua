@@ -85,7 +85,7 @@ function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, sca
         local hudOffset = Options.HUDOffset
         local renderPos = Vector(Isaac.GetScreenWidth() - 38 - 20 * hudOffset, Isaac.GetScreenHeight() - 28 - 12 * hudOffset)
         local data = ty:GetLibData(player)
-        ty.LUAMIN:DrawString(string.format("%.1f%%", math.min(100, 100 * data.BloodSample.DamageAmount / GetDamagePerCharge(player))), renderPos.X, renderPos.Y, KColor(1, 1, 1, 1), 10, false)    
+        ty.LUAMIN:DrawString(string.format("%.1f%%", math.min(100, 100 * data.BloodSample.DamageAmount / GetDamagePerCharge(player))), renderPos.X, renderPos.Y, KColor(1, 1, 1, 1), 10, false)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin.PostPlayerHUDRenderActiveItem)
@@ -200,7 +200,7 @@ function Warfarin:PostHUDUpdate()
             if player:GetBlackHearts() > 0 then
                 player:AddBlackHearts(-player:GetBlackHearts())
             end
-            if player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then 
+            if player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then
                 player:AddBoneHearts((GetHeartLimit(player) - player:GetMaxHearts() - player:GetBoneHearts() * 2) / 2)
             end
         end
@@ -210,12 +210,12 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_HUD_UPDATE, Warfarin.PostHUDUpdate)
 
 function Warfarin:PostPickupUpdate(pickup)
     local room = ty.GAME:GetRoom()
+    local pickup = pickup:ToPickup()
     local itemConfig = ty.ITEMCONFIG:GetCollectible(pickup.SubType)
     if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
     local globalData = ty.GLOBALDATA.BloodSample
-    local pickup = pickup:ToPickup()
     if pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType) then
         pickup:MakeShopItem(-2)
     end
@@ -421,7 +421,7 @@ function Warfarin:PostNewRoom()
         end
         if globalData.BloodSample then
             globalData.BloodSample.InTriggered = false
-            globalData.BloodSample.OutTriggered = false    
+            globalData.BloodSample.OutTriggered = false
         end
     end
 end

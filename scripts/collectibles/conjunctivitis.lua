@@ -18,16 +18,12 @@ local function GetTailedDamage(player, tear)
 end
 
 local function GetTears(player, tears)
+    if not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS)) then
+        return 0.8 * tears
+    end
     if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
         return 30 / 11
     end
-    if player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) then
-        return tears
-    end
-    if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
-        return 0.8 * tears
-    end
-    return tears
 end
 
 local function FireNewTear(player, tear)
@@ -36,7 +32,7 @@ local function FireNewTear(player, tear)
     end
     if tear.TearFlags & TearFlags.TEAR_ABSORB == TearFlags.TEAR_ABSORB or tear.TearFlags & TearFlags.TEAR_LASERSHOT == TearFlags.TEAR_LASERSHOT then
         return
-    end 
+    end
     local newTear = Isaac.Spawn(EntityType.ENTITY_TEAR, tear.Variant, 0, tear.Position, tear.Velocity:Normalized():Resized(0.01), tear.SpawnerEntity):ToTear()
     newTear.TearFlags = tear.TearFlags
     local newTearData = ty:GetLibData(newTear)
@@ -102,7 +98,7 @@ function Conjunctivitis:PostFireTear(tear)
     local tear = tear:ToTear()
     local player = ty:GetPlayerFromTear(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) then
-        playSound = true 
+        playSound = true
     end
 end
 Conjunctivitis:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, Conjunctivitis.PostFireTear)
@@ -114,7 +110,7 @@ function Conjunctivitis:PreSFXPlay(id, volume, frameDelay, loop, pitch, pan)
                 playSound = false
             else
                 return false
-            end    
+            end
         end
     end
 end

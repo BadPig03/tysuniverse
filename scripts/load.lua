@@ -36,6 +36,7 @@ ty.CollectiblesList = {
     'philosophers_staff',
     'rewind',
     'scapegoat',
+    'telescope',
     'the_gospel_of_john',
     'tool_box',
     'wake_up'

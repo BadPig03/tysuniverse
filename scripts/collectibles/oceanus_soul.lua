@@ -81,7 +81,7 @@ end
 
 local function IsInValidRoom(room)
     return room:GetType() ~= RoomType.ROOM_DUNGEON and not ty:IsValueInTable(ty.LEVEL:GetCurrentRoomIndex(), bannedGridRooms)
-end 
+end
 
 local function GetDefaultLaserColor(player)
     local laserColor = player:GetLaserColor()
@@ -384,9 +384,6 @@ local function DoFlushEnemies(player)
 end
 
 local function GetTears(player, tears)
-    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-        return 30 / 11
-    end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
         tears = tears * 2
     end
@@ -396,7 +393,10 @@ local function GetTears(player, tears)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
         tears = tears * 0.7
     end
-    return tears * 0.6
+    tears = tears * 0.6
+    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
+        return 30 / 11
+    end
 end
 
 function OceanusSoul:UpdateLaser(effect)
@@ -462,7 +462,7 @@ function OceanusSoul:UpdateLaser(effect)
                     if (not room:IsPositionInRoom(effect.Position + Vector(8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0)) or (not room:IsPositionInRoom(effect.Position + Vector(-8, 0), 0) and room:IsPositionInRoom(effect.Position + Vector(8, 0), 0)) then
                         effect.Velocity = Vector(-effect.Velocity.X, effect.Velocity.Y)
                         data.RubberCement = 5
-                    end    
+                    end
                 end
             elseif data.TearFlags & TearFlags.TEAR_CONTINUUM == TearFlags.TEAR_CONTINUUM then
                 local roomSize = room:GetGridSize()
@@ -651,7 +651,7 @@ function OceanusSoul:UpdateLaser(effect)
                     else
                         if ty:GetLibData(knife).OceanusSoul then
                             knife.Rotation = knife.Rotation + 3
-                        end    
+                        end
                     end
                 end
             end
@@ -714,7 +714,7 @@ function OceanusSoul:FamiliarUpdate(familiar)
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, OceanusSoul.FamiliarUpdate)
 
-function OceanusSoul:PostPlayerUpdate(player)   
+function OceanusSoul:PostPlayerUpdate(player)
     local room = ty.GAME:GetRoom()
     local data = ty:GetLibData(player)
     local globalData = ty.GLOBALDATA
@@ -744,7 +744,7 @@ function OceanusSoul:PostPlayerUpdate(player)
             if globalData.OceanusSoul.Strength == 0 then
                 room:SetWaterCurrent(Vector(0, 0))
             else
-                room:SetWaterCurrent(player:GetLastDirection():Normalized():Resized(globalData.OceanusSoul.Strength ^ 2)) 
+                room:SetWaterCurrent(player:GetLastDirection():Normalized():Resized(globalData.OceanusSoul.Strength ^ 2))
             end
             if room:GetFrameCount() >= 1 and not ty:IsValueInTable(ty.LEVEL:GetCurrentRoomDesc().ListIndex, globalData.OceanusSoul.RoomList) then
                 DoFlushEnemies(player)
