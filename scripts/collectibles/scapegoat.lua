@@ -19,8 +19,8 @@ function Scapegoat:PostReviveScapegoat(player, reviver)
     end
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF02, 3, player.Position, Vector(0, 0), nil)
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF02, 4, player.Position, Vector(0, 0), nil)
-    ty.SFXMANAGER:Play(SoundEffect.SOUND_UNHOLY)
-    ty.SFXMANAGER:Play(SoundEffect.SOUND_FLASHBACK)
+    ty.SFXMANAGER:Play(SoundEffect.SOUND_UNHOLY, 0.6)
+    ty.SFXMANAGER:Play(SoundEffect.SOUND_FLASHBACK, 0.6)
 end
 
 function Scapegoat:PreRevive(player)

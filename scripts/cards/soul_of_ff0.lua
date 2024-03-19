@@ -14,6 +14,9 @@ local function PostUse(healthType, player, soul)
             player:AddSoulHearts(maxHearts)
         end
     elseif healthType == HealthType.LOST then
+        player:AddMaxHearts(-maxHearts)
+        player:AddBoneHearts(-player:GetBoneHearts())
+        player:AddSoulHearts(-player:GetSoulHearts())
         player:AddSoulHearts(1)
     elseif healthType == HealthType.BONE then
         player:AddMaxHearts(-maxHearts)
@@ -31,6 +34,9 @@ function SoulOfFF0:PostUseCard(card, player, useFlags)
         data.Warfarin.Original = healthType
         player:AddMaxHearts(4)
         player:AddHearts(4)
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF02, 3, player.Position, Vector(0, 0), nil)
+        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF02, 4, player.Position, Vector(0, 0), nil)
+        ty.SFXMANAGER:Play(SoundEffect.SOUND_ANGEL_BEAM, 0.6, 2, false, 1.3) 
     end
 end
 SoulOfFF0:AddCallback(ModCallbacks.MC_USE_CARD, SoulOfFF0.PostUseCard, ty.CustomCards.SOULOFFF0)
