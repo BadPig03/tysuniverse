@@ -47,6 +47,9 @@ ty.PlayersList = {
 ty.ChallengesList = {
     'glue_prohibition'
 }
+ty.CardsList = {
+    'soul_of_ff0'
+}
 
 ty.GlobalDataName = "_TY_GLOBAL_"
 ty.DataName = "_TY_"
@@ -57,6 +60,7 @@ include("scripts.constant")
 include("scripts.data")
 include("scripts.functions")
 include("scripts.collectible")
+include("scripts.card")
 
 for _, title in pairs(ty.ClassesList) do
     local class = include("scripts."..title)
@@ -81,6 +85,12 @@ for _, title in pairs(ty.ChallengesList) do
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
     print("ty's Universe [+REPENTOGON]: Challenges "..title.." has loaded!")
+end
+for _, title in pairs(ty.CardsList) do
+    local class = include("scripts.cards."..title)
+	table.insert(ty.LoadedLua, class)
+	ty[_] = class
+    print("ty's Universe [+REPENTOGON]: Cards "..title.." has loaded!")
 end
 for _, title in pairs(ty.LoadedLua) do
     title:Register()

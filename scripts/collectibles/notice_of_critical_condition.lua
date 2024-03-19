@@ -41,7 +41,7 @@ local function TextAcceleration(frame)
 	if frame > 0 then
 		return 0
 	end
-	return -151 / 1690 * frame^2
+	return -151 / 1690 * frame ^ 2
 end
 
 local function AddChance(data, difference)
@@ -115,7 +115,7 @@ function NoticeOfCriticalCondition:PostNewLevel()
 			if rng:RandomInt(100) < spawnChance then
 				Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALINGBEGGAR, 0, Vector(120, 200), Vector(0, 0), nil)
 				AddChance(data, -50)
-			end	
+			end
 		end
 		for _, player in pairs(PlayerManager.GetPlayers()) do
 			if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
@@ -157,7 +157,7 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, slot.Position, Vector(0, 0), nil)
 			local rng = slot:GetDropRNG()
 			for i = 1, rng:RandomInt(3) + 1 do
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, slot.Position, Vector(1, 1):Normalized():Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil):ToPickup()	
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, slot.Position, Vector(1, 1):Normalized():Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil):ToPickup()
 			end
 			slot:BloodExplode()
 			slot:Remove()
@@ -232,6 +232,9 @@ NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_SLOT_UPDATE, NoticeOf
 function NoticeOfCriticalCondition:PreSlotCollision(slot, collider, low)
 	if slot.Variant == ty.CustomEntities.HEALINGBEGGAR then
 		local player = collider:ToPlayer()
+		if player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B then
+			player = player:GetOtherTwin()
+		end
 		local sprite = slot:GetSprite()
 		local slotData = ty.GLOBALDATA.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 		if sprite:IsPlaying("Idle") and player and player:GetBrokenHearts() >= 1 and player:GetNumCoins() >= 2 then
@@ -245,7 +248,7 @@ function NoticeOfCriticalCondition:PreSlotCollision(slot, collider, low)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, player.Position, Vector(0, 0), nil)
 			player:AddBrokenHearts(-1)
 			playerData.NoticeOfCriticalCondition.TempBrokenHearts = playerData.NoticeOfCriticalCondition.TempBrokenHearts + 1
-		end	
+		end
 	end
 end
 NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_PRE_SLOT_COLLISION, NoticeOfCriticalCondition.PreSlotCollision, ty.CustomEntities.HEALINGBEGGAR)

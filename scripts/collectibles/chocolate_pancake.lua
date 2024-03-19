@@ -36,8 +36,9 @@ function ChocolatePancake:PostPickupUpdate(pickup)
             end
         end
     else
-        if ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.ChocolatePancake) and pickup:IsShopItem() and not pickup.Touched and pickup.Price == PickupPrice.PRICE_FREE and pickup:GetPriceSprite():GetFilename() == "gfx/items/shops/chocolate_pancake_deal.anm2" then
+        if ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.ChocolatePancake) and pickup:IsShopItem() and not pickup.Touched and pickup.Price == PickupPrice.PRICE_FREE then
             pickup.AutoUpdatePrice = true
+            pickup.Price = ty.ITEMCONFIG:GetCollectible(pickup.SubType).DevilPrice
             ty:RemoveValueInTable(pickup.InitSeed, ty.GLOBALDATA.ChocolatePancake)
         end
     end

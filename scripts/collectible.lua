@@ -38,6 +38,10 @@ local collectibles = {
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 
+local cards = {
+    [ty.CustomCards.SOULOFFF0] = { Name="ff0的魂石", Description="血液活化" }
+}
+
 function ty:ItemQueueUpdate(player)
     if ty.GAME:GetFrameCount() > 0 then
         local data = ty:GetLibData(player)
@@ -67,5 +71,16 @@ function ty:PostPickupCollectible(player, item, touched)
     end
 end
 ty:AddCallback("TY_POST_PICK_UP_COLLECTIBLE", ty.PostPickupCollectible)
+
+function ty:PostPickupCollision(pickup, collider, low)
+    local player = collider:ToPlayer()
+    local language = Options.Language
+    if player and player:CanPickupItem() and not pickup:Exists() then
+        if cards[pickup.SubType] and language == "zh" then
+            ty.HUD:ShowItemText(cards[pickup.SubType].Name, cards[pickup.SubType].Description)
+        end    
+    end
+end
+ty:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, ty.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
 
 return ty

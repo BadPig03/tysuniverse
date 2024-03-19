@@ -42,7 +42,7 @@ local function GetClosestCollectible(player)
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
-        if pickup:IsShopItem() and pickup.Price < 0 and pickup.Price ~= PickupPrice.PRICE_FREE and (pickup.Position - player.Position):Length() < minDistance then
+        if pickup:IsShopItem() and pickup.Price < 0 and pickup:GetPriceSprite():GetFilename() ~= "gfx/items/shops/broken_heart_deal.anm2" and (pickup.Position - player.Position):Length() < minDistance then
             minDistance = (pickup.Position - player.Position):Length()
             collectible = pickup
         end

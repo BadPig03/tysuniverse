@@ -566,14 +566,35 @@ EIDInfo.Collectibles = {
     }
 }
 
-local icons = Sprite("gfx/eid/player_icons.anm2", true)
-EID:addIcon("Player"..ty.CustomPlayerType.WARFARIN, "Players", 0, 16, 16, 0, 0, icons)
+EIDInfo.Cards = {
+    [ty.CustomCards.SOULOFFF0] = {
+        [1] = {
+            Name = "ff0的魂石",
+            Desc = "#{{Heart}} 给予可获得心之容器的能力并立即获得两颗心之容器"..
+            "#{{Warning}} 效果仅持续一层，结束后将所有的心之容器转换为原本可接受的血量"
+        },
+        [2] = {
+            Name = "Soul of ff0",
+            Desc = ""
+        }
+    }
+}
+
+EID:addIcon("Player"..ty.CustomPlayerType.WARFARIN, "Players", 0, 16, 16, 0, 0, Sprite("gfx/eid/player_icons.anm2", true))
+EID:addIcon("Card"..ty.CustomCards.SOULOFFF0, "Soul of ff0", -1, 9, 9, -1, 0, Sprite("gfx/eid/eid_cardfronts.anm2", true))
+EID:addIcon("Water", "Water", 0, 10, 10, 0, 0, Sprite("gfx/eid/inline_icons.anm2", true))
 EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用血液样本时额外恢复一颗红心 #{{ArrowUp}} 心上限数量增加到9个", "ff0", "zh_cn")
 EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} Heals one red heart when using the Blood Sample #{{ArrowUp}} The max amount of heart containers is raised to 9", "ff0", "en_us")
 
 for ID, descTable in pairs(EIDInfo.Collectibles) do
     for i = 1, 2 do
         EID:addCollectible(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
+    end
+end
+
+for ID, descTable in pairs(EIDInfo.Cards) do
+    for i = 1, 2 do
+        EID:addCard(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
     end
 end
 

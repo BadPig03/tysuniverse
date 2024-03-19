@@ -59,6 +59,10 @@ ty.CustomNullItems = {
     WARFARINMOMSWIG= Isaac.GetNullItemIdByName("Warfarin Moms Wig")
 }
 
+ty.CustomCards = {
+    SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0")
+}
+
 ty.CustomEffects = {
     EMPTYHELPER = Isaac.GetEntityVariantByName("Empty Helper"),
     HEPHAESTUSSOULCIRCLE = Isaac.GetEntityVariantByName("Hephaestus Soul Circle"),

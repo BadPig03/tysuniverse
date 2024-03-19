@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w11b"
+ty.VERSION = "02w11c"
 ty.REPENTOGONVERSION = "1.0.7c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -24,8 +24,6 @@ include("scripts/load.lua")
 
 if EID then
 	include("scripts/EID.lua")
-    local inlineSprite = Sprite("gfx/eid/inline_icons.anm2", true)
-    EID:addIcon("Water", "Water", 0, 10, 10, 0, 0, inlineSprite);
 end
 
 local lastRoomData = {}
@@ -80,6 +78,7 @@ local function GetInitData()
     data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Stat = { Damage = { Multiplier = 1, DamageUp = 0, Flat = 0 }, Speed = { Limit = -1 }, Tears = { TearsUp = 0, Modifiers = {} } }
+    data.Warfarin = { Original = -1 }
     data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, HealthFactor = 1 }
     return data
 end

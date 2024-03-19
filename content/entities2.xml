@@ -21,4 +21,5 @@
     <entity anm2path="items/familiars/magnifier.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Magnifier" numGridCollisionPoints="12" shadowSize="11" stageHP="0"/>
     <entity anm2path="items/slots/blood_sacrifice_vessel.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="15" friction="1" name="Blood Sacrifice Vessel" numGridCollisionPoints="24" shadowSize="33" stageHP="0" id="6"/>
     <entity anm2path="items/familiars/tool_box.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="13" friction="1" id="3" name="Tool Box" numGridCollisionPoints="12" shadowSize="11" stageHP="0" tags="cansacrifice"/>
+    <entity anm2path="items/pick ups/soul_of_ff0.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="12" friction="1" id="5" name="Soul of ff0" numGridCollisionPoints="24" shadowSize="16" stageHP="0" variant="300" subtype="128"/>
 </entities>
