@@ -7,6 +7,9 @@
 	<costume id="7" anm2path="character_warfarin_magic_8_ball.anm2" type="none"/>
 	<costume id="8" anm2path="character_warfarin_ceremonial_robes.anm2" type="none" priority="99"/>
 	<costume id="9" anm2path="character_warfarin_moms_wig.anm2" type="none" priority="99"/>
+	<costume id="10" anm2path="character_warfarin_black_candle.anm2" type="none"/>
+	<costume id="11" anm2path="character_warfarin_taurus.anm2" type="none"/>
+	<costume id="12" anm2path="character_warfarin_leo.anm2" type="none" priority="99"/>
 	<costume id="0" anm2path="costume_hephaestus_soul.anm2" type="passive" isFlying="true"/>
 	<costume id="1" anm2path="costume_absolution.anm2" type="passive"/>
 	<costume id="2" anm2path="costume_guilt.anm2" type="passive"/>
@@ -18,4 +21,5 @@
 	<costume id="20" anm2path="costume_marriage_certificate.anm2" type="passive" hasSkinAlt="true"/>
 	<costume id="23" anm2path="" type="passive" overwriteColor="true" skinColor="4" forceBodyColor="true" forceHeadColor="true"/>
 	<costume id="31" anm2path="costume_oceanus_soul.anm2" type="passive" isFlying="true"/>
+	<costume id="35" anm2path="costume_beggar_mask.anm2" type="passive"/>
 </costumes>

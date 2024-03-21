@@ -544,6 +544,22 @@ EIDInfo.Collectibles = {
             "#Isaac can pick up all collectibles in the Planetarium Room"
         }
     },
+    [ty.CustomCollectibles.BEGGARMASK] = {
+        [1] = {
+            Name = "丐帮面具",
+            Desc = "#{{ArrowUp}} 部分房间第一次进入时会额外生成一个对应的乞丐"..
+            "#每次向乞丐捐赠时增加生成掉落物的概率"..
+            "#当乞丐生成道具时，额外生成一个道具交易或者再次生成一个乞丐"..
+            "#{{Warning}} 如果任意乞丐被炸死，则失去'丐帮面具'道具"
+        },
+        [2] = {
+            Name = "Beggar Mask",
+            Desc = "#{{ArrowUp}} A beggar will be spawned in some rooms upon the first entry"..
+            "#For every donation received, beggars have a higher chance to drop a random pick up"..
+            "#When a beggar drops an item, another item trade or a new beggar will be spawned"..
+            "#{{Warning}} If a beggar is killed by explosion, the Beggar Mask is removed"
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
@@ -575,7 +591,8 @@ EIDInfo.Cards = {
         },
         [2] = {
             Name = "Soul of ff0",
-            Desc = ""
+            Desc = "#{{Heart}} Grant the ability to obtain heart containers and immediately receive two heart containers"..
+            "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted"
         }
     }
 }

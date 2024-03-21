@@ -34,6 +34,7 @@ ty.CustomCollectibles = {
     ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
     BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
     TELESCOPE = Isaac.GetItemIdByName("Telescope"),
+    BEGGARMASK = Isaac.GetItemIdByName("Beggar Mask"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
@@ -54,9 +55,12 @@ ty.CustomNullItems = {
     WARFARINHAIR = Isaac.GetNullItemIdByName("Warfarin Hair"),
     WARFARINWINGS = Isaac.GetNullItemIdByName("Warfarin Wings"),
     WARFARINHAEMOLACRIA = Isaac.GetNullItemIdByName("Warfarin Haemolacria"),
-    WARFARINMAGIC8BALL= Isaac.GetNullItemIdByName("Warfarin Magic 8 Ball"),
-    WARFARINCEREMONIALROBES= Isaac.GetNullItemIdByName("Warfarin Ceremonial Robes"),
-    WARFARINMOMSWIG= Isaac.GetNullItemIdByName("Warfarin Moms Wig")
+    WARFARINMAGIC8BALL = Isaac.GetNullItemIdByName("Warfarin Magic 8 Ball"),
+    WARFARINCEREMONIALROBES = Isaac.GetNullItemIdByName("Warfarin Ceremonial Robes"),
+    WARFARINMOMSWIG = Isaac.GetNullItemIdByName("Warfarin Moms Wig"),
+    WARFARINBLACKCANDLE = Isaac.GetNullItemIdByName("Warfarin Black Candle"),
+    WARFARINTAURUS = Isaac.GetNullItemIdByName("Warfarin Taurus"),
+    WARFARINLEO = Isaac.GetNullItemIdByName("Warfarin Leo")
 }
 
 ty.CustomCards = {

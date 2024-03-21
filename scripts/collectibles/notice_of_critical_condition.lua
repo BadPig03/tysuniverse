@@ -151,78 +151,79 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 		slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 	end
 	if slotData.IsBroken then
-		if sprite:IsFinished("Broken") then
+		if sprite:IsFinished("Teleport") then
+			slot:Remove()
+		end
+	else
+		if slotData.ShouldExplode then
+			slot.Velocity = Vector(0, 0)
+			slotData.IsBroken = true
+			slotData.ShouldExplode = false
+			sprite:Play("Teleport", true)
+		end
+		if slot.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, slot.Position, Vector(0, 0), nil)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, slot.Position, Vector(0, 0), nil)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, slot.Position, Vector(0, 0), nil)
 			local rng = slot:GetDropRNG()
 			for i = 1, rng:RandomInt(3) + 1 do
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, slot.Position, Vector(1, 1):Normalized():Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil):ToPickup()
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, slot.Position, Vector(1, 0):Resized(2 + rng:RandomFloat() * 4):Rotated(rng:RandomInt(360)), nil):ToPickup()
 			end
+			for _, player in pairs(PlayerManager.GetPlayers()) do
+				if player:HasCollectible(ty.CustomCollectibles.BEGGARMASK) then
+					player:RemoveCollectible(ty.CustomCollectibles.BEGGARMASK)
+					player:AnimateSad()
+					ty.SFXMANAGER:Play(SoundEffect.SOUND_HOLY_MANTLE, 0.6, 2, false, 1.3)
+					Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, player.Position, Vector(0, 0), nil):GetSprite().Color:SetColorize(0.3, 0.3, 0.3, 1)        
+				end
+			end	
 			slot:BloodExplode()
 			slot:Remove()
-		end
-	else
-		if slotData.ShouldExplode or slot.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
-			slot.Velocity = Vector(0, 0)
-			slotData.IsBroken = true
-			slotData.ShouldExplode = false
-			sprite:Play("Broken", true)
+			return
 		end
 		local player = slotData.Player
 		if player then
-			local playerData = ty:GetLibData(player)
 			local rng = player:GetCollectibleRNG(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION)
-			if sprite:IsFinished("InsertTwoCoins") then
-				sprite:Play("Initiate", true)
+			if sprite:IsEventTriggered("CoinInsert") then
+				ty.SFXMANAGER:Play(SoundEffect.SOUND_SCAMPER, 0.6)
 			end
-			if sprite:IsFinished("Initiate") then
-				sprite:Play("Wiggle", true)
-			end
-			if sprite:IsFinished("Wiggle") then
-				if rng:RandomInt(100) < 25 then
-					sprite:Play("GainItem", true)
-				else
-					sprite:Play("GainPill", true)
-				end
-			end
-			if sprite:IsFinished("GainPill") then
-				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 16), 0, true), Vector(0, 0), nil)
-				sprite:Play("Idle", true)
+			if sprite:IsEventTriggered("GainPill") then
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_PILL, 0, slot.Position, Vector(1, 0):Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil)
 				ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN, 0.6)
+				ty.SFXMANAGER:Play(SoundEffect.SOUND_THUMBS_DOWN, 0.6)
+				sprite:Play("Idle", true)
 				slotData.BrokenChance = math.max(0, slotData.BrokenChance - 4)
-				playerData.NoticeOfCriticalCondition.TempBrokenHearts = playerData.NoticeOfCriticalCondition.TempBrokenHearts - 1
 			end
-			if sprite:IsFinished("GainItem") then
+			if sprite:IsEventTriggered("Prize") then
 				local itemSubtype = GetItemFromPool(player)
 				local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemSubtype, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 80), 0, true), Vector(0, 0), nil):ToPickup()
 				item.ShopItemId = -2
 				item.Price = 0
 				ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN, 0.6)
+				ty.SFXMANAGER:Play(SoundEffect.SOUND_THUMBSUP, 0.6)
+				sprite:Play("Idle", true)
+				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
+				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, player.Position, Vector(0, 0), nil)
+				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, player.Position, Vector(0, 0), nil)
+				player:AddBrokenHearts(-1)
 				slotData.BrokenChance = math.min(100, slotData.BrokenChance + 16)
-				playerData.NoticeOfCriticalCondition.TempBrokenHearts = playerData.NoticeOfCriticalCondition.TempBrokenHearts - 1
 				if itemSubtype == CollectibleType.COLLECTIBLE_DEATH_CERTIFICATE then
 					slotData.ShouldExplode = true
 					data.NoticeOfCriticalCondition.Disabled = true
 				else
-					sprite:Play("Idle", true)
 					if rng:RandomInt(100) < slotData.BrokenChance then
 						slotData.ShouldExplode = true
 					end
 				end
 			end
-			if sprite:IsEventTriggered("CoinInsert") then
-				ty.SFXMANAGER:Play(SoundEffect.SOUND_SCAMPER, 0.6)
+			if sprite:IsFinished("PayPrize") then
+				sprite:Play("Prize", true)
 			end
-			if sprite:IsEventTriggered("GainItem") then
-				ty.SFXMANAGER:Play(SoundEffect.SOUND_THUMBSUP, 0.6)
+			if sprite:IsFinished("Prize") or sprite:IsFinished("PayNothing") then
+				sprite:Play("Idle", true)
 			end
-			if sprite:IsEventTriggered("GainPill") then
-				ty.SFXMANAGER:Play(SoundEffect.SOUND_THUMBS_DOWN, 0.6)
-				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
-				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, player.Position, Vector(0, 0), nil)
-				Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, player.Position, Vector(0, 0), nil)
-				player:AddBrokenHearts(1)
+			if sprite:IsFinished("Teleport") then
+				slot:Remove()
 			end
 		end
 	end
@@ -236,35 +237,29 @@ function NoticeOfCriticalCondition:PreSlotCollision(slot, collider, low)
 			player = player:GetOtherTwin()
 		end
 		local sprite = slot:GetSprite()
+		local data = ty.GLOBALDATA
 		local slotData = ty.GLOBALDATA.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
+		if slotData == nil then
+			data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:TableCopyTo(GetInitData())
+			slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
+		end
 		if sprite:IsPlaying("Idle") and player and player:GetBrokenHearts() >= 1 and player:GetNumCoins() >= 2 then
 			local playerData = ty:GetLibData(player)
 			slotData.Player = player
-			sprite:Play("InsertTwoCoins", true)
+			if player:GetCollectibleRNG(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION):RandomInt(100) < 25 then
+				sprite:Play("PayPrize", true)
+			else
+				sprite:Play("PayNothing", true)
+			end
 			player:AddCoins(-2)
 			ty.SFXMANAGER:Play(SoundEffect.SOUND_BAND_AID_PICK_UP, 0.6)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, player.Position, Vector(0, 0), nil)
 			Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CREEP_RED, 0, player.Position, Vector(0, 0), nil)
-			player:AddBrokenHearts(-1)
-			playerData.NoticeOfCriticalCondition.TempBrokenHearts = playerData.NoticeOfCriticalCondition.TempBrokenHearts + 1
 		end
 	end
 end
 NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_PRE_SLOT_COLLISION, NoticeOfCriticalCondition.PreSlotCollision, ty.CustomEntities.HEALINGBEGGAR)
-
-function NoticeOfCriticalCondition:PostNewRoom()
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
-            local data = ty:GetLibData(player)
-            if data.NoticeOfCriticalCondition.TempBrokenHearts > 0 then
-                player:AddBrokenHearts(data.NoticeOfCriticalCondition.TempBrokenHearts)
-                data.NoticeOfCriticalCondition.TempBrokenHearts = 0
-            end
-		end
-    end
-end
-NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, NoticeOfCriticalCondition.PostNewRoom)
 
 function NoticeOfCriticalCondition:PreSlotCreateExplosionDrops(slot)
     return false

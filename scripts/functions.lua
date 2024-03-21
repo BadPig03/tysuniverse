@@ -76,6 +76,7 @@ end
 function ty:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, originalItem)
 	includeActives = includeActives or false
 	excludeTags = excludeTags or ItemConfig.TAG_QUEST
+    originalItem = originalItem or CollectibleType.COLLECTIBLE_BREAKFAST
 	local room = ty.GAME:GetRoom()
 	local result = nil
 	repeat

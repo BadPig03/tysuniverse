@@ -35,6 +35,7 @@ local collectibles = {
     [ty.CustomCollectibles.BONEINFISHSTEAK] = { Name="带骨鱼排", Description="小心地吃" },
     [ty.CustomCollectibles.TELESCOPE] = { Name="望远镜", Description="远距离观察" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
+    [ty.CustomCollectibles.BEGGARMASK] = { Name="丐帮面具", Description="忠诚！" },
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 

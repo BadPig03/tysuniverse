@@ -9,6 +9,7 @@ ty.CollectiblesList = {
     'absolution',
     'anorexia',
     'atonement_voucher',
+    'beggar_mask',
     'blood_sacrifice',
     'bobs_stomach',
     'bone_in_fish_steak',
