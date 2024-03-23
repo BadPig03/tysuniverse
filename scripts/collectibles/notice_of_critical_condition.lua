@@ -196,9 +196,7 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 			end
 			if sprite:IsEventTriggered("Prize") then
 				local itemSubtype = GetItemFromPool(player)
-				local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemSubtype, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 80), 0, true), Vector(0, 0), nil):ToPickup()
-				item.ShopItemId = -2
-				item.Price = 0
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, itemSubtype, room:FindFreePickupSpawnPosition(slot.Position + Vector(0, 80), 0, true), Vector(0, 0), nil)
 				ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN, 0.6)
 				ty.SFXMANAGER:Play(SoundEffect.SOUND_THUMBSUP, 0.6)
 				sprite:Play("Idle", true)
@@ -231,8 +229,8 @@ end
 NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_SLOT_UPDATE, NoticeOfCriticalCondition.PostSlotUpdate, ty.CustomEntities.HEALINGBEGGAR)
 
 function NoticeOfCriticalCondition:PreSlotCollision(slot, collider, low)
-	if slot.Variant == ty.CustomEntities.HEALINGBEGGAR then
-		local player = collider:ToPlayer()
+	local player = collider:ToPlayer()
+	if slot.Variant == ty.CustomEntities.HEALINGBEGGAR and player then
 		if player:GetPlayerType() == PlayerType.PLAYER_THESOUL_B then
 			player = player:GetOtherTwin()
 		end

@@ -8,7 +8,7 @@ ty.CustomCollectibles = {
     BROKENMIRRORING = Isaac.GetItemIdByName("Broken Mirroring"),
     LASERGUN = Isaac.GetItemIdByName("Laser Gun"),
     CORNUCOPIA = Isaac.GetItemIdByName("Cornucopia"),
-    NOTICEOFCRITICALCONDITION = Isaac.GetItemIdByName("Notice Of Critical Condition"),
+    NOTICEOFCRITICALCONDITION = Isaac.GetItemIdByName("Notice of Critical Condition"),
     LUMIGYROFLY = Isaac.GetItemIdByName("Lumigyro Fly"),
     COLLAPSE = Isaac.GetItemIdByName("Collapse"),
     CURSEDTREASURE = Isaac.GetItemIdByName("Cursed Treasure"),
@@ -92,7 +92,7 @@ ty.CustomEntities = {
     CURSEDCOIN = Isaac.GetEntitySubTypeByName("Cursed Coin"),
     MAGNIFIER = Isaac.GetEntityVariantByName("Magnifier"),
     BLOODSACRIFICEVESSEL = Isaac.GetEntityVariantByName("Blood Sacrifice Vessel"),
-    TOOLBOX = Isaac.GetEntityVariantByName("Tool Box"),
+    TOOLBOX = Isaac.GetEntityVariantByName("Tool Box")
 }
 
 ty.ConstantValues = {

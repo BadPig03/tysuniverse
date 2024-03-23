@@ -14,9 +14,9 @@ local function GetDamagePerCharge(player)
     if ty.GAME:IsGreedMode() then
         stage = ty.LEVEL:GetStage() * 1.6
     end
-    local charge = 15 + 20 * stage ^ 1.5
+    local charge = 15 + 20 * stage ^ 1.4
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
-        charge = charge * 0.9
+        charge = charge * 0.8
     end
     return charge
 end
@@ -38,7 +38,7 @@ local function IsCollectibleHasNoItemPool(collectibleType)
 end
 
 local function GetClosestCollectible(player)
-    local minDistance = 128
+    local minDistance = 96
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
@@ -62,12 +62,11 @@ local function IsDevilAngelRoomOpened()
 end
 
 local function GetTears(player, tears)
-    if player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) then
-        if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-            return math.max(0.8 * tears, 30 / 11)
-        else
-            return 0.8 * tears
-        end
+    if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
+        tears = 0.8 * tears
+    end
+    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
+        return 30 / 11
     end
     return tears
 end
@@ -120,17 +119,25 @@ function Warfarin:PostPlayerUpdate(player)
             globalData.BloodSample.InTriggered = true
         end
     end
-    local collectible = GetClosestCollectible(player)
-    local charge = player:GetActiveCharge(ActiveSlot.SLOT_POCKET) + player:GetBatteryCharge(ActiveSlot.SLOT_POCKET)
-    if collectible then
-        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
-            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
-            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
-        end
-    else
-        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
-            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
-            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+    if room:IsClear() then
+        local collectible = GetClosestCollectible(player)
+        local charge = player:GetActiveCharge(ActiveSlot.SLOT_POCKET) + player:GetBatteryCharge(ActiveSlot.SLOT_POCKET)
+        if collectible then
+            if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
+                player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
+                player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+                if player:IsExtraAnimationFinished() then
+                    player:AnimateCollectible(ty.CustomCollectibles.BLOODYDICE, "UseItem")
+                end
+            end
+        else
+            if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
+                player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
+                player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+                if player:IsExtraAnimationFinished() then
+                    player:AnimateCollectible(ty.CustomCollectibles.BLOODSAMPLE, "UseItem")
+                end
+            end
         end
     end
 end
@@ -381,12 +388,12 @@ function Warfarin:PreSFXPlay(id, volume, frameDelay, loop, pitch, pan)
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Warfarin.PreSFXPlay, SoundEffect.SOUND_ISAAC_HURT_GRUNT)
 
-function Warfarin:PostDevilCalculate(chance)
+function Warfarin:PreDevilApplyItems()
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
-        return chance + 0.36
+        return 0.36
     end
 end
-Warfarin:AddPriorityCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, CallbackPriority.LATE, Warfarin.PostDevilCalculate)
+Warfarin:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Warfarin.PreDevilApplyItems)
 
 function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA

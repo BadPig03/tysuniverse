@@ -20,7 +20,7 @@
 	<active id="6" quality="3" craftquality="3" description="Another me" gfx="collectibles_mirroring_broken.png" name="Broken Mirroring" maxcharges="6" hidden="true" tags="offensive nocantrip"/>
 	<active	id="7" quality="3" craftquality="3" cooldown="60" description="Burning plasma" gfx="collectibles_laser_gun.png" maxcharges="300" chargetype="timed" name="Laser Gun" tags="offensive nocantrip"/>
 	<active	id="8" quality="4" craftquality="-1" cooldown="12" description="Turning trash into treasure" gfx="collectibles_cornucopia.png" maxcharges="0" chargetype="special" devilprice="2" shopprice="30" name="Cornucopia" tags="offensive nocantrip"/>
-	<passive id="9" quality="3" craftquality="3" description="Uncertain fate" gfx="collectibles_notice_of_critical_condition.png" name="Notice Of Critical Condition" tags="nolostbr nogreed nokeeper"/>
+	<passive id="9" quality="3" craftquality="3" description="Uncertain fate" gfx="collectibles_notice_of_critical_condition.png" name="Notice of Critical Condition" tags="nolostbr nogreed nokeeper"/>
 	<familiar id="10" quality="3" craftquality="3" description="They're more violent" gfx="collectibles_lumigyrofly.png" name="Lumigyro Fly" cache="familiars" tags="fly offensive"/>
 	<passive id="11" quality="0" craftquality="0" description="I'm attractive" gfx="collectibles_collapse.png" name="Collapse" tags="nolostbr offensive"/>
 	<passive id="12" quality="2" craftquality="2" description="More goods... but at what cost?" gfx="collectibles_cursed_treasure.png" name="Cursed Treasure" tags="offensive"/>
@@ -30,7 +30,7 @@
 	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppysfood.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
 	<passive id="17" quality="2" craftquality="2" description="Prevents from becoming worse" gfx="collectibles_conservative_treatment.png" name="Conservative Treatment" cache="all" tags="syringe offensive"/>
 	<passive id="18" quality="4" craftquality="4" description="Increased tear production" gfx="collectibles_conjunctivitis.png" name="Conjunctivitis" devilprice="2" shopprice="30" cache="tearflag firedelay shotspeed" tags="offensive"/>
-	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown of Kings" tags="nogreed offensive"/>
+	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown Of Kings" tags="nogreed offensive"/>
 	<passive id="20" quality="3" craftquality="3" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
 	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive"/>
 	<active id="22" quality="3" craftquality="3" description="Sinister motive" gfx="collectibles_hades_blade.png" name="Hades Blade" maxcharges="5" cache="damage" tags="offensive"/>
@@ -44,9 +44,9 @@
 	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared"/>
 	<passive id="32" quality="2" craftquality="2" description="Take medicine on time" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive"/>
-	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" shopprice="10" cache="firedelay speed damage luck" tags="food nolostbr"/>
+	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay speed damage luck" tags="food nolostbr"/>
 	<passive id="34" quality="3" craftquality="3" description="Distant observation" gfx="collectibles_telescope.png" name="Telescope" cache="firedelay luck" tags="stars lazarusshared nogreed offensive"/>
 	<passive id="35" quality="3" craftquality="3" description="The loyalty!" gfx="collectibles_beggar_mask.png" name="Beggar Mask" tags="offensive"/>
-	<active	id="36" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
-	<active	id="37" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="37" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>

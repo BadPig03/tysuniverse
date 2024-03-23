@@ -111,6 +111,14 @@ function CursedTreasure:PostPickupUpdate(pickup)
 end
 CursedTreasure:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, CursedTreasure.PostPickupUpdate, PickupVariant.PICKUP_COIN)
 
+function CursedTreasure:PrePickupCollsion(pickup, collider, low)
+    if pickup.Variant == PickupVariant.PICKUP_COIN and pickup.SubType == ty.CustomEntities.CURSEDCOIN and ((collider.Type == EntityType.ENTITY_FAMILIAR and (collider.Variant == FamiliarVariant.BUM_FRIEND or collider.Variant == FamiliarVariant.BUMBO or collider.Variant == FamiliarVariant.SUPER_BUM)) or collider.Type == EntityType.ENTITY_ULTRA_GREED or collider.Type == EntityType.ENTITY_BUMBINO) then
+        pickup.SubType = CoinSubType.COIN_PENNY
+        return
+    end
+end
+CursedTreasure:AddCallback(ModCallbacks.MC_PRE_PICKUP_COLLISION, CursedTreasure.PrePickupCollsion)
+
 function CursedTreasure:PostPickupCollision(pickup, collider, low)
     local player = collider:ToPlayer()
     if pickup.SubType == ty.CustomEntities.CURSEDCOIN and player then

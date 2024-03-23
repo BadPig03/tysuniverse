@@ -42,16 +42,18 @@ end
 BoneInFishSteak:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, BoneInFishSteak.PostPlayerUpdate)
 
 function BoneInFishSteak:EvaluateCache(player, cacheFlag)
-    if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) and player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
-        local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.BONEINFISHSTEAK)
-        if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
-        end
-        if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, collectibleNum)
-        end
-        if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + collectibleNum
+    if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) then
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
+            local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.BONEINFISHSTEAK)
+            if cacheFlag == CacheFlag.CACHE_SPEED then
+                player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
+            end
+            if cacheFlag == CacheFlag.CACHE_DAMAGE then
+                ty.Stat:AddFlatDamage(player, collectibleNum)
+            end
+            if cacheFlag == CacheFlag.CACHE_LUCK then
+                player.Luck = player.Luck + collectibleNum
+            end
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
             local data = ty:GetLibData(player)
