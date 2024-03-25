@@ -30,7 +30,7 @@
 	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppysfood.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
 	<passive id="17" quality="2" craftquality="2" description="Prevents from becoming worse" gfx="collectibles_conservative_treatment.png" name="Conservative Treatment" cache="all" tags="syringe offensive"/>
 	<passive id="18" quality="4" craftquality="4" description="Increased tear production" gfx="collectibles_conjunctivitis.png" name="Conjunctivitis" devilprice="2" shopprice="30" cache="tearflag firedelay shotspeed" tags="offensive"/>
-	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown Of Kings" tags="nogreed offensive"/>
+	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown of Kings" tags="nogreed offensive"/>
 	<passive id="20" quality="3" craftquality="3" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
 	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive"/>
 	<active id="22" quality="3" craftquality="3" description="Sinister motive" gfx="collectibles_hades_blade.png" name="Hades Blade" maxcharges="5" cache="damage" tags="offensive"/>
@@ -39,7 +39,7 @@
 	<passive id="25" quality="2" craftquality="2" description="Demon's favorite" gfx="collectibles_chocolate_pancake.png" name="Chocolate Pancake" maxhearts="2" cache="speed shotspeed luck" tags="food nolostbr"/>
 	<passive id="26" quality="1" craftquality="1" description="Confess my sin" gfx="collectibles_atonement_voucher.png" name="Atonement Voucher" tags="nolostbr"/>
 	<active id="27" quality="3" craftquality="3" cooldown="60" description="Is it a dream?" gfx="collectibles_wake_up.png" name="Wake-up" maxcharges="0" tags="nogreed offensive nocantrip"/>
-	<active id="28" quality="2" craftquality="2" cooldown="60" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" shopprice="10" tags="offensive nocantrip"/>
+	<active id="28" quality="2" craftquality="2" cooldown="60" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" tags="offensive nocantrip"/>
 	<passive id="29" quality="0" craftquality="0" description="It stinks" gfx="collectibles_expired_glue.png" name="Expired Glue" tags="offensive"/>
 	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared"/>

@@ -48,7 +48,7 @@ function ty:ItemQueueUpdate(player)
         local data = ty:GetLibData(player)
         local queuedItem = player.QueuedItem
         if not player:IsItemQueueEmpty() and queuedItem.Item then
-            if data.ItemQueue.ItemID == 0 then
+            if data.ItemQueue and data.ItemQueue.ItemID == 0 then
                 data.ItemQueue.ItemID = queuedItem.Item
                 data.ItemQueue.Frame = ty.GAME:GetFrameCount()
                 Isaac.RunCallback("TY_POST_PICK_UP_COLLECTIBLE", player, queuedItem.Item.ID, queuedItem.Touched)
@@ -60,7 +60,7 @@ function ty:ItemQueueUpdate(player)
         end
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, ty.ItemQueueUpdate, 0)
+ty:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, ty.ItemQueueUpdate)
 
 function ty:PostPickupCollectible(player, item, touched)
     local language = Options.Language

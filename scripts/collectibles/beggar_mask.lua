@@ -18,7 +18,14 @@ function BeggerMask:PostNewRoom()
     local roomType = room:GetType()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         if player:HasCollectible(ty.CustomCollectibles.BEGGARMASK) and room:IsFirstVisit() then
-            local pos = room:FindFreeTilePosition(Vector(520, 360), 120)
+            local pos = room:FindFreePickupSpawnPosition(Vector(520, 360), 0, true, false)
+            if room:GetRoomShape() == RoomShape.ROOMSHAPE_IV then
+                pos = room:FindFreePickupSpawnPosition(Vector(360, 360), 0, true, false)
+            elseif room:GetRoomShape() == RoomShape.ROOMSHAPE_IH then
+                pos = room:FindFreePickupSpawnPosition(Vector(440, 280), 0, true, false)
+            elseif room:GetRoomShape() == RoomShape.ROOMSHAPE_2x1 then
+                pos = room:FindFreePickupSpawnPosition(Vector(1000, 360), 0, true, false)
+            end
             local slot = nil
             if roomType == RoomType.ROOM_ANGEL then
                 slot = Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALING_BEGGAR, 0, pos, Vector(0, 0), nil)
@@ -50,6 +57,7 @@ function BeggerMask:PostNewRoom()
             end
         end
     end
+    prized = false
 end
 BeggerMask:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, BeggerMask.PostNewRoom)
 

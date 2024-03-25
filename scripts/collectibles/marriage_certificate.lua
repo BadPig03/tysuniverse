@@ -53,7 +53,7 @@ local function CopyCollectiblesFromPlayer(player, init)
     if init then
         table.insert(list, CollectibleType.COLLECTIBLE_WHORE_OF_BABYLON)
         table.insert(list, CollectibleType.COLLECTIBLE_DEAD_BIRD)
-        table.insert(list, CollectibleType.COLLECTIBLE_BIRTHRIGHT)
+        table.insert(list, CollectibleType.COLLECTIBLE_MAGGYS_BOW)
     end
     return list
 end
@@ -76,7 +76,7 @@ local function InitSubPlayer(player)
     for _, itemID in pairs(CopyCollectiblesFromPlayer(player, true)) do
         subPlayer:AddCollectible(itemID)
     end
-    subPlayer:AnimateCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT)
+    subPlayer:AnimateCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
     allowCopying = true
 end 
 
@@ -102,8 +102,25 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
         elseif player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B then
             return CollectibleType.COLLECTIBLE_BIRTHRIGHT
         end
-    end
-    if player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) and type == CollectibleType.COLLECTIBLE_ESAU_JR then
+        if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN) then
+            player:AddBlackHearts(6)
+            return false
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) then
+            for i = 1, player:GetCollectibleNum(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) do
+                player:RemoveCollectible(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS)
+            end
+            extraBlackHearts = true
+        end
+        if (PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR)) then
+            return CollectibleType.COLLECTIBLE_DIVORCE_PAPERS
+        end
+    elseif type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
+        for i = 1, player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) do
+            player:RemoveCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
+        end
+        player:AddBlackHearts(6)
+    elseif type == CollectibleType.COLLECTIBLE_ESAU_JR and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
         allowCopying = false
         for _, player2 in pairs(PlayerManager.GetPlayers()) do
             if IsSubPlayer(player) then
@@ -112,21 +129,6 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
         end
         allowCopying = true
         return false
-    end
-    if (PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR)) and type == ty.CustomCollectibles.MARRIAGECERTIFICATE then
-        return CollectibleType.COLLECTIBLE_DIVORCE_PAPERS
-    end
-    if player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) and type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS then
-        for i = 1, player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) do
-            player:RemoveCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
-        end
-        player:AddBlackHearts(6)
-    end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) and type == ty.CustomCollectibles.MARRIAGECERTIFICATE then
-        for i = 1, player:GetCollectibleNum(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) do
-            player:RemoveCollectible(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS)
-        end
-        extraBlackHearts = true
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_PRE_ADD_COLLECTIBLE, MarriageCertificate.PreAddCollectible)
@@ -206,7 +208,7 @@ MarriageCertificate:AddCallback(ModCallbacks.MC_PRE_NEW_ROOM, MarriageCertificat
 function MarriageCertificate:PostNewRoom()
     if ty.LEVEL:HasAbandonedMineshaft() and ty.LEVEL:GetDimension() == Dimension.NORMAL and itemCount > 0 then
         for i = 1, itemCount do
-            local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.CustomCollectibles.MARRIAGECERTIFICATE, ty.GAME:GetRoom():FindFreePickupSpawnPosition(Vector(200, 520), 0, true), Vector(0, 0), nil):ToPickup()
+            local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_DIVORCE_PAPERS, ty.GAME:GetRoom():FindFreePickupSpawnPosition(Vector(200, 520), 0, true), Vector(0, 0), nil):ToPickup()
             item.ShopItemId = -2
             item.Price = 0
             item:RemoveCollectibleCycle()

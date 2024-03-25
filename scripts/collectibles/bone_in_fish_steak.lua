@@ -27,8 +27,8 @@ end
 BoneInFishSteak:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, BoneInFishSteak.PostAddCollectible)
 
 function BoneInFishSteak:PostPlayerUpdate(player)
-    if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) then
-        local data = ty:GetLibData(player)
+    local data = ty:GetLibData(player)
+    if data.Init and player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) then
         local trinketsCount = GetSmeltedTrinketCounts(player)
         if trinketsCount > data.BoneInFishSteak.TrinketsCount then
             data.BoneInFishSteak.TearsUp = data.BoneInFishSteak.TearsUp + trinketsCount - data.BoneInFishSteak.TrinketsCount

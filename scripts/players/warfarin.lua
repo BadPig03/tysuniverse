@@ -38,7 +38,7 @@ local function IsCollectibleHasNoItemPool(collectibleType)
 end
 
 local function GetClosestCollectible(player)
-    local minDistance = 96
+    local minDistance = 128
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
@@ -119,24 +119,22 @@ function Warfarin:PostPlayerUpdate(player)
             globalData.BloodSample.InTriggered = true
         end
     end
-    if room:IsClear() then
-        local collectible = GetClosestCollectible(player)
-        local charge = player:GetActiveCharge(ActiveSlot.SLOT_POCKET) + player:GetBatteryCharge(ActiveSlot.SLOT_POCKET)
-        if collectible then
-            if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
-                player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
-                player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
-                if player:IsExtraAnimationFinished() then
-                    player:AnimateCollectible(ty.CustomCollectibles.BLOODYDICE, "UseItem")
-                end
+    local collectible = GetClosestCollectible(player)
+    local charge = player:GetActiveCharge(ActiveSlot.SLOT_POCKET) + player:GetBatteryCharge(ActiveSlot.SLOT_POCKET)
+    if collectible and room:IsClear() then
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
+            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
+            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+            if player:IsExtraAnimationFinished() then
+                player:AnimateCollectible(ty.CustomCollectibles.BLOODYDICE, "UseItem")
             end
-        else
-            if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
-                player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
-                player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
-                if player:IsExtraAnimationFinished() then
-                    player:AnimateCollectible(ty.CustomCollectibles.BLOODSAMPLE, "UseItem")
-                end
+        end
+    else
+        if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
+            player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
+            player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
+            if player:IsExtraAnimationFinished() then
+                player:AnimateCollectible(ty.CustomCollectibles.BLOODSAMPLE, "UseItem")
             end
         end
     end
@@ -252,6 +250,7 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_USE_ITEM, Warfarin.UseItem)
 
 function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, player)
+    local effects = player:GetEffects()
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
         if type == CollectibleType.COLLECTIBLE_ABADDON then
             player:AddMaxHearts(2)
@@ -259,7 +258,8 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         end
         if type == CollectibleType.COLLECTIBLE_CHARM_VAMPIRE then
             player:AddCacheFlags(CacheFlag.CACHE_FLYING, true)
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
         end
         if type == CollectibleType.COLLECTIBLE_BLOOD_BAG then
             player:AddHearts(99)
@@ -268,26 +268,26 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
             player:AddBoneHearts(-1)
         end
         if type == CollectibleType.COLLECTIBLE_SPIRIT_OF_THE_NIGHT or type == CollectibleType.COLLECTIBLE_DEAD_DOVE then
-            player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
         end
         if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
         end
         if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
         end
         if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
         end
         if type == CollectibleType.COLLECTIBLE_BLACK_CANDLE then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
         end
         if type == CollectibleType.COLLECTIBLE_TAURUS then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
         end
         if type == CollectibleType.COLLECTIBLE_LEO then
-            player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
         end
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
     end
@@ -295,23 +295,31 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, Warfarin.PostAddCollectible)
 
 function Warfarin:PostTriggerCollectibleRemoved(player, type)
+    local effects = player:GetEffects()
+    if type == CollectibleType.COLLECTIBLE_CHARM_VAMPIRE then
+        player:EvaluateItems()
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+    end
+    if type == CollectibleType.COLLECTIBLE_SPIRIT_OF_THE_NIGHT or type == CollectibleType.COLLECTIBLE_DEAD_DOVE then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+    end
     if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
-	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
 	end
     if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
-	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
 	end
     if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
-	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
 	end
     if type == CollectibleType.COLLECTIBLE_BLACK_CANDLE then
-	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
+	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
 	end
     if type == CollectibleType.COLLECTIBLE_TAURUS then
-        player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
     end
     if type == CollectibleType.COLLECTIBLE_LEO then
-	    player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
+	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
 	end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, Warfarin.PostTriggerCollectibleRemoved)

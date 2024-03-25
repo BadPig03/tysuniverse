@@ -13,6 +13,7 @@ local function GetItemFromPool(player)
         local index = rng:RandomInt(#validItems) + 1
         local selected_item = validItems[index]
         ty:RemoveValueInTable(selected_item, data.NoticeOfCriticalCondition.ItemList)
+        ty.ITEMPOOL:RemoveCollectible(selected_item)
         return selected_item
     else
         return CollectibleType.COLLECTIBLE_BREAKFAST
