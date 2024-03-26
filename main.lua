@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w12c"
+ty.VERSION = "02w12d"
 ty.REPENTOGONVERSION = "1.0.8b"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -98,7 +98,7 @@ local function GetGlobalInitData()
     end
     local data = {}
     data.Init = true
-    data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {}, InTriggered = false, OutTriggered = false }
+    data.BloodSample = { BossIndex = GridRooms.ROOM_ERROR_IDX, GridIndex = 37, ItemList = {}, BossItemList = {}, InTriggered = false, OutTriggered = false }
     data.ChocolatePancake = {}
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, Disabled = false, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731, ty.CustomCollectibles.ANOREXIA, ty.CustomCollectibles.CONSERVATIVETREATMENT, ty.CustomCollectibles.CONJUNCTIVITIS } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
@@ -226,7 +226,7 @@ function ty:PostUpdate()
 end
 ty:AddCallback(ModCallbacks.MC_POST_UPDATE, ty.PostUpdate)
 
-function ty:PostNewRoom()
+function ty:PostNewRoom(room, roomDesc)
 	if genesisReset then
 		ResetInitData()
 		genesisReset = false
@@ -239,7 +239,7 @@ function ty:PostNewRoom()
         ty.PERSISTENTDATA.Rewind = true
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, ty.PostNewRoom)
+ty:AddCallback(ModCallbacks.MC_PRE_NEW_ROOM, ty.PostNewRoom)
 
 function ty:PostRender()
     if REPENTOGON then

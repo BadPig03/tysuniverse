@@ -206,14 +206,33 @@ function Warfarin:PostHUDUpdate()
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_HUD_UPDATE, Warfarin.PostHUDUpdate)
 
+function Warfarin:PreRoomExit(player, newLevel)
+    local room = ty.GAME:GetRoom()
+    local globalData = ty.GLOBALDATA.BloodSample
+    if room:GetType() == RoomType.ROOM_BOSS and room:IsFirstVisit() then
+        bossItemList = {}
+        for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
+            local pickup = ent:ToPickup()
+            if pickup:IsShopItem() then
+                table.insert(globalData.BossItemList, pickup.InitSeed)
+            end
+        end
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_PRE_ROOM_EXIT, Warfarin.PreRoomExit)
+
 function Warfarin:PostPickupUpdate(pickup)
     local room = ty.GAME:GetRoom()
     local pickup = pickup:ToPickup()
     local itemConfig = ty.ITEMCONFIG:GetCollectible(pickup.SubType)
-    if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
+    local globalData = ty.GLOBALDATA.BloodSample
+    if not globalData or not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
-    local globalData = ty.GLOBALDATA.BloodSample
+    if ty:IsValueInTable(pickup.InitSeed, globalData.BossItemList) then
+        pickup:MakeShopItem(-2)
+        ty:RemoveValueInTable(pickup.InitSeed, globalData.BossItemList)
+    end
     if pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType) then
         pickup:MakeShopItem(-2)
     end
@@ -433,7 +452,7 @@ function Warfarin:PostNewRoom()
             room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
             room:RemoveGridEntityImmediate(room:GetGridIndex(Vector(200, 160)), 0, false)
         end
-        if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() then
+        if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
             if restorePosition then
                 for _, player in pairs(PlayerManager.GetPlayers()) do
                     player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)

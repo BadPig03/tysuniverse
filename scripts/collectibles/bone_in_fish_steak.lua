@@ -11,7 +11,7 @@ end
 
 function BoneInFishSteak:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     local data = ty:GetLibData(player)
-    if player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) or type == ty.CustomCollectibles.BONEINFISHSTEAK then
+    if (player:HasCollectible(ty.CustomCollectibles.BONEINFISHSTEAK) or type == ty.CustomCollectibles.BONEINFISHSTEAK) and firstTime then
         local item = ty.ITEMCONFIG:GetCollectible(type)
         if item and item:HasTags(ItemConfig.TAG_FOOD) then
             data.BoneInFishSteak.TearsUp = data.BoneInFishSteak.TearsUp + 1
