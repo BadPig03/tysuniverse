@@ -1,7 +1,7 @@
 <costumes anm2root="gfx/characters/" >
 	<costume id="1" anm2path="costume_hephaestus_soul_fire.anm2" type="none" isFlying="true" priority="1"/>
 	<costume id="2" anm2path="costume_marriage_certificate_hearts.anm2" type="none"/>
-	<costume id="4" anm2path="character_warfarin_hair.anm2" type="none" priority="98"/>
+	<costume id="4" anm2path="character_warfarin_hair.anm2" type="none" priority="97"/>
 	<costume id="5" anm2path="character_warfarin_wings.anm2" type="none" isFlying="true"/>
 	<costume id="6" anm2path="character_warfarin_haemolacria.anm2" type="none"/>
 	<costume id="7" anm2path="character_warfarin_magic_8_ball.anm2" type="none"/>
@@ -10,6 +10,11 @@
 	<costume id="10" anm2path="character_warfarin_black_candle.anm2" type="none"/>
 	<costume id="11" anm2path="character_warfarin_taurus.anm2" type="none"/>
 	<costume id="12" anm2path="character_warfarin_leo.anm2" type="none" priority="99"/>
+	<costume id="13" anm2path="character_warfarin_frozen_hair.anm2" type="none" priority="98"/>
+	<costume id="14" anm2path="character_warfarin_frozen_hair.anm2" type="none" priority="98"/>
+	<costume id="15" anm2path="character_warfarin_frozen_hair.anm2" type="none" priority="98"/>
+	<costume id="16" anm2path="character_warfarin_frozen_hair2.anm2" type="none" priority="98"/>
+	<costume id="17" anm2path="character_warfarin_card_reading.anm2" type="none"/>
 	<costume id="0" anm2path="costume_hephaestus_soul.anm2" type="passive" isFlying="true"/>
 	<costume id="1" anm2path="costume_absolution.anm2" type="passive"/>
 	<costume id="2" anm2path="costume_guilt.anm2" type="passive"/>

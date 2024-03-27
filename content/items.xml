@@ -11,6 +11,11 @@
 	<null id="10" name="Warfarin Black Candle" persistent="true"/>
 	<null id="11" name="Warfarin Taurus" persistent="true"/>
 	<null id="12" name="Warfarin Leo" persistent="true"/>
+	<null id="13" name="Warfarin Frozen Hair" persistent="true"/>
+	<null id="14" name="Warfarin Frozen Hair 2" persistent="true"/>
+	<null id="15" name="Warfarin Frozen Hair 3" persistent="true"/>
+	<null id="16" name="Warfarin Frozen Hair 4" persistent="true"/>
+	<null id="17" name="Warfarin Card Reading" persistent="true"/>
 	<passive id="0" quality="4" craftquality="4" description="God of fire" gfx="collectibles_hephaestus_soul.png" name="Hephaestus' Soul" cache="flying" devilprice="2" shopprice="30" tags="offensive summonable"/>
 	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="lazarusshared"/>
 	<passive id="2" quality="3" craftquality="3" description="Sink into the quicksand of evil" gfx="collectibles_guilt.png" name="Guilt" devilprice="2" tags="nolostbr nokeeper devil lazarusshared"/>

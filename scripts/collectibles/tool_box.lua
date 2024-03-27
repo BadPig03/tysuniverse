@@ -27,7 +27,7 @@ function ToolBox:FamiliarUpdate(familiar)
     end
     if familiar.Coins >= limit then
         local rng = player:GetCollectibleRNG(ty.CustomCollectibles.TOOLBOX)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, cardList[rng:RandomInt(1, 15)], familiar.Position, Vector(0, 0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, cardList[rng:RandomInt(1, 15)], room:FindFreePickupSpawnPosition(familiar.Position, 0, true, false), Vector(0, 0), nil)
         familiar.Coins = 0
         sprite:Play("Appear", true)
     end

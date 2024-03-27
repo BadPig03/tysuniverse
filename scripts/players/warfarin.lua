@@ -138,6 +138,18 @@ function Warfarin:PostPlayerUpdate(player)
             end
         end
     end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_GNAWED_LEAF) and player:GetGnawedLeafTimer() >= 60 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
+        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
+    end
+    if player:GetGnawedLeafTimer() < 60 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
+    end
+    if effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
+        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
+    end
+    if not effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
+    end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
@@ -308,6 +320,21 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         if type == CollectibleType.COLLECTIBLE_LEO then
             effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
         end
+        if type == CollectibleType.COLLECTIBLE_INTRUDER then
+            player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_INTRUDER))
+        end
+        if type == CollectibleType.COLLECTIBLE_TERRA then
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_JUPITER then
+            player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_JUPITER))
+        end
+        if type == CollectibleType.COLLECTIBLE_URANUS then
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_CARD_READING then
+            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+        end
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
     end
 end
@@ -340,6 +367,15 @@ function Warfarin:PostTriggerCollectibleRemoved(player, type)
     if type == CollectibleType.COLLECTIBLE_LEO then
 	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
 	end
+    if type == CollectibleType.COLLECTIBLE_TERRA then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
+    end
+    if type == CollectibleType.COLLECTIBLE_URANUS then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
+    end
+    if type == CollectibleType.COLLECTIBLE_CARD_READING then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+    end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, Warfarin.PostTriggerCollectibleRemoved)
 
@@ -460,6 +496,7 @@ function Warfarin:PostNewRoom()
                 restorePosition = false
             end
             room:DestroyGrid(globalData.BloodSample.GridIndex, true)
+            room:RemoveGridEntityImmediate(globalData.BloodSample.GridIndex, 0, false)
             if #Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE) == 0 then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
             end
@@ -502,10 +539,15 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostCrawlspace
 
 function Warfarin:PostLadderUpdate(effect)
     local sprite = effect:GetSprite()
-    if sprite:IsFinished("Idle") and ty.GAME:GetRoom():IsClear() then
-        for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
-            restorePosition = true
-            ty.GAME:StartRoomTransition(ty.GLOBALDATA.BloodSample.BossIndex, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
+    if sprite:IsFinished("Idle") then
+        if ty.GAME:GetRoom():IsClear() then
+            sprite.Color = Color(1, 1, 1, 1)
+            for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
+                restorePosition = true
+                ty.GAME:StartRoomTransition(ty.GLOBALDATA.BloodSample.BossIndex, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
+            end
+        else
+            sprite.Color = Color(1, 1, 1, 0.1)
         end
     end
 end
