@@ -65,7 +65,8 @@ ty.CustomNullItems = {
     WARFARINFROZENHAIR2 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 2"),
     WARFARINFROZENHAIR3 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 3"),
     WARFARINFROZENHAIR4 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 4"),
-    WARFARINCARDREADING = Isaac.GetNullItemIdByName("Warfarin Card Reading")
+    WARFARINCARDREADING = Isaac.GetNullItemIdByName("Warfarin Card Reading"),
+    WARFARINESAUJRHAIR = Isaac.GetNullItemIdByName("Warfarin Esau Jr Hair")
 }
 
 ty.CustomCards = {

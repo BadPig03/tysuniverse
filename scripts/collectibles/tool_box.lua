@@ -15,6 +15,7 @@ function ToolBox:FamiliarUpdate(familiar)
     local familiar = familiar:ToFamiliar()
     local player = familiar.Player
     local sprite = familiar:GetSprite()
+    local room = ty.GAME:GetRoom()
     if sprite:IsFinished("Appear") or sprite:IsFinished("Idle") then
         sprite:Play("Float", true)
     end

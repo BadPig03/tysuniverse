@@ -91,15 +91,63 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin
 
 function Warfarin:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
+    local effects = player:GetEffects()
     local globalData = ty.GLOBALDATA
     if not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.FF0UNLOCKED) and player:GetMaxHearts() >= 24 then
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.FF0UNLOCKED)
     end
-    if not data.Init or player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
+    if not data.Init then
+        return
+    end
+    if player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAIR).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAIR).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
+        end
         return
     end
     local room = ty.GAME:GetRoom()
-    local effects = player:GetEffects()
     local damageAmountPerCharge = GetDamagePerCharge(player)
     data.BloodSample.DamageAmount = data.BloodSample.DamageAmount + room:GetEnemyDamageInflicted() / 2
     if data.BloodSample.DamageAmount >= damageAmountPerCharge then
@@ -150,6 +198,12 @@ function Warfarin:PostPlayerUpdate(player)
     if not effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
     end
+    if not effects:HasNullEffect(NullItemID.ID_ESAU_JR) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
+    end
+    if effects:HasNullEffect(NullItemID.ID_ESAU_JR) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
+        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
+    end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
@@ -193,7 +247,7 @@ Warfarin:AddCallback(ModCallbacks.MC_PRE_TRIGGER_PLAYER_DEATH, Warfarin.PreTrigg
 function Warfarin:PostHUDUpdate()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
-        if data.Init and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
+        if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
             if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) and player:GetBlackHearts() > 0 then
                 player:AddMaxHearts(2)
                 player:AddHearts(2)
@@ -222,7 +276,7 @@ function Warfarin:PreRoomExit(player, newLevel)
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA.BloodSample
     if room:GetType() == RoomType.ROOM_BOSS and room:IsFirstVisit() then
-        bossItemList = {}
+        globalData.BossItemList = {}
         for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
             local pickup = ent:ToPickup()
             if pickup:IsShopItem() then
@@ -334,6 +388,9 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         end
         if type == CollectibleType.COLLECTIBLE_CARD_READING then
             effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+        end
+        if type == CollectibleType.COLLECTIBLE_C_SECTION then
+            player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_C_SECTION))
         end
         player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
     end
@@ -521,6 +578,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Warfarin.PostNewLevel)
 function Warfarin:PostCrawlspaceUpdate(effect)
     local sprite = effect:GetSprite()
     local data = ty:GetLibData(effect)
+    local room = ty.GAME:GetRoom()
     if effect.SubType == ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE then
         if sprite:IsPlaying("Closed") and #Isaac.FindInRadius(effect.Position, 24, EntityPartition.PLAYER) == 0 then
             sprite:Play("Open", true)
@@ -533,6 +591,10 @@ function Warfarin:PostCrawlspaceUpdate(effect)
                 ty.GAME:StartRoomTransition(GridRooms.ROOM_BLACK_MARKET_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
         end
+    end
+    if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
+        room:SpawnGridEntity(room:GetGridIndex(effect.Position), GridEntityType.GRID_TRAPDOOR, 0, 0, 0)
+        effect:Remove()
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostCrawlspaceUpdate, EffectVariant.ISAACS_CARPET)
