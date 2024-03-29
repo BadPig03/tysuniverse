@@ -107,7 +107,9 @@ local function GetPickupCharge(pickup, player, real)
             end
             if item > 0 then
                 local itemConfigCollectible = ty.ITEMCONFIG:GetCollectible(item)
-                if not itemConfigCollectible:HasTags(ItemConfig.TAG_QUEST) then
+                if itemConfigCollectible:HasTags(ItemConfig.TAG_QUEST) then
+                    charge = 12
+                else
                     charge = charge + math.max(math.min(24, 6 * itemConfigCollectible.Quality), 3)
                 end
             else

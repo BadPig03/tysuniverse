@@ -538,8 +538,8 @@ Warfarin:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, Warfarin.PreSpawnCle
 
 function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
-        local globalData = ty.GLOBALDATA
+    local globalData = ty.GLOBALDATA
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
         if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
             room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
@@ -558,10 +558,8 @@ function Warfarin:PostNewRoom()
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
             end
         end
-        if globalData.BloodSample then
-            globalData.BloodSample.InTriggered = false
-            globalData.BloodSample.OutTriggered = false
-        end
+        globalData.BloodSample.InTriggered = false
+        globalData.BloodSample.OutTriggered = false
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Warfarin.PostNewRoom)
@@ -591,10 +589,10 @@ function Warfarin:PostCrawlspaceUpdate(effect)
                 ty.GAME:StartRoomTransition(GridRooms.ROOM_BLACK_MARKET_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
         end
-    end
-    if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
-        room:SpawnGridEntity(room:GetGridIndex(effect.Position), GridEntityType.GRID_TRAPDOOR, 0, 0, 0)
-        effect:Remove()
+        if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
+            room:SpawnGridEntity(room:GetGridIndex(effect.Position), GridEntityType.GRID_TRAPDOOR, 0, 0, 0)
+            effect:Remove()
+        end
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostCrawlspaceUpdate, EffectVariant.ISAACS_CARPET)

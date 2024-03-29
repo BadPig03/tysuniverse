@@ -307,8 +307,8 @@ local function SpawnLaser(player, index, percent)
         local whirlPool = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WHIRLPOOL, 0, laser.Position, Vector(0, 0), laser):ToEffect()
         whirlPool:GetSprite().Scale = laserSprite.Scale * 0.75
         whirlPool:FollowParent(laser)
-        whirlPool:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
         whirlPool:GetSprite().Color = Color(1, 1, 1, 0.4)
+        laserData.Whirl = whirlPool
         local whirlPoolParticle = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.WHIRLPOOL, 1, laser.Position, Vector(0, 0), laser):ToEffect()
         whirlPoolParticle:GetSprite().Scale = laserSprite.Scale * 0.65
         whirlPoolParticle:FollowParent(whirlPool)
@@ -316,6 +316,7 @@ local function SpawnLaser(player, index, percent)
         if laserData.Weapon & 1 << 8 == 1 << 8 then
             whirlPoolParticle:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
         end
+        laserData.WhirlParticle = whirlPoolParticle
     else
         laserData.Homing = true
     end
@@ -409,6 +410,14 @@ function OceanusSoul:UpdateLaser(effect)
         player = player:ToFamiliar().Player
     end
     local rng = player:GetCollectibleRNG(ty.CustomCollectibles.OCEANUSSOUL)
+    if effect.FrameCount >= 20 then
+        if not data.Whirl:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
+            data.Whirl:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
+        end
+        if data.Weapon | 1 << 8 == 1 << 8 and not data.WhirlParticle:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
+            data.WhirlParticle:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
+        end
+    end
     if sprite:IsFinished("Start") then
         sprite:Play("Loop", true)
     end

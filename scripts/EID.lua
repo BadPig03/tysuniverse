@@ -412,7 +412,7 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.WAKEUP] = {
         [1] = {
             Name = "唤醒",
-            Desc = "#{{IsaacsRoom}} 传送到'家'一层并随机生成3个最低品质为3的攻击性标签道具"..
+            Desc = "#{{IsaacsRoom}} 传送到'家'一层并随机生成3个最低品质为3的攻击道具"..
             "#{{Heart}} 恢复所有血量"..
             "#{{Warning}} 击败教条后直接进入下一层",
             Virtue = "道具来自天使房道具池",
@@ -421,7 +421,7 @@ EIDInfo.Collectibles = {
         },
         [2] = {
             Name = "Wake-up",
-            Desc = "#{{IsaacsRoom}} Teleports Isaac to Home and spawns 3 items of at least quality 3 with Offensive tag from random item pools"..
+            Desc = "#{{IsaacsRoom}} Teleports Isaac to Home and spawns 3 offensive items of at least quality 3 from random item pools"..
             "#{{Heart}} Full Health"..
             "#{{Warning}} Go to next stage if the Dogma is killed",
             Virtue = "Collectibles are selected from Angel Room item pool instead",
