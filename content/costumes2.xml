@@ -16,6 +16,7 @@
 	<costume id="16" anm2path="character_warfarin_frozen_hair2.anm2" type="none" priority="98"/>
 	<costume id="17" anm2path="character_warfarin_card_reading.anm2" type="none"/>
 	<costume id="18" anm2path="character_warfarin_esau_jr_hair.anm2" type="none" priority="98"/>
+	<costume id="19" anm2path="character_warfarin_wings.anm2" type="none" isFlying="true"/>
 	<costume id="0" anm2path="costume_hephaestus_soul.anm2" type="passive" isFlying="true"/>
 	<costume id="1" anm2path="costume_absolution.anm2" type="passive"/>
 	<costume id="2" anm2path="costume_guilt.anm2" type="passive"/>

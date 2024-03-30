@@ -35,6 +35,7 @@ ty.CustomCollectibles = {
     BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
     TELESCOPE = Isaac.GetItemIdByName("Telescope"),
     BEGGARMASK = Isaac.GetItemIdByName("Beggar Mask"),
+    PEELEDBANANA = Isaac.GetItemIdByName("Peeled Banana"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
@@ -66,7 +67,8 @@ ty.CustomNullItems = {
     WARFARINFROZENHAIR3 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 3"),
     WARFARINFROZENHAIR4 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 4"),
     WARFARINCARDREADING = Isaac.GetNullItemIdByName("Warfarin Card Reading"),
-    WARFARINESAUJRHAIR = Isaac.GetNullItemIdByName("Warfarin Esau Jr Hair")
+    WARFARINESAUJRHAIR = Isaac.GetNullItemIdByName("Warfarin Esau Jr Hair"),
+    WARFARINGUPPYWINGS = Isaac.GetNullItemIdByName("Warfarin Guppy Wings")
 }
 
 ty.CustomCards = {

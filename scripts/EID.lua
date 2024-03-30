@@ -519,7 +519,7 @@ EIDInfo.Collectibles = {
         [2] = {
             Name = "Bone-in Fish Steak",
             Desc = "#{{ArrowUp}} +1 Health up"..
-            "Whenever Isaac picks up an item which contains the 'food' tag or consumes any trinket"..
+            "#Whenever Isaac picks up an item which contains the 'food' tag or consumes any trinket"..
             "#{{Collectible486}} Causes Isaac to take damage without taking away health"..
             "#{{Tears}} +0.2 Fire rate permanently",
             BingeEater = "{{ArrowUp}} +1 extra Damage"..
@@ -558,6 +558,26 @@ EIDInfo.Collectibles = {
             "#For every donation received, beggars have a higher chance to drop a random pick up"..
             "#When a beggar drops an item, another item trade or a new beggar will be spawned"..
             "#{{Warning}} If a beggar is killed by explosion, the Beggar Mask is removed"
+        }
+    },
+    [ty.CustomCollectibles.PEELEDBANANA] = {
+        [1] = {
+            Name = "剥皮香蕉",
+            Desc = "#{{ArrowUp}} +1心之容器并治疗一颗红心"..
+            "#{{Heart}} 进入新的房间时，有25%的概率治疗半颗红心"..
+            "#{{Warning}} 多个道具的概率可叠加",
+            BingeEater = "{{ArrowUp}} +2.5射程"..
+            "#{{Collectible664}} {{ArrowUp}} +1幸运"..
+            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
+        },
+        [2] = {
+            Name = "Peeled Banana",
+            Desc = "#{{ArrowUp}} +1 Health up and heals 1 red heart"..
+            "#{{Heart}}Has 25% chance to heal half a heart every new room"..
+            "#{{Warning}}The probabilities of multiple bananas can stack",
+            BingeEater = "{{ArrowUp}} +2.5 Tear range"..
+            "#{{Collectible664}} {{ArrowUp}} +1 Luck"..
+            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.BLOODSAMPLE] = {

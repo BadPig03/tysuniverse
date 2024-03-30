@@ -34,6 +34,7 @@ ty.CollectiblesList = {
     'notice_of_critical_condition',
     'oceanus_soul',
     'order',
+    'peeled_banana',
     'philosophers_staff',
     'rewind',
     'scapegoat',

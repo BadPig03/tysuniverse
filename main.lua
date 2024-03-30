@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w12g"
+ty.VERSION = "02w13a"
 ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -77,7 +77,7 @@ local function GetInitData()
     data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Stat = { Damage = { Multiplier = 1, DamageUp = 0, Flat = 0 }, Speed = { Limit = -1 }, Tears = { TearsUp = 0, Modifiers = {} } }
-    data.Warfarin = { Original = -1 }
+    data.Warfarin = { Original = -1, UsedCount = 0 }
     data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1 }
     return data
 end

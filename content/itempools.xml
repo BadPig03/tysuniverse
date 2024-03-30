@@ -3,7 +3,7 @@
     <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absolution" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="The Gospel of John" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Oceanus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Oceanus' Soul" Weight="0.5" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="babyShop">
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -13,12 +13,14 @@
 		<Item Name="Magnifier" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="boss">
     <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="curse">
     <Item Name="Notice of Critical Condition" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -73,6 +75,7 @@
     <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Beggar Mask" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="keyMaster">
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -135,6 +138,7 @@
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Telescope" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Beggar Mask" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="ultraSecret">
     <Item Name="Guilt" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

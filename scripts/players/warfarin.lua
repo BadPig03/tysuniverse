@@ -10,11 +10,8 @@ if CuerLib then
 end
 
 local function GetDamagePerCharge(player)
-    local stage = ty.LEVEL:GetAbsoluteStage()
-    if ty.GAME:IsGreedMode() then
-        stage = ty.LEVEL:GetStage() * 1.6
-    end
-    local charge = 15 + 20 * stage ^ 1.4
+    local data = ty:GetLibData(player)
+    local charge = 20 + 15 * data.Warfarin.UsedCount
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.8
     end
@@ -204,6 +201,12 @@ function Warfarin:PostPlayerUpdate(player)
     if effects:HasNullEffect(NullItemID.ID_ESAU_JR) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
         effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
     end
+    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) >= 3 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
+        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+    end
+    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) < 3 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+    end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
@@ -312,6 +315,7 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY then
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
+    local data = ty:GetLibData(player)
     if itemID == ty.CustomCollectibles.BLOODYDICE then
         local collectible = GetClosestCollectible(player)
         if collectible then
@@ -319,6 +323,7 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
             collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType))
             collectible.ShopItemId = -2
             collectible.Price = 0
+            data.Warfarin.UsedCount = data.Warfarin.UsedCount + 1
             return { Discharge = true, Remove = false, ShowAnim = true }
         else
             return { Discharge = false, Remove = false, ShowAnim = false }
@@ -329,6 +334,7 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
             player:AddHearts(2)
         end
+        data.Warfarin.UsedCount = data.Warfarin.UsedCount + 1
         return { Discharge = true, Remove = false, ShowAnim = true }
     end
 end
@@ -518,7 +524,7 @@ Warfarin:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Warfarin.PreDevilApp
 function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA
     local room = ty.GAME:GetRoom()
-    if replaceTrapDoor and not room:IsMirrorWorld() then
+    if replaceTrapDoor then
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
         globalData.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)
@@ -530,7 +536,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_GRID_ENTITY_SPAWN, Warfarin.PostGridEn
 
 function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not ty.LEVEL:IsAscent() then
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE4_1 and ty.LEVEL:GetCurses() | LevelCurse.CURSE_OF_LABYRINTH == LevelCurse.CURSE_OF_LABYRINTH) and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
         replaceTrapDoor = not IsDevilAngelRoomOpened()
     end
 end
@@ -540,7 +546,7 @@ function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
-        if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 then
+        if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
             room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
             room:RemoveGridEntityImmediate(room:GetGridIndex(Vector(200, 160)), 0, false)
