@@ -522,22 +522,22 @@ EIDInfo.Collectibles = {
             "#Whenever Isaac picks up an item which contains the 'food' tag or consumes any trinket"..
             "#{{Collectible486}} Causes Isaac to take damage without taking away health"..
             "#{{Tears}} +0.2 Fire rate permanently",
-            BingeEater = "{{ArrowUp}} +1 extra Damage"..
+            BingeEater = "{{ArrowUp}} +1 Extra damage"..
             "#{{Collectible664}} {{ArrowUp}} +1 Luck"..
             "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
         }
     },
-    [ty.CustomCollectibles.TELESCOPE] = {
+    [ty.CustomCollectibles.PLANETARIUMTELESCOPE] = {
         [1] = {
-            Name = "望远镜",
-            Desc = "#{{Card}} 获得一张'XVII-星星'卡牌"..
+            Name = "星象望远镜",
+            Desc = "#{{Card}} 生成一张'XVII-星星'卡牌"..
             "#{{ArrowUp}} 每持有一个有'星星'标签的道具会获得+2幸运值和+0.25射速修正"..
             "#{{Planetarium}} 进入新的一层时，星象房的开启概率为幸运值/24"..
-            "#{{Warning}} 允许在第三章之后开启星象房，并可以拾取所有道具"
+            "#{{Warning}} 允许在第三章之后开启星象房，并可以拾取星象房中的所有道具"
         },
         [2] = {
-            Name = "Telescope",
-            Desc = "#{{Card}} Gives a tarot card 'XVII-Star'"..
+            Name = "Planetarium Telescope",
+            Desc = "#{{Card}} Spawns a tarot card 'XVII-Star'"..
             "#{{ArrowUp}} Each collectible with a 'star' tag will grant +2 luck and +0.25 fire rate"..
             "#{{Planetarium}} When entering a new floor, the Planetarium chance is luck / 24"..
             "#{{Warning}} Allows the spawning of the Planetarium Room after Chapter 3"..

@@ -36,9 +36,9 @@ ty.CollectiblesList = {
     'order',
     'peeled_banana',
     'philosophers_staff',
+    'planetarium_telescope',
     'rewind',
     'scapegoat',
-    'telescope',
     'the_gospel_of_john',
     'tool_box',
     'wake_up'

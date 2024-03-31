@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w13a"
+ty.VERSION = "02w13b"
 ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -130,17 +130,20 @@ local function RewindPlayerData()
     ty.GLOBALDATA = ty:TableCopyTo(lastRoomData["GlobalData"])
 end
 
-if not ty.GLOBALDATA.Init and Isaac.IsInGame() then
+if (not ty.GLOBALDATA or not ty.GLOBALDATA.Init) and Isaac.IsInGame() then
     for _, player in pairs(PlayerManager.GetPlayers()) do
         ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
+        lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
         player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         if player:GetFlippedForm() then
             local player = player:GetFlippedForm()
             ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
+            lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
             player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         end
     end
     ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
+    lastRoomData["GlobalData"] = ty:TableCopyTo(ty.GLOBALDATA)
     ResetInitData()
 end
 

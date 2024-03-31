@@ -33,7 +33,7 @@ ty.CustomCollectibles = {
     OCEANUSSOUL = Isaac.GetItemIdByName("Oceanus' Soul"),
     ABSENCENOTE = Isaac.GetItemIdByName("Absence Note"),
     BONEINFISHSTEAK = Isaac.GetItemIdByName("Bone-in Fish Steak"),
-    TELESCOPE = Isaac.GetItemIdByName("Telescope"),
+    PLANETARIUMTELESCOPE = Isaac.GetItemIdByName("Planetarium Telescope"),
     BEGGARMASK = Isaac.GetItemIdByName("Beggar Mask"),
     PEELEDBANANA = Isaac.GetItemIdByName("Peeled Banana"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
@@ -68,7 +68,8 @@ ty.CustomNullItems = {
     WARFARINFROZENHAIR4 = Isaac.GetNullItemIdByName("Warfarin Frozen Hair 4"),
     WARFARINCARDREADING = Isaac.GetNullItemIdByName("Warfarin Card Reading"),
     WARFARINESAUJRHAIR = Isaac.GetNullItemIdByName("Warfarin Esau Jr Hair"),
-    WARFARINGUPPYWINGS = Isaac.GetNullItemIdByName("Warfarin Guppy Wings")
+    WARFARINGUPPYWINGS = Isaac.GetNullItemIdByName("Warfarin Guppy Wings"),
+    WARFARINREVERSEEMPRESS = Isaac.GetNullItemIdByName("Warfarin Reverse Empress")
 }
 
 ty.CustomCards = {
@@ -104,7 +105,7 @@ ty.CustomEntities = {
 }
 
 ty.ConstantValues = {
-    HEPHAESTUSSOULCIRCLEALPHA = 0.25,
+    HEPHAESTUSSOULCIRCLEALPHA = 0.35,
     HEPHAESTUSSOULCIRCLE = 180,
     COLLAPSERANGE = 384,
     LASERGUNPLASMABALLRANGE = 160,
@@ -118,7 +119,8 @@ ty.CustomGiantBooks = {
 }
 
 ty.CustomAchievements = {
-    FF0UNLOCKED = Isaac.GetAchievementIdByName("ff0_unlocked")
+    FF0UNLOCKED = Isaac.GetAchievementIdByName("ff0_unlocked"),
+    OCEANUSSOULUNLOCKED = Isaac.GetAchievementIdByName("oceanus_soul_unlocked")
 }
 
 ty.CustomChallenges = {

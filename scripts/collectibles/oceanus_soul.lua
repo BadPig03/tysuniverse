@@ -884,4 +884,21 @@ function OceanusSoul:NPCUpdate(npc)
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_NPC_UPDATE, OceanusSoul.NPCUpdate)
 
+function OceanusSoul:Unlock(player, reviver)
+    player:RemoveCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL)
+    player:AddCollectible(ty.CustomCollectibles.OCEANUSSOUL)
+    player:AnimateCollectible(ty.CustomCollectibles.OCEANUSSOUL)
+    if not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.OCEANUSSOULUNLOCKED) then
+        ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.OCEANUSSOULUNLOCKED)
+    end
+end
+
+function OceanusSoul:PreRevive(player)
+    local room = ty.GAME:GetRoom()
+    if room:IsMirrorWorld() and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and player:GetHearts() + player:GetSoulHearts() + player:GetBoneHearts() == 0 then
+        return { BeforeVanilla = true, Callback = OceanusSoul.Unlock }
+    end
+end
+OceanusSoul:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 8, OceanusSoul.PreRevive)
+
 return OceanusSoul

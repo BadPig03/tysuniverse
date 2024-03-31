@@ -127,7 +127,7 @@ function WakeUp:PostPlayerUpdate(player)
     if data.Init then
         if data.WakeUp.Delay > 0 then
             data.WakeUp.Delay = data.WakeUp.Delay - 1
-            player:AddSlowing(EntityRef(player), 1, data.WakeUp.Delay / 300, Color(1, 1, 1, 1))
+            player:AddSlowing(EntityRef(player), 1, data.WakeUp.Delay / 300, player:GetSprite().Color)
             ty.GAME:Darken((300 - data.WakeUp.Delay) / 300, 1)
         elseif data.WakeUp.Delay == 0 then
             data.WakeUp.Delay = -1

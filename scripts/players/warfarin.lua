@@ -11,11 +11,11 @@ end
 
 local function GetDamagePerCharge(player)
     local data = ty:GetLibData(player)
-    local charge = 20 + 15 * data.Warfarin.UsedCount
+    local charge = 20 + math.log(data.Warfarin.UsedCount ^ 2 + 1) + (data.Warfarin.UsedCount) ^ 1.5 / 2
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.8
     end
-    return charge
+    return math.ceil(charge)
 end
 
 local function IsCollectibleHasNoItemPool(collectibleType)
@@ -206,6 +206,12 @@ function Warfarin:PostPlayerUpdate(player)
     end
     if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) < 3 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+    end
+    if not effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
+        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
+    end
+    if effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
+        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
@@ -528,7 +534,9 @@ function Warfarin:PostGridEntitySpawn(grid)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
         globalData.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)
-        room:RemoveGridEntityImmediate(globalData.BloodSample.GridIndex, 0, false)
+        if not room:DestroyGrid(globalData.BloodSample.GridIndex, true) then
+            room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
+        end
         replaceTrapDoor = false
     end
 end
@@ -548,8 +556,9 @@ function Warfarin:PostNewRoom()
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
         if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
-            room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true)
-            room:RemoveGridEntityImmediate(room:GetGridIndex(Vector(200, 160)), 0, false)
+            if not room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true) then
+                room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
+            end
         end
         if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
             if restorePosition then
@@ -558,8 +567,9 @@ function Warfarin:PostNewRoom()
                 end
                 restorePosition = false
             end
-            room:DestroyGrid(globalData.BloodSample.GridIndex, true)
-            room:RemoveGridEntityImmediate(globalData.BloodSample.GridIndex, 0, false)
+            if not room:DestroyGrid(globalData.BloodSample.GridIndex, true) then
+                room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
+            end
             if #Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE) == 0 then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
             end
