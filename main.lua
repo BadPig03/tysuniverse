@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w13b"
+ty.VERSION = "02w13c"
 ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -73,6 +73,7 @@ local function GetInitData()
     data.Magnifier = { Scale = 1 }
     data.MarriageCertificate = { MainPlayerSeed = -1, IsAlive = true }
     data.Mirroring = { PlayerType = -1, OldItemList = {}, Health = 0, Bomb = 0, IsDarkJudas = false, IsLazarus2 = false, Charge = 0, BookOfVirtues = false, MirrorBustedPosition = Vector(0, 0), MirroringSpawned = false }
+    data.OceanusSoul = { Metronome = false }
     data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
     data.ReviveTable = { IsDead = false, ReviveTime = 0, ReviveInfo = nil, Reviver = nil, PlayingAnimation = nil, AnimationCountdown = -1 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }

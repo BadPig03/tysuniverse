@@ -120,7 +120,8 @@ ty.CustomGiantBooks = {
 
 ty.CustomAchievements = {
     FF0UNLOCKED = Isaac.GetAchievementIdByName("ff0_unlocked"),
-    OCEANUSSOULUNLOCKED = Isaac.GetAchievementIdByName("oceanus_soul_unlocked")
+    OCEANUSSOULUNLOCKED = Isaac.GetAchievementIdByName("oceanus_soul_unlocked"),
+    SOULOFFF0UNLOCKED = Isaac.GetAchievementIdByName("soul_of_ff0_unlocked")
 }
 
 ty.CustomChallenges = {

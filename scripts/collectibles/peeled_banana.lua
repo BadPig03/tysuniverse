@@ -22,7 +22,7 @@ function PeeledBanana:EvaluateCache(player, cacheFlag)
             player.TearRange = player.TearRange + 100 * collectibleNum
         end
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            ty.Stat:AddSpeed(player, -0.03 * collectibleNum)
+            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
             player.Luck = player.Luck + collectibleNum

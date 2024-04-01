@@ -3,7 +3,7 @@
     <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absolution" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="The Gospel of John" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Oceanus' Soul" Weight="0.5" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Oceanus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="babyShop">
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

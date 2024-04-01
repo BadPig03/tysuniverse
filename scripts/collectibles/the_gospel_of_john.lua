@@ -58,7 +58,7 @@ TheGospelOfJohn:AddCallback(ModCallbacks.MC_USE_ITEM, TheGospelOfJohn.UseItem, t
 
 function TheGospelOfJohn:PostPickupUpdate(pickup)
     local pickup = pickup:ToPickup()
-    if ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart) and pickup:IsShopItem() and pickup:GetAlternatePedestal() == -1 and not pickup.Touched then
+    if ty.GLOBALDATA.TheGospelOfJohn and ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart) and pickup:IsShopItem() and pickup:GetAlternatePedestal() == -1 and not pickup.Touched then
         local sprite = pickup:GetPriceSprite()
         if sprite:GetFilename() ~= "gfx/items/shops/broken_heart_deal.anm2" then
             sprite:Load("gfx/items/shops/broken_heart_deal.anm2", true)

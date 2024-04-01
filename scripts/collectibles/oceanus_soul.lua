@@ -401,6 +401,21 @@ local function GetTears(player, tears)
     return tears
 end
 
+local function RestorePlayerWeapon(player)
+    local count = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+    for i = 1, count do
+        player:RemoveCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+    end
+    player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+    player:RemoveCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+    for i = 1, count do
+        player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
+    end
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_C_SECTION) then
+        player:SetWeapon(Isaac.CreateWeapon(WeaponType.WEAPON_FETUS, player), 1)
+    end
+end
+
 function OceanusSoul:UpdateLaser(effect)
     local room = ty.GAME:GetRoom()
     local sprite = effect:GetSprite()
@@ -729,6 +744,9 @@ function OceanusSoul:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
     local globalData = ty.GLOBALDATA
     if data.Init and player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) then
+        if player:GetMetronomeCollectibleID() == ty.CustomCollectibles.OCEANUSSOUL and not data.OceanusSoul.Metronome then
+            data.OceanusSoul.Metronome = true
+        end
         if (ty.LEVEL:HasAbandonedMineshaft() and ty.LEVEL:GetDimension() ~= Dimension.MINESHAFT) or not ty.LEVEL:HasAbandonedMineshaft() then
             if ty:IsPlayerFiring(player) or (player:HasCollectible(CollectibleType.COLLECTIBLE_MARKED) and not room:IsClear()) then
                 if not HasChargeBar(player) then
@@ -815,6 +833,13 @@ function OceanusSoul:PostNewRoom()
             end
         end
     end
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        local data = ty:GetLibData(player)
+        if data.OceanusSoul.Metronome then
+            RestorePlayerWeapon(player)
+            data.OceanusSoul.Metronome = false
+        end
+    end
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, OceanusSoul.PostNewRoom)
 
@@ -830,18 +855,7 @@ OceanusSoul:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, OceanusSoul.PostAd
 
 function OceanusSoul:PostTriggerCollectibleRemoved(player, type)
     local room = ty.GAME:GetRoom()
-    local count = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
-    for i = 1, count do
-        player:RemoveCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
-    end
-    player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
-    player:RemoveCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
-    for i = 1, count do
-        player:AddCollectible(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
-    end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_C_SECTION) then
-        player:SetWeapon(Isaac.CreateWeapon(WeaponType.WEAPON_FETUS, player), 1)
-    end
+    RestorePlayerWeapon(player)
     room:SetWaterCurrent(Vector(0, 0))
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, OceanusSoul.PostTriggerCollectibleRemoved, ty.CustomCollectibles.OCEANUSSOUL)

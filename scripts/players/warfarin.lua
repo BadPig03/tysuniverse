@@ -11,7 +11,7 @@ end
 
 local function GetDamagePerCharge(player)
     local data = ty:GetLibData(player)
-    local charge = 20 + math.log(data.Warfarin.UsedCount ^ 2 + 1) + (data.Warfarin.UsedCount) ^ 1.5 / 2
+    local charge = 20 + math.log(data.Warfarin.UsedCount ^ 2 + 1) + (data.Warfarin.UsedCount) ^ 1.5
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.8
     end
@@ -87,12 +87,12 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin.PostPlayerHUDRenderActiveItem)
 
 function Warfarin:PostPlayerUpdate(player)
-    local data = ty:GetLibData(player)
-    local effects = player:GetEffects()
-    local globalData = ty.GLOBALDATA
+    local room = ty.GAME:GetRoom()
     if not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.FF0UNLOCKED) and player:GetMaxHearts() >= 24 then
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.FF0UNLOCKED)
     end
+    local data = ty:GetLibData(player)
+    local effects = player:GetEffects()
     if not data.Init then
         return
     end
@@ -142,9 +142,17 @@ function Warfarin:PostPlayerUpdate(player)
         if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
             effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
         end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+        end
+        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
+            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
+        end
         return
+    elseif ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetCurrentRoomIndex() == 94 and room:GetFrameCount() >= 5 and not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.SOULOFFF0UNLOCKED) then
+        ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.SOULOFFF0UNLOCKED)
     end
-    local room = ty.GAME:GetRoom()
+    local globalData = ty.GLOBALDATA
     local damageAmountPerCharge = GetDamagePerCharge(player)
     data.BloodSample.DamageAmount = data.BloodSample.DamageAmount + room:GetEnemyDamageInflicted() / 2
     if data.BloodSample.DamageAmount >= damageAmountPerCharge then
@@ -605,7 +613,7 @@ function Warfarin:PostCrawlspaceUpdate(effect)
                 ty.GAME:StartRoomTransition(GridRooms.ROOM_BLACK_MARKET_IDX, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
         end
-        if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
+        if not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:IsAscent() then
             room:SpawnGridEntity(room:GetGridIndex(effect.Position), GridEntityType.GRID_TRAPDOOR, 0, 0, 0)
             effect:Remove()
         end

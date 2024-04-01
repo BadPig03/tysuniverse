@@ -7,7 +7,7 @@ function GuppysFood:EvaluateCache(player, cacheFlag)
             ty.Stat:AddFlatDamage(player, collectibleNum)
         end
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            ty.Stat:AddSpeed(player, -0.03 * collectibleNum)
+            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
             player.ShotSpeed = player.ShotSpeed + collectibleNum * 0.2
