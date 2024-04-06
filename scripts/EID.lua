@@ -585,7 +585,7 @@ EIDInfo.Collectibles = {
             Name = "命运的指引",
             Desc = "#显示地图轮廓与隐藏房、头目房的图标，并将通往头目房最近的路作为主路"..
             "#{{ArrowUp}} 消灭本层头目后会获得随机属性提升"..
-            "#{{DevilChance}} 若未离开过主路，则一定开启恶魔房并给予{{Collectible108}}圣饼效果"..
+            "#{{DevilChance}} 若未离开过主路，则一定开启恶魔房并在头目房内给予{{Collectible108}}圣饼效果"..
             "#{{CurseDarkness}} 非主路的房间内会极其黑暗"..
             "#{{Warning}} 部分楼层和特殊维度不生效"
         },
@@ -593,7 +593,7 @@ EIDInfo.Collectibles = {
             Name = "Guidance of Destiny",
             Desc = "#Displays map outlines along with icons for secret rooms and boss rooms, and marks the path leading to the nearest boss room as the main route"..
             "#{{ArrowUp}} Defeating the boss on the floor will grant stats increases"..
-            "#{{DevilChance}} If Isaac has not deviated from the main route when fighting the boss, he will be given damage resistance and a Devil Room will always open"..
+            "#{{DevilChance}} If Isaac has not deviated from the main route when fighting the boss, he will be given damage resistance in the boss room and a Devil Room will always open"..
             "#{{CurseDarkness}} Rooms off the main route will be extremely dark"..
             "#{{Warning}} Doesn't work on certain floors and other dimensions"
         }
