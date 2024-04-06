@@ -60,7 +60,7 @@ local function GetInitData()
     data.AtonementVoucher = { Effected = false, DevilRoomVisited = false }
     data.BobsStomach = { LastDirectionX = 0, LastDirectionY = 0, Fired = false, CanFire = false }
     data.BloodSacrifice = { UsedCount = {}, VesselList = {}, Respawning = false, PlaySound = false }
-    data.BloodSample = { DamageAmount = 0, RedHearts = 0 }
+    data.BloodSample = { Percent = 0 }
     data.BoneInFishSteak = { TearsUp = 0, TrinketsCount = 0 }
     data.Cornucopia = { IsHolding = false, Charge = 0 }
     data.CrownOfKings = { CanSpawn = false, IsBossChallenge = false, IsBossrush = false, CanRender = true }

@@ -82,22 +82,22 @@ function CursedDestiny:EvaluateCache(player, cacheFlag)
     if not ty.GAME:GetRoom():HasCurseMist() then
         local data = ty:GetLibData(player)
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.15
+            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.1
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.5 * data.CursedDestiny.Reward end)
+            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.25 * data.CursedDestiny.Reward end)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward)
+            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.5)
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + data.CursedDestiny.Reward * 60
+            player.TearRange = player.TearRange + data.CursedDestiny.Reward * 50
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.05
+            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.1
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + data.CursedDestiny.Reward
+            player.Luck = player.Luck + data.CursedDestiny.Reward * 0.5
         end  
     end
 end
@@ -166,11 +166,11 @@ function CursedDestiny:PreSpawnCleanAward(rng, spawnPosition)
                         local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, true, rng:Next()), room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil):ToPickup()
                         item:MakeShopItem(-2)
                     end
-                    if stage >= LevelStage.STAGE1_2 and stage <= LevelStage.STAGE4_2 and not IsDevilAngelRoomOpened() then
+                    if ty.LEVEL:CanSpawnDevilRoom() and not IsDevilAngelRoomOpened() then
                         room:TrySpawnDevilRoomDoor(true, true) 
                     end
+                    data.CursedDestiny.Reward = data.CursedDestiny.Reward + 1
                 end
-                local rng = player:GetCollectibleRNG(ty.CustomCollectibles.CURSEDDESTINY)
                 data.CursedDestiny.Reward = data.CursedDestiny.Reward + 1
                 player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
                 player:AnimateHappy()

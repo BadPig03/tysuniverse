@@ -82,7 +82,7 @@ function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, sca
         local hudOffset = Options.HUDOffset
         local renderPos = Vector(Isaac.GetScreenWidth() - 38 - 20 * hudOffset, Isaac.GetScreenHeight() - 28 - 12 * hudOffset)
         local data = ty:GetLibData(player)
-        ty.LUAMIN:DrawString(string.format("%.1f%%", math.min(100, 100 * data.BloodSample.DamageAmount / GetDamagePerCharge(player))), renderPos.X, renderPos.Y, KColor(1, 1, 1, 1), 10, false)
+        ty.LUAMIN:DrawString(string.format("%.1f%%", math.min(100, 100 * data.BloodSample.Percent)), renderPos.X, renderPos.Y, KColor(1, 1, 1, 1), 10, false)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin.PostPlayerHUDRenderActiveItem)
@@ -153,13 +153,12 @@ function Warfarin:PostPlayerUpdate(player)
     elseif ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetCurrentRoomIndex() == 94 and room:GetFrameCount() >= 5 and not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.SOULOFFF0UNLOCKED) then
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.SOULOFFF0UNLOCKED)
     end
-    local globalData = ty.GLOBALDATA
-    local damageAmountPerCharge = GetDamagePerCharge(player)
-    data.BloodSample.DamageAmount = data.BloodSample.DamageAmount + room:GetEnemyDamageInflicted() / 2
-    if data.BloodSample.DamageAmount >= damageAmountPerCharge then
-        data.BloodSample.DamageAmount = data.BloodSample.DamageAmount - damageAmountPerCharge
+    data.BloodSample.Percent = data.BloodSample.Percent + 0.5 * room:GetEnemyDamageInflicted() / GetDamagePerCharge(player)
+    if data.BloodSample.Percent >= 1 then
+        data.BloodSample.Percent = data.BloodSample.Percent - 1
         player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
     end
+    local globalData = ty.GLOBALDATA
     if player:GetMaxHearts() + player:GetBoneHearts() * 2 > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
         effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
         if not globalData.BloodSample.OutTriggered then
