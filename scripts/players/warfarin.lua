@@ -306,7 +306,7 @@ function Warfarin:PostPickupUpdate(pickup)
     if not globalData or not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
-    if (room:GetType() == RoomType.ROOM_BOSS and not ty:IsValueInTable(pickup.InitSeed, bossItemList) and pickup.FrameCount <= 1) or (pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) then
+    if (room:GetType() == RoomType.ROOM_BOSS and pickup.ShopItemId ~= -2 and not ty:IsValueInTable(pickup.InitSeed, bossItemList) and pickup.FrameCount <= 1 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) or (pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) then
         pickup:MakeShopItem(-2)
     end
     if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then

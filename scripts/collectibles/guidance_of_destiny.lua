@@ -67,24 +67,26 @@ local function IsDevilAngelRoomOpened()
 end
 
 function GuidanceOfDestiny:EvaluateCache(player, cacheFlag)
-    local data = ty:GetLibData(player)
-    if cacheFlag == CacheFlag.CACHE_SPEED then
-        player.MoveSpeed = player.MoveSpeed + data.GuidanceOfDestiny.Reward * 0.15
-    end
-    if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-        ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.5 * data.GuidanceOfDestiny.Reward end)
-    end
-    if cacheFlag == CacheFlag.CACHE_DAMAGE then
-        ty.Stat:AddFlatDamage(player, data.GuidanceOfDestiny.Reward)
-    end
-    if cacheFlag == CacheFlag.CACHE_RANGE then
-        player.TearRange = player.TearRange + data.GuidanceOfDestiny.Reward * 60
-    end
-    if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-        player.ShotSpeed = player.ShotSpeed + data.GuidanceOfDestiny.Reward * 0.05
-    end
-    if cacheFlag == CacheFlag.CACHE_LUCK then
-        player.Luck = player.Luck + data.GuidanceOfDestiny.Reward
+    if not ty.GAME:GetRoom():HasCurseMist() then
+        local data = ty:GetLibData(player)
+        if cacheFlag == CacheFlag.CACHE_SPEED then
+            player.MoveSpeed = player.MoveSpeed + data.GuidanceOfDestiny.Reward * 0.15
+        end
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
+            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.5 * data.GuidanceOfDestiny.Reward end)
+        end
+        if cacheFlag == CacheFlag.CACHE_DAMAGE then
+            ty.Stat:AddFlatDamage(player, data.GuidanceOfDestiny.Reward)
+        end
+        if cacheFlag == CacheFlag.CACHE_RANGE then
+            player.TearRange = player.TearRange + data.GuidanceOfDestiny.Reward * 60
+        end
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
+            player.ShotSpeed = player.ShotSpeed + data.GuidanceOfDestiny.Reward * 0.05
+        end
+        if cacheFlag == CacheFlag.CACHE_LUCK then
+            player.Luck = player.Luck + data.GuidanceOfDestiny.Reward
+        end  
     end
 end
 GuidanceOfDestiny:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, GuidanceOfDestiny.EvaluateCache)
@@ -118,9 +120,9 @@ GuidanceOfDestiny:AddCallback(ModCallbacks.MC_PRE_LEVEL_PLACE_ROOM, GuidanceOfDe
 function GuidanceOfDestiny:PostLevelLayoutGenerated(levelGenerator)
     if IsValidStage() then
         newLevel = true
+        ty.PERSISTENTDATA.LevelGeneratorRooms = {}
+        ty.PERSISTENTDATA.ShortestPath = {}    
     end
-    ty.PERSISTENTDATA.LevelGeneratorRooms = {}
-    ty.PERSISTENTDATA.ShortestPath = {}
 end
 GuidanceOfDestiny:AddCallback(ModCallbacks.MC_POST_LEVEL_LAYOUT_GENERATED, GuidanceOfDestiny.PostLevelLayoutGenerated)
 
