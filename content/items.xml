@@ -35,11 +35,11 @@
 	<active	id="13" quality="4" craftquality="4" cooldown="60" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="8" devilprice="2" shopprice="30" name="The Gospel of John" tags="angel book offensive"/>
 	<familiar id="14" quality="2" craftquality="2" description="Bigger than ever" gfx="collectibles_magnifier.png" name="Magnifier" cache="familiars" tags="offensive uniquefamiliar"/>
 	<passive id="15" quality="3" craftquality="3" description="Takes on all sins and impurities" gfx="collectibles_scapegoat.png" name="Scapegoat" tags="nocantrip"/>
-	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppysfood.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
+	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppys_food.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
 	<passive id="17" quality="2" craftquality="2" description="Prevents from becoming worse" gfx="collectibles_conservative_treatment.png" name="Conservative Treatment" cache="all" tags="syringe offensive"/>
 	<passive id="18" quality="4" craftquality="4" description="Increased tear production" gfx="collectibles_conjunctivitis.png" name="Conjunctivitis" devilprice="2" shopprice="30" cache="tearflag firedelay shotspeed" tags="offensive"/>
 	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown of Kings" tags="nogreed offensive"/>
-	<passive id="20" quality="3" craftquality="3" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
+	<passive id="20" quality="3" craftquality="-1" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
 	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive"/>
 	<active id="22" quality="3" craftquality="3" description="Sinister motive" gfx="collectibles_hades_blade.png" name="Hades Blade" maxcharges="5" cache="damage" tags="offensive"/>
 	<passive id="23" quality="2" craftquality="2" description="Amlost leaking out" gfx="collectibles_bobs_stomach.png" name="Bob's Stomach" tags="bob offensive"/>
@@ -56,6 +56,7 @@
 	<passive id="34" quality="3" craftquality="3" description="Distant observation" gfx="collectibles_planetarium_telescope.png" name="Planetarium Telescope" cache="firedelay luck" tags="stars lazarusshared nogreed offensive"/>
 	<passive id="35" quality="3" craftquality="3" description="The loyalty!" gfx="collectibles_beggar_mask.png" name="Beggar Mask" tags="offensive"/>
 	<passive id="36" quality="2" craftquality="2" description="Sweet sensation" gfx="collectibles_peeled_banana.png" name="Peeled Banana" maxhearts="2" hearts="2" tags="food nolostbr" cache="luck range"/>
-	<active	id="37" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
-	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_guidance_of_destiny.png" name="Guidance of Destiny" tags="nolostbr lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
+	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="39" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>

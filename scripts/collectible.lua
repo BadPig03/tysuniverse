@@ -36,6 +36,7 @@ local collectibles = {
     [ty.CustomCollectibles.PLANETARIUMTELESCOPE] = { Name="星象望远镜", Description="远距离观察" },
     [ty.CustomCollectibles.BEGGARMASK] = { Name="丐帮面具", Description="忠诚！" },
     [ty.CustomCollectibles.PEELEDBANANA] = { Name="剥皮香蕉", Description="甜甜的感觉" },
+    [ty.CustomCollectibles.GUIDANCEOFDESTINY] = { Name="命运的指引", Description="命中注定" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }

@@ -116,7 +116,7 @@ function CrownOfKings:PreSpawnCleanAward(rng, spawnPosition)
             else
                 collectibleID = GetCollectibleQualityFromRandomPool(0, 3, rng)
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, collectibleID, room:FindFreePickupSpawnPosition(spawnPosition + Vector(0, 80), 0, true), Vector(0, 0), nil) 
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, collectibleID, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
             data.CrownOfKings.CanSpawn = false
             player:AnimateHappy()
         end

@@ -21,6 +21,7 @@ ty.CollectiblesList = {
     'crown_of_kings',
     'cursed_treasure',
     'expired_glue',
+    'guidance_of_destiny',
     'guilt',
     'guppys_food',
     'hades_blade',

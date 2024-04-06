@@ -4,6 +4,7 @@ local shouldReviveWithRedHearts = false
 local stopHurtSound = false
 local restorePosition = false
 local replaceTrapDoor = false
+local bossItemList = {}
 
 if CuerLib then
     CuerLib.Players.SetOnlyRedHeartPlayer(ty.CustomPlayerType.WARFARIN, true)
@@ -178,17 +179,11 @@ function Warfarin:PostPlayerUpdate(player)
         if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODSAMPLE then
             player:SetPocketActiveItem(ty.CustomCollectibles.BLOODYDICE, ActiveSlot.SLOT_POCKET, true)
             player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
-            if player:IsExtraAnimationFinished() then
-                player:AnimateCollectible(ty.CustomCollectibles.BLOODYDICE, "UseItem")
-            end
         end
     else
         if player:GetActiveItem(ActiveSlot.SLOT_POCKET) == ty.CustomCollectibles.BLOODYDICE then
             player:SetPocketActiveItem(ty.CustomCollectibles.BLOODSAMPLE, ActiveSlot.SLOT_POCKET, true)
             player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
-            if player:IsExtraAnimationFinished() then
-                player:AnimateCollectible(ty.CustomCollectibles.BLOODSAMPLE, "UseItem")
-            end
         end
     end
     if player:HasCollectible(CollectibleType.COLLECTIBLE_GNAWED_LEAF) and player:GetGnawedLeafTimer() >= 60 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
@@ -291,13 +286,12 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_HUD_UPDATE, Warfarin.PostHUDUpdate)
 
 function Warfarin:PreRoomExit(player, newLevel)
     local room = ty.GAME:GetRoom()
-    local globalData = ty.GLOBALDATA.BloodSample
-    if room:GetType() == RoomType.ROOM_BOSS and room:IsFirstVisit() then
-        globalData.BossItemList = {}
+    if room:GetType() == RoomType.ROOM_BOSS then
+        bossItemList = {}
         for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
             local pickup = ent:ToPickup()
-            if pickup:IsShopItem() then
-                table.insert(globalData.BossItemList, pickup.InitSeed)
+            if not pickup:IsShopItem() then
+                table.insert(bossItemList, pickup.InitSeed)
             end
         end
     end
@@ -312,11 +306,7 @@ function Warfarin:PostPickupUpdate(pickup)
     if not globalData or not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
-    if ty:IsValueInTable(pickup.InitSeed, globalData.BossItemList) then
-        pickup:MakeShopItem(-2)
-        ty:RemoveValueInTable(pickup.InitSeed, globalData.BossItemList)
-    end
-    if pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType) then
+    if (room:GetType() == RoomType.ROOM_BOSS and not ty:IsValueInTable(pickup.InitSeed, bossItemList) and pickup.FrameCount <= 1) or (pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) then
         pickup:MakeShopItem(-2)
     end
     if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then
@@ -540,7 +530,7 @@ function Warfarin:PostGridEntitySpawn(grid)
     local room = ty.GAME:GetRoom()
     if replaceTrapDoor then
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
-        globalData.BloodSample.BossIndex = ty.LEVEL:GetCurrentRoomIndex()
+        globalData.BloodSample.BossDefeated = true
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)
         if not room:DestroyGrid(globalData.BloodSample.GridIndex, true) then
             room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
@@ -562,13 +552,16 @@ function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
-        if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossIndex > 0 and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
+        if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
             if not room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true) then
                 room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
             end
+            for _, player in pairs(PlayerManager.GetPlayers()) do
+                player.Position = Vector(200, 280)
+            end
         end
-        if room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == globalData.BloodSample.BossIndex and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
+        if room:GetType() == RoomType.ROOM_BOSS and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() == ty:GetLastBossRoomIndex() and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
             if restorePosition then
                 for _, player in pairs(PlayerManager.GetPlayers()) do
                     player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)
@@ -591,7 +584,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, Warfarin.PostNewRoom)
 function Warfarin:PostNewLevel()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
-        globalData.BloodSample.BossIndex = GridRooms.ROOM_ERROR_IDX
+        globalData.BloodSample.BossDefeated = false
         globalData.BloodSample.GridIndex = 37
     end
 end
@@ -628,7 +621,7 @@ function Warfarin:PostLadderUpdate(effect)
             sprite.Color = Color(1, 1, 1, 1)
             for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
                 restorePosition = true
-                ty.GAME:StartRoomTransition(ty.GLOBALDATA.BloodSample.BossIndex, Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
+                ty.GAME:StartRoomTransition(ty:GetLastBossRoomIndex(), Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
         else
             sprite.Color = Color(1, 1, 1, 0.1)

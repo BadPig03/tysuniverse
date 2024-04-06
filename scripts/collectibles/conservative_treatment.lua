@@ -33,7 +33,7 @@ function ConservativeTreatment:EvaluateCache(player, cacheFlag)
         end
     end
 end
-ConservativeTreatment:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, CallbackPriority.LATE, ConservativeTreatment.EvaluateCache)
+ConservativeTreatment:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, 10, ConservativeTreatment.EvaluateCache)
 
 function ConservativeTreatment:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     if player:GetHealthType() == HealthType.BONE then

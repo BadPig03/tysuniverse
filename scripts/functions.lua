@@ -208,4 +208,34 @@ function ty:RemoveOtherPickupIndex(index)
     end
 end
 
+function ty:GetLastBossRoomIndex()
+    local function HasOneOrLessDoor(roomDesc)
+        local count = 0
+        for i = DoorSlot.LEFT0, DoorSlot.DOWN1 do
+            if roomDesc.AllowedDoors & 1 << i == 1 << i then
+                count = count + 1
+            end
+        end
+        return count <= 1
+    end
+    if ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE7 then
+        for i = 0, 168 do
+            local roomDesc = ty.LEVEL:GetRoomByIdx(i)
+            local roomData = roomDesc.Data
+            if roomData and roomData.Type == RoomType.ROOM_BOSS and roomData.Shape == RoomShape.ROOMSHAPE_2x2 then
+                return roomDesc.SafeGridIndex
+            end
+        end
+    else
+        for i = 0, 168 do
+            local roomDesc = ty.LEVEL:GetRoomByIdx(i)
+            local roomData = roomDesc.Data
+            if roomData and roomData.Type == RoomType.ROOM_BOSS and HasOneOrLessDoor(roomDesc) then
+                return roomDesc.SafeGridIndex
+            end
+        end    
+    end
+    return ty.LEVEL:GetStartingRoomIndex()
+end
+
 return ty
