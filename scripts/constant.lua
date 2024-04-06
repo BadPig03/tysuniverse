@@ -36,7 +36,7 @@ ty.CustomCollectibles = {
     PLANETARIUMTELESCOPE = Isaac.GetItemIdByName("Planetarium Telescope"),
     BEGGARMASK = Isaac.GetItemIdByName("Beggar Mask"),
     PEELEDBANANA = Isaac.GetItemIdByName("Peeled Banana"),
-    GUIDANCEOFDESTINY = Isaac.GetItemIdByName("Guidance of Destiny"),
+    CURSEDDESTINY = Isaac.GetItemIdByName("Cursed Destiny"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }

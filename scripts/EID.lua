@@ -580,9 +580,9 @@ EIDInfo.Collectibles = {
             "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
         }
     },
-    [ty.CustomCollectibles.GUIDANCEOFDESTINY] = {
+    [ty.CustomCollectibles.CURSEDDESTINY] = {
         [1] = {
-            Name = "命运的指引",
+            Name = "被诅咒的命运",
             Desc = "#显示地图轮廓与隐藏房、头目房的图标，并将通往头目房最近的路作为主路"..
             "#{{ArrowUp}} 消灭本层头目后会获得随机属性提升"..
             "#{{DevilChance}} 若未离开过主路，则一定开启恶魔房并在头目房内给予{{Collectible108}}圣饼效果"..
@@ -590,7 +590,7 @@ EIDInfo.Collectibles = {
             "#{{Warning}} 部分楼层和特殊维度不生效"
         },
         [2] = {
-            Name = "Guidance of Destiny",
+            Name = "Cursed Destiny",
             Desc = "#Displays map outlines along with icons for secret rooms and boss rooms, and marks the path leading to the nearest boss room as the main route"..
             "#{{ArrowUp}} Defeating the boss on the floor will grant stats increases"..
             "#{{DevilChance}} If Isaac has not deviated from the main route when fighting the boss, he will be given damage resistance in the boss room and a Devil Room will always open"..

@@ -1,4 +1,4 @@
-local GuidanceOfDestiny = ty:DefineANewClass()
+local CursedDestiny = ty:DefineANewClass()
 
 local roomGenerationIndices = {}
 local newLevel = false
@@ -66,32 +66,44 @@ local function IsDevilAngelRoomOpened()
     return false
 end
 
-function GuidanceOfDestiny:EvaluateCache(player, cacheFlag)
+local function RevealRooms()
+    for i = 0, 168 do
+        local room = ty.LEVEL:GetRoomByIdx(i)
+        if room.Data and (room.Data.Type == RoomType.ROOM_BOSS or room.Data.Type == RoomType.ROOM_SECRET) then
+            room.DisplayFlags = 1 << 2
+        end
+    end
+    ty.LEVEL:ApplyMapEffect()
+    ty.LEVEL:UpdateVisibility()
+    ty.LEVEL:RemoveCurses(LevelCurse.CURSE_OF_THE_LOST)
+end
+
+function CursedDestiny:EvaluateCache(player, cacheFlag)
     if not ty.GAME:GetRoom():HasCurseMist() then
         local data = ty:GetLibData(player)
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + data.GuidanceOfDestiny.Reward * 0.15
+            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.15
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.5 * data.GuidanceOfDestiny.Reward end)
+            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.5 * data.CursedDestiny.Reward end)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, data.GuidanceOfDestiny.Reward)
+            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward)
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + data.GuidanceOfDestiny.Reward * 60
+            player.TearRange = player.TearRange + data.CursedDestiny.Reward * 60
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + data.GuidanceOfDestiny.Reward * 0.05
+            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.05
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + data.GuidanceOfDestiny.Reward
+            player.Luck = player.Luck + data.CursedDestiny.Reward
         end  
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, GuidanceOfDestiny.EvaluateCache)
+CursedDestiny:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, CursedDestiny.EvaluateCache)
 
-function GuidanceOfDestiny:PreLevelPlaceRoom(levelGeneratorRoom, roomConfigRoom, seed)
+function CursedDestiny:PreLevelPlaceRoom(levelGeneratorRoom, roomConfigRoom, seed)
     if IsValidStage() and newLevel then
         local shape = levelGeneratorRoom:Shape()
         local gridIndex = levelGeneratorRoom:Row() * 13 + levelGeneratorRoom:Column()
@@ -115,18 +127,18 @@ function GuidanceOfDestiny:PreLevelPlaceRoom(levelGeneratorRoom, roomConfigRoom,
 		end
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_PRE_LEVEL_PLACE_ROOM, GuidanceOfDestiny.PreLevelPlaceRoom)
+CursedDestiny:AddCallback(ModCallbacks.MC_PRE_LEVEL_PLACE_ROOM, CursedDestiny.PreLevelPlaceRoom)
 
-function GuidanceOfDestiny:PostLevelLayoutGenerated(levelGenerator)
+function CursedDestiny:PostLevelLayoutGenerated(levelGenerator)
     if IsValidStage() then
         newLevel = true
         ty.PERSISTENTDATA.LevelGeneratorRooms = {}
         ty.PERSISTENTDATA.ShortestPath = {}    
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_POST_LEVEL_LAYOUT_GENERATED, GuidanceOfDestiny.PostLevelLayoutGenerated)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_LEVEL_LAYOUT_GENERATED, CursedDestiny.PostLevelLayoutGenerated)
 
-function GuidanceOfDestiny:PostNewLevel()
+function CursedDestiny:PostNewLevel()
     if IsValidStage() and newLevel then
         local rooms = ty.PERSISTENTDATA.LevelGeneratorRooms
         for i, room in pairs(rooms) do
@@ -135,20 +147,19 @@ function GuidanceOfDestiny:PostNewLevel()
         ty.PERSISTENTDATA.ShortestPath = FindShortestPath()
         newLevel = false
     end
-    if ty.GLOBALDATA.GuidanceOfDestiny then
-        ty.GLOBALDATA.GuidanceOfDestiny.OutOfBounds = false
-        ty.GLOBALDATA.GuidanceOfDestiny.Revealed = false
+    if ty.GLOBALDATA.CursedDestiny then
+        ty.GLOBALDATA.CursedDestiny.OutOfBounds = false
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, GuidanceOfDestiny.PostNewLevel)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, CursedDestiny.PostNewLevel)
 
-function GuidanceOfDestiny:PreSpawnCleanAward(rng, spawnPosition)
+function CursedDestiny:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) and room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == ty:GetLastBossRoomIndex() then
+    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == ty:GetLastBossRoomIndex() then
         for _, player in pairs(PlayerManager.GetPlayers()) do
-            if player:HasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) then
+            if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
                 local data = ty:GetLibData(player)
-                if not ty.GLOBALDATA.GuidanceOfDestiny.OutOfBounds then
+                if not ty.GLOBALDATA.CursedDestiny.OutOfBounds then
                     local stage = ty.LEVEL:GetAbsoluteStage()
                     local devilRoom = ty.LEVEL:GetRoomByIdx(GridRooms.ROOM_DEVIL_IDX)
                     if devilRoom.Data and devilRoom.Data.Type == RoomType.ROOM_ANGEL then
@@ -159,56 +170,51 @@ function GuidanceOfDestiny:PreSpawnCleanAward(rng, spawnPosition)
                         room:TrySpawnDevilRoomDoor(true, true) 
                     end
                 end
-                local rng = player:GetCollectibleRNG(ty.CustomCollectibles.GUIDANCEOFDESTINY)
-                data.GuidanceOfDestiny.Reward = data.GuidanceOfDestiny.Reward + 1
+                local rng = player:GetCollectibleRNG(ty.CustomCollectibles.CURSEDDESTINY)
+                data.CursedDestiny.Reward = data.CursedDestiny.Reward + 1
                 player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
                 player:AnimateHappy()
             end
         end
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, GuidanceOfDestiny.PreSpawnCleanAward)
+CursedDestiny:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, CursedDestiny.PreSpawnCleanAward)
 
-function GuidanceOfDestiny:PostUpdate()
-    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) and not ty.GLOBALDATA.GuidanceOfDestiny.Revealed then
-        for i = 0, 168 do
-            local room = ty.LEVEL:GetRoomByIdx(i)
-            if room.Data and (room.Data.Type == RoomType.ROOM_BOSS or room.Data.Type == RoomType.ROOM_SECRET) then
-                room.DisplayFlags = 1 << 2
-            end
-        end
-        ty.LEVEL:ApplyMapEffect()
-        ty.LEVEL:UpdateVisibility()
-        ty.GLOBALDATA.GuidanceOfDestiny.Revealed = true
+function CursedDestiny:PostAddCollectible(type, charge, firstTime, slot, varData, player)
+    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
+        RevealRooms()
     end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_POST_UPDATE, GuidanceOfDestiny.PostUpdate)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, CursedDestiny.PostAddCollectible, ty.CustomCollectibles.CURSEDDESTINY)
 
-function GuidanceOfDestiny:PostNewRoom()
+function CursedDestiny:PostNewRoom()
     local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) and not ty.GLOBALDATA.GuidanceOfDestiny.OutOfBounds and roomIndex == ty:GetLastBossRoomIndex() then
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not ty.GLOBALDATA.CursedDestiny.OutOfBounds and roomIndex == ty:GetLastBossRoomIndex() then
         for _, player in pairs(PlayerManager.GetPlayers()) do
             local effects = player:GetEffects()
-            if player:HasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) and not effects:HasCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER) then
+            if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not effects:HasCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER) then
                 effects:AddCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER)
             end
         end
     end
+    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
+        RevealRooms()
+    end
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, GuidanceOfDestiny.PostNewRoom)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, CursedDestiny.PostNewRoom)
 
-function GuidanceOfDestiny:GetShaderParams(shaderName)
+function CursedDestiny:GetShaderParams(shaderName)
     local pos, pos2 = Isaac.GetPlayer().Position, Isaac.GetPlayer(1).Position
     local distances = {192, 192, 64, 64}
     local active = 0
-	if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.GUIDANCEOFDESTINY) and shaderName == "GuidanceOfDestinyDarkness" then
+	if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and shaderName == "GuidanceOfDestinyDarkness" then
         local room = ty.GAME:GetRoom()
         local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
         if not ty:IsValueInTable(roomIndex, ty.PERSISTENTDATA.ShortestPath) and roomIndex >= 0 then
             ty.GAME:Darken(1, 1)
             active = 0.9
-            if not ty.GLOBALDATA.GuidanceOfDestiny.OutOfBounds then
-                ty.GLOBALDATA.GuidanceOfDestiny.OutOfBounds = true
+            if not ty.GLOBALDATA.CursedDestiny.OutOfBounds then
+                ty.GLOBALDATA.CursedDestiny.OutOfBounds = true
             end
         end
         if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
@@ -230,6 +236,6 @@ function GuidanceOfDestiny:GetShaderParams(shaderName)
         WarpCheck = {pos.X + 1, pos.Y + 1}
     }
 end
-GuidanceOfDestiny:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, GuidanceOfDestiny.GetShaderParams)
+CursedDestiny:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, CursedDestiny.GetShaderParams)
 
-return GuidanceOfDestiny
+return CursedDestiny
