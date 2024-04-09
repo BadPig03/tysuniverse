@@ -24,7 +24,7 @@ local function MorphAllCollectibles(rng, flag)
             newItem:RemoveCollectibleCycle()
             newItem.AutoUpdatePrice = false
             if flag then
-                newItem.Price = math.floor(ty.ITEMCONFIG:GetCollectible(newItem.SubType).ShopPrice * 1.5)
+                newItem.Price = (ty.ITEMCONFIG:GetCollectible(newItem.SubType).Quality - 2) * 20
                 table.insert(ty.GLOBALDATA.TheGospelOfJohn.Money, newItem.InitSeed)
             else
                 newItem.Price = PickupPrice.PRICE_FREE

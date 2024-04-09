@@ -147,8 +147,10 @@ function CursedDestiny:PostNewLevel()
         ty.PERSISTENTDATA.ShortestPath = FindShortestPath()
         newLevel = false
     end
-    if ty.GLOBALDATA.CursedDestiny then
-        ty.GLOBALDATA.CursedDestiny.OutOfBounds = false
+    local globalData = ty.GLOBALDATA
+    if globalData.CursedDestiny then
+        globalData.CursedDestiny.OutOfBounds = false
+        globalData.CursedDestiny.Owned = false
     end
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, CursedDestiny.PostNewLevel)
@@ -203,18 +205,29 @@ function CursedDestiny:PostNewRoom()
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, CursedDestiny.PostNewRoom)
 
+function CursedDestiny:PostUpdate(player)
+    local globalData = ty.GLOBALDATA
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and globalData.CursedDestiny then
+        if not globalData.CursedDestiny.Owned then
+            globalData.CursedDestiny.Owned = true
+        end
+    end
+end
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_UPDATE, CursedDestiny.PostUpdate)
+
 function CursedDestiny:GetShaderParams(shaderName)
     local pos, pos2 = Isaac.GetPlayer().Position, Isaac.GetPlayer(1).Position
     local distances = {192, 192, 64, 64}
     local active = 0
-	if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and shaderName == "GuidanceOfDestinyDarkness" then
+    local globalData = ty.GLOBALDATA
+	if IsValidStage() and (PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) or globalData.CursedDestiny.Owned) and shaderName == "GuidanceOfDestinyDarkness" then
         local room = ty.GAME:GetRoom()
         local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
         if not ty:IsValueInTable(roomIndex, ty.PERSISTENTDATA.ShortestPath) and roomIndex >= 0 then
             ty.GAME:Darken(1, 1)
             active = 0.9
-            if not ty.GLOBALDATA.CursedDestiny.OutOfBounds then
-                ty.GLOBALDATA.CursedDestiny.OutOfBounds = true
+            if not globalData.CursedDestiny.OutOfBounds then
+                globalData.CursedDestiny.OutOfBounds = true
             end
         end
         if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then

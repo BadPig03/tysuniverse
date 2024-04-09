@@ -1,4 +1,4 @@
 <challenges version="1">
     <challenge name="Laser Fan" id="1" playertype="0" startingitems="20,63,Laser Gun" roomfilter="2,4,12" cursefilter="2" endstage="6" canshoot="false"/>
-    <challenge name="Glue Prohibition" id="2" playertype="33" startingitems="40,376,416,Expired Glue" endstage="8"/>
+    <challenge name="Glue Prohibition" id="2" playertype="33" startingitems="40,376,416" endstage="6"/>
 </challenges>

@@ -7,20 +7,22 @@ function PhilosophersStaff:UseItem(itemID, rng, player, useFlags, activeSlot, va
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET)) do
-        ty.SFXMANAGER:Play(SoundEffect.SOUND_GOLD_HEART, 0.6)
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, ent.Position, Vector(0, 0), nil)
-        local crater = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_CRATER, 0, ent.Position, Vector(0, 0), nil)
-        crater:GetSprite().Color:SetColorize(6,4.5,0.2,2)
-        ty.GAME:SpawnParticles(ent.Position, EffectVariant.COIN_PARTICLE, 25, 7)
-        for i = 1, 4 + rng:RandomInt(4) do
-            local subType = CoinSubType.COIN_PENNY
-            if rng:RandomInt(100) < 10 then
-                subType = rng:RandomInt(CoinSubType.COIN_NICKEL, CoinSubType.COIN_GOLDEN + 1)
+        if not ent:ToPickup():IsShopItem() then
+            ty.SFXMANAGER:Play(SoundEffect.SOUND_GOLD_HEART, 0.6)
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, ent.Position, Vector(0, 0), nil)
+            local crater = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_CRATER, 0, ent.Position, Vector(0, 0), nil)
+            crater:GetSprite().Color:SetColorize(6,4.5,0.2,2)
+            ty.GAME:SpawnParticles(ent.Position, EffectVariant.COIN_PARTICLE, 25, 7)
+            for i = 1, 4 + rng:RandomInt(4) do
+                local subType = CoinSubType.COIN_PENNY
+                if rng:RandomInt(100) < 10 then
+                    subType = rng:RandomInt(CoinSubType.COIN_NICKEL, CoinSubType.COIN_GOLDEN + 1)
+                end
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
+            ent:Remove()
+            flag = true
         end
-        ent:Remove()
-        flag = true
     end
     if flag then
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then
