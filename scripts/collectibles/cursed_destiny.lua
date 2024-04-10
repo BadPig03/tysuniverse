@@ -157,7 +157,8 @@ CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, CursedDestiny.PostNewL
 
 function CursedDestiny:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == ty:GetLastBossRoomIndex() then
+    local roomIndex = ty.LEVEL:GetCurrentRoomIndex()
+    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
         for _, player in pairs(PlayerManager.GetPlayers()) do
             if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
                 local data = ty:GetLibData(player)
@@ -190,8 +191,9 @@ end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, CursedDestiny.PostAddCollectible, ty.CustomCollectibles.CURSEDDESTINY)
 
 function CursedDestiny:PostNewRoom()
+    local room = ty.GAME:GetRoom()
     local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not ty.GLOBALDATA.CursedDestiny.OutOfBounds and roomIndex == ty:GetLastBossRoomIndex() then
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not ty.GLOBALDATA.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
         for _, player in pairs(PlayerManager.GetPlayers()) do
             local effects = player:GetEffects()
             if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not effects:HasCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER) then
