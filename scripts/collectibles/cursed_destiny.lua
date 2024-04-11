@@ -79,25 +79,36 @@ local function RevealRooms()
 end
 
 function CursedDestiny:EvaluateCache(player, cacheFlag)
-    if not ty.GAME:GetRoom():HasCurseMist() then
+    local globalData = ty.GLOBALDATA
+    if not ty.GAME:GetRoom():HasCurseMist() and player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
         local data = ty:GetLibData(player)
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.1
+            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.08
+            if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
+                if player:HasCollectible(CollectibleType.COLLECTIBLE_PONY) or player:HasCollectible(CollectibleType.COLLECTIBLE_WHITE_PONY) then
+                    player.MoveSpeed = math.max(1.5, player.MoveSpeed * 0.8)
+                else
+                    player.MoveSpeed = player.MoveSpeed * 0.8
+                end
+            end
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.25 * data.CursedDestiny.Reward end)
+            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.CursedDestiny.Reward end)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.5)
+            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.4)
+            if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
+                player.Damage = player.Damage * 0.8
+            end
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
-            player.TearRange = player.TearRange + data.CursedDestiny.Reward * 50
+            player.TearRange = player.TearRange + data.CursedDestiny.Reward * 40
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.1
+            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.08
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + data.CursedDestiny.Reward * 0.5
+            player.Luck = player.Luck + data.CursedDestiny.Reward * 0.4
         end  
     end
 end
@@ -190,67 +201,54 @@ function CursedDestiny:PostAddCollectible(type, charge, firstTime, slot, varData
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, CursedDestiny.PostAddCollectible, ty.CustomCollectibles.CURSEDDESTINY)
 
-function CursedDestiny:PostNewRoom()
-    local room = ty.GAME:GetRoom()
-    local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not ty.GLOBALDATA.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            local effects = player:GetEffects()
-            if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not effects:HasCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER) then
-                effects:AddCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER)
-            end
-        end
-    end
-    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
-        RevealRooms()
-    end
-end
-CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, CursedDestiny.PostNewRoom)
-
-function CursedDestiny:PostUpdate(player)
+function CursedDestiny:PostUpdate()
     local globalData = ty.GLOBALDATA
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and globalData.CursedDestiny then
+    if globalData.CursedDestiny and (PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) or globalData.CursedDestiny.Owned) then
         if not globalData.CursedDestiny.Owned then
             globalData.CursedDestiny.Owned = true
+        end
+        if IsValidStage() then
+            local room = ty.GAME:GetRoom()
+            local darken = 0
+            local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
+            if not ty:IsValueInTable(roomIndex, ty.PERSISTENTDATA.ShortestPath) and roomIndex >= 0 then
+                if not globalData.CursedDestiny.OutOfBounds then
+                    globalData.CursedDestiny.OutOfBounds = true
+                end
+                if not globalData.CursedDestiny.InDarkness then
+                    globalData.CursedDestiny.InDarkness = true
+                end
+                if room:GetFrameCount() <= 1 then
+                    RevealRooms()
+                    for _, player in pairs(PlayerManager.GetPlayers()) do
+                        player:UsePill(PillEffect.PILLEFFECT_ADDICTED, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
+                    end
+                end
+                darken = 1
+            else
+                if globalData.CursedDestiny.InDarkness then
+                    globalData.CursedDestiny.InDarkness = false
+                end
+                if room:GetFrameCount() <= 1 and not globalData.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
+                    for _, player in pairs(PlayerManager.GetPlayers()) do
+                        player:UsePill(PillEffect.PILLEFFECT_PERCS, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
+                    end
+
+                end
+            end
+            if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
+                darken = 0.75
+            end
+            if darken > 0 then
+                ty.GAME:Darken(darken, 1)
+            end
+            for _, player in pairs(PlayerManager.GetPlayers()) do
+                player:AddCacheFlags(CacheFlag.CACHE_SPEED, true)
+                player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
+            end
         end
     end
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_UPDATE, CursedDestiny.PostUpdate)
-
-function CursedDestiny:GetShaderParams(shaderName)
-    local pos, pos2 = Isaac.GetPlayer().Position, Isaac.GetPlayer(1).Position
-    local distances = {192, 192, 64, 64}
-    local active = 0
-    local globalData = ty.GLOBALDATA
-	if IsValidStage() and (PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) or globalData.CursedDestiny.Owned) and shaderName == "GuidanceOfDestinyDarkness" then
-        local room = ty.GAME:GetRoom()
-        local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
-        if not ty:IsValueInTable(roomIndex, ty.PERSISTENTDATA.ShortestPath) and roomIndex >= 0 then
-            ty.GAME:Darken(1, 1)
-            active = 0.9
-            if not globalData.CursedDestiny.OutOfBounds then
-                globalData.CursedDestiny.OutOfBounds = true
-            end
-        end
-        if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
-            distances = {256, 256, 96, 96}
-        end
-    else
-        return { ActiveIn = 0 }
-    end
-    local edgePos = Isaac.WorldToScreen(pos + Vector(distances[1], 0))
-    local edgePos2 = Isaac.WorldToScreen(pos2 + Vector(distances[2], 0))
-    local fadePos = Isaac.WorldToScreen(pos + Vector(distances[3], 0))
-    local fadePos2 = Isaac.WorldToScreen(pos2 + Vector(distances[4], 0))
-    pos, pos2 = Isaac.WorldToScreen(pos), Isaac.WorldToScreen(pos2)
-    return {
-        ActiveIn = active,
-        TargetPositionOne = {pos.X, pos.Y, edgePos.X, edgePos.Y},
-        TargetPositionTwo = {pos2.X, pos2.Y, edgePos2.X, edgePos2.Y},
-        FadePositions = {fadePos.X, fadePos.Y, fadePos2.X, fadePos2.Y},
-        WarpCheck = {pos.X + 1, pos.Y + 1}
-    }
-end
-CursedDestiny:AddCallback(ModCallbacks.MC_GET_SHADER_PARAMS, CursedDestiny.GetShaderParams)
 
 return CursedDestiny

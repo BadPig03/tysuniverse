@@ -30,4 +30,5 @@
 	<costume id="23" anm2path="" type="passive" overwriteColor="true" skinColor="4" forceBodyColor="true" forceHeadColor="true"/>
 	<costume id="31" anm2path="costume_oceanus_soul.anm2" type="passive" isFlying="true"/>
 	<costume id="35" anm2path="costume_beggar_mask.anm2" type="passive"/>
+	<costume id="37" anm2path="" type="passive" overwriteColor="true" skinColor="1" forceBodyColor="true" forceHeadColor="true"/>
 </costumes>

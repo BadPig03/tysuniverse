@@ -1,4 +1,5 @@
 <shaders>
+<!--
     <shader name="GuidanceOfDestinyDarkness">
 		<parameters>
 			<param name="ActiveIn" type="float"/>
@@ -150,4 +151,5 @@
             }
         ]]></fragment>
     </shader>
+-->
 </shaders>
