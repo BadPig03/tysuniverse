@@ -9,10 +9,14 @@ local bannedCollectibles = {
     CollectibleType.COLLECTIBLE_DIVORCE_PAPERS,
     CollectibleType.COLLECTIBLE_STRAW_MAN,
     CollectibleType.COLLECTIBLE_INNER_CHILD,
-    ty.CustomCollectibles.SCAPEGOAT,
-    ty.CustomCollectibles.NOTICEOFCRITICALCONDITION,
+    ty.CustomCollectibles.BOBSSTOMACH,
+    ty.CustomCollectibles.HEPHAESTUSSOUL,
+    ty.CustomCollectibles.MAGNIFIER,
     ty.CustomCollectibles.MARRIAGECERTIFICATE,
-    ty.CustomCollectibles.OCEANUSSOUL
+    ty.CustomCollectibles.NOTICEOFCRITICALCONDITION,
+    ty.CustomCollectibles.OCEANUSSOUL,
+    ty.CustomCollectibles.ORDER,
+    ty.CustomCollectibles.SCAPEGOAT
 }
 
 local allowCopying = false
@@ -51,9 +55,9 @@ local function CopyCollectiblesFromPlayer(player, init)
         until #list > math.min(3, #origin)    
     end
     if init then
-        table.insert(list, CollectibleType.COLLECTIBLE_WHORE_OF_BABYLON)
-        table.insert(list, CollectibleType.COLLECTIBLE_DEAD_BIRD)
-        table.insert(list, CollectibleType.COLLECTIBLE_MAGGYS_BOW)
+        table.insert(list, 1, CollectibleType.COLLECTIBLE_WHORE_OF_BABYLON)
+        table.insert(list, 1, CollectibleType.COLLECTIBLE_DEAD_BIRD)
+        table.insert(list, 1, CollectibleType.COLLECTIBLE_MAGGYS_BOW)
     end
     return list
 end

@@ -1,5 +1,7 @@
 local Conjunctivitis = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local cached = false
 local playSound = true
 
@@ -15,16 +17,6 @@ end
 
 local function GetTailedDamage(player, tear)
     return math.max(player.ShotSpeed * tear.CollisionDamage * 0.02 * tear.Velocity:Length(), tear.CollisionDamage * 0.1)
-end
-
-local function GetTears(player, tears)
-    if not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS)) then
-        return 0.8 * tears
-    end
-    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-        return 30 / 11
-    end
-    return tears
 end
 
 local function FireNewTear(player, tear)
@@ -76,7 +68,7 @@ function Conjunctivitis:EvaluateCache(player, cacheFlag)
             end
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return GetTears(player, tears) end)
+            stat:AddTearsMultiplier(player, 0.8)
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(CollectibleType.COLLECTIBLE_TRISAGION) then
             player.ShotSpeed = player.ShotSpeed * 0.8

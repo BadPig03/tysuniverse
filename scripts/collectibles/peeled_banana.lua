@@ -1,5 +1,7 @@
 local PeeledBanana = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 function PeeledBanana:PostNewRoom()
     local room = ty.GAME:GetRoom()
     if room:IsFirstVisit() then
@@ -22,7 +24,7 @@ function PeeledBanana:EvaluateCache(player, cacheFlag)
             player.TearRange = player.TearRange + 100 * collectibleNum
         end
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
+            stat:AddSpeedUp(player, -0.03 * collectibleNum)
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
             player.Luck = player.Luck + collectibleNum

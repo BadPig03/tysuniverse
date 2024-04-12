@@ -1,5 +1,7 @@
 local CursedDestiny = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local roomGenerationIndices = {}
 local newLevel = false
 
@@ -83,22 +85,18 @@ function CursedDestiny:EvaluateCache(player, cacheFlag)
     if not ty.GAME:GetRoom():HasCurseMist() and player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
         local data = ty:GetLibData(player)
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed + data.CursedDestiny.Reward * 0.08
+            stat:AddSpeedUp(player, data.CursedDestiny.Reward * 0.08)
             if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
-                if player:HasCollectible(CollectibleType.COLLECTIBLE_PONY) or player:HasCollectible(CollectibleType.COLLECTIBLE_WHITE_PONY) then
-                    player.MoveSpeed = math.max(1.5, player.MoveSpeed * 0.8)
-                else
-                    player.MoveSpeed = player.MoveSpeed * 0.8
-                end
+                stat:SetSpeedMultiplier(player, 0.8)
             end
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.CursedDestiny.Reward end)
+            stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.CursedDestiny.Reward end)
         end
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.4)
+            stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.4)
             if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
-                player.Damage = player.Damage * 0.8
+                stat:MultiplyDamage(player, 0.8)
             end
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
@@ -194,12 +192,13 @@ function CursedDestiny:PreSpawnCleanAward(rng, spawnPosition)
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, CursedDestiny.PreSpawnCleanAward)
 
-function CursedDestiny:PostAddCollectible(type, charge, firstTime, slot, varData, player)
+function CursedDestiny:RevealAllRoom()
     if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
         RevealRooms()
     end
 end
-CursedDestiny:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, CursedDestiny.PostAddCollectible, ty.CustomCollectibles.CURSEDDESTINY)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, CursedDestiny.RevealAllRoom, ty.CustomCollectibles.CURSEDDESTINY)
+CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, CursedDestiny.RevealAllRoom)
 
 function CursedDestiny:PostUpdate()
     local globalData = ty.GLOBALDATA
@@ -219,7 +218,6 @@ function CursedDestiny:PostUpdate()
                     globalData.CursedDestiny.InDarkness = true
                 end
                 if room:GetFrameCount() <= 1 then
-                    RevealRooms()
                     for _, player in pairs(PlayerManager.GetPlayers()) do
                         player:UsePill(PillEffect.PILLEFFECT_ADDICTED, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
                     end
@@ -233,7 +231,6 @@ function CursedDestiny:PostUpdate()
                     for _, player in pairs(PlayerManager.GetPlayers()) do
                         player:UsePill(PillEffect.PILLEFFECT_PERCS, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
                     end
-
                 end
             end
             if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
@@ -246,6 +243,7 @@ function CursedDestiny:PostUpdate()
                 player:AddCacheFlags(CacheFlag.CACHE_SPEED, true)
                 player:AddCacheFlags(CacheFlag.CACHE_DAMAGE, true)
             end
+            RevealRooms()
         end
     end
 end

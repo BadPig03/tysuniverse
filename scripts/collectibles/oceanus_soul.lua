@@ -1,5 +1,9 @@
 local OceanusSoul = ty:DefineANewClass()
 
+ty.Revive:SetReviveConfig("TY_OCEANUSSOUL_REVIVE", { BeforeVanilla = true })
+
+local stat = ty.Stat
+
 local burningEnemies = { [10] = 2, [15] = 3, [41] = 4, [54] = 0,  [87] = 1, [208] = 2, [226] = 2, [818] = 2, [824] = 1, [825] = 0, [841] = true, [915] = 0 }
 local bannedGridRooms = { GridRooms.ROOM_DUNGEON_IDX, GridRooms.ROOM_GIDEON_DUNGEON_IDX, GridRooms.ROOM_ROTGUT_DUNGEON1_IDX, GridRooms.ROOM_ROTGUT_DUNGEON2_IDX }
 local stopFlushSound = false
@@ -384,23 +388,6 @@ local function DoFlushEnemies(player)
     end
 end
 
-local function GetTears(player, tears)
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
-        tears = tears * 2
-    end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
-        tears = tears * 0.8
-    end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
-        tears = tears * 0.7
-    end
-    tears = tears * 0.6
-    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-        return 30 / 11
-    end
-    return tears
-end
-
 local function RestorePlayerWeapon(player)
     local count = player:GetCollectibleNum(CollectibleType.COLLECTIBLE_SPIRIT_SWORD)
     for i = 1, count do
@@ -708,7 +695,17 @@ function OceanusSoul:EvaluateCache(player, cacheFlag)
             player.CanFly = true
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return GetTears(player, tears) end)
+            local modifier = 0.6
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_DR_FETUS) then
+                modifier = modifier * 2
+            end
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_EPIC_FETUS) then
+                modifier = modifier * 0.8
+            end
+            if player:HasCollectible(CollectibleType.COLLECTIBLE_TECH_X) then
+                modifier = modifier * 0.7
+            end
+            stat:AddTearsMultiplier(player, modifier)
         end
     end
 end
@@ -898,7 +895,7 @@ function OceanusSoul:NPCUpdate(npc)
 end
 OceanusSoul:AddCallback(ModCallbacks.MC_NPC_UPDATE, OceanusSoul.NPCUpdate)
 
-function OceanusSoul:Unlock(player, reviver)
+function OceanusSoul:PostReviveOceanusSoul(player, configKey, reviver)
     player:RemoveCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL)
     player:AddCollectible(ty.CustomCollectibles.OCEANUSSOUL)
     player:AnimateCollectible(ty.CustomCollectibles.OCEANUSSOUL)
@@ -906,13 +903,14 @@ function OceanusSoul:Unlock(player, reviver)
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.OCEANUSSOULUNLOCKED)
     end
 end
+OceanusSoul:AddCallback("TY_POST_PLAYER_REVIVE", OceanusSoul.PostReviveOceanusSoul, "TY_OCEANUSSOUL_REVIVE")
 
-function OceanusSoul:PreRevive(player)
+function OceanusSoul:PreReviveOceanusSoul(player)
     local room = ty.GAME:GetRoom()
     if room:IsMirrorWorld() and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and player:GetHearts() + player:GetSoulHearts() + player:GetBoneHearts() == 0 then
-        return { BeforeVanilla = true, Callback = OceanusSoul.Unlock }
+        return "TY_OCEANUSSOUL_REVIVE"
     end
 end
-OceanusSoul:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 8, OceanusSoul.PreRevive)
+OceanusSoul:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 9, OceanusSoul.PreReviveOceanusSoul)
 
 return OceanusSoul

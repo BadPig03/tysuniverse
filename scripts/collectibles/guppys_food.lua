@@ -1,13 +1,15 @@
 local GuppysFood = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 function GuppysFood:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.GUPPYSFOOD) and player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
         local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.GUPPYSFOOD)
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, collectibleNum)
+            stat:AddFlatDamage(player, collectibleNum)
         end
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
+            stat:AddSpeedUp(player, -0.03 * collectibleNum)
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
             player.ShotSpeed = player.ShotSpeed + collectibleNum * 0.2

@@ -1,5 +1,7 @@
 local BoneInFishSteak = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local function GetSmeltedTrinketCounts(player)
     local count = 0
     for trinket, v in pairs(player:GetSmeltedTrinkets()) do
@@ -46,10 +48,10 @@ function BoneInFishSteak:EvaluateCache(player, cacheFlag)
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
             local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.BONEINFISHSTEAK)
             if cacheFlag == CacheFlag.CACHE_SPEED then
-                player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
+                stat:AddSpeedUp(player, -0.03 * collectibleNum)
             end
             if cacheFlag == CacheFlag.CACHE_DAMAGE then
-                ty.Stat:AddFlatDamage(player, collectibleNum)
+                stat:AddFlatDamage(player, collectibleNum)
             end
             if cacheFlag == CacheFlag.CACHE_LUCK then
                 player.Luck = player.Luck + collectibleNum
@@ -57,7 +59,7 @@ function BoneInFishSteak:EvaluateCache(player, cacheFlag)
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
             local data = ty:GetLibData(player)
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.2 * data.BoneInFishSteak.TearsUp end)
+            stat:AddFlatTears(player, 0.2 * data.BoneInFishSteak.TearsUp)
         end
     end
 end

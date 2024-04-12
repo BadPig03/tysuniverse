@@ -1,39 +1,31 @@
 local ConservativeTreatment = ty:DefineANewClass()
 
-local statInitValue = {
-    [1] = 1,
-    [2] = 10,
-    [3] = 3.5,
-    [4] = 260,
-    [5] = -23.75,
-    [6] = 1,
-    [7] = 0
-}
+local stat = ty.Stat
 
 function ConservativeTreatment:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-        if cacheFlag == CacheFlag.CACHE_SPEED and player.MoveSpeed < statInitValue[1] then
-            player.MoveSpeed = statInitValue[1]
+        if cacheFlag == CacheFlag.CACHE_SPEED and player.MoveSpeed < 1 then
+            player.MoveSpeed = 1
         end
-        if cacheFlag == CacheFlag.CACHE_FIREDELAY and 30 / (player.MaxFireDelay + 1) < 30 / 11 then
-            ty.Stat:AddTearsModifier(player, function(tears) return 30 / (statInitValue[2] + 1) end, 99)
+        if cacheFlag == CacheFlag.CACHE_FIREDELAY and stat:GetEvaluatedTears(player) < 30 / 11 then
+            stat:AddTearsModifier(player, function(tears) return 30 / 11 end, 101)
         end
-        if cacheFlag == CacheFlag.CACHE_DAMAGE and player.Damage < statInitValue[3] then
-            player.Damage = statInitValue[3]
+        if cacheFlag == CacheFlag.CACHE_DAMAGE and player.Damage < 3.5 then
+            player.Damage = 3.5
         end
-        if cacheFlag == CacheFlag.CACHE_RANGE and player.TearRange < statInitValue[4] then
-            player.TearRange = statInitValue[4]
-            player.TearHeight = statInitValue[5]
+        if cacheFlag == CacheFlag.CACHE_RANGE and player.TearRange < 260 then
+            player.TearRange = 260
+            player.TearHeight = -23.75
         end
-        if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player.ShotSpeed < statInitValue[6] then
-            player.ShotSpeed = statInitValue[6]
+        if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player.ShotSpeed < 1 then
+            player.ShotSpeed = 1
         end
-        if cacheFlag == CacheFlag.CACHE_LUCK and player.Luck < statInitValue[7] then
-            player.Luck = statInitValue[7]
+        if cacheFlag == CacheFlag.CACHE_LUCK and player.Luck < 0 then
+            player.Luck = 0
         end
     end
 end
-ConservativeTreatment:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, 10, ConservativeTreatment.EvaluateCache)
+ConservativeTreatment:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ConservativeTreatment.EvaluateCache)
 
 function ConservativeTreatment:PostAddCollectible(type, charge, firstTime, slot, varData, player)
     if player:GetHealthType() == HealthType.BONE then

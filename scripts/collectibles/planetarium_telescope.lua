@@ -1,5 +1,7 @@
 local PlanetariumTelescope = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local function GetAvarageLuck()
     local luck = 0
     for _, player in pairs(PlayerManager.GetPlayers()) do
@@ -25,7 +27,7 @@ function PlanetariumTelescope:EvaluateCache(player, cacheFlag)
             player.Luck = player.Luck + 2 * num
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            ty.Stat:AddTearsModifier(player, function(tears) return tears + 0.25 * num end)
+            stat:AddFlatTears(player, 0.25 * num)
         end
     end
 end

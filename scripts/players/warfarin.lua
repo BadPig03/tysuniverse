@@ -1,5 +1,7 @@
 local Warfarin = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local shouldReviveWithRedHearts = false
 local stopHurtSound = false
 local restorePosition = false
@@ -57,16 +59,6 @@ local function IsDevilAngelRoomOpened()
         end
     end
     return false
-end
-
-local function GetTears(player, tears)
-    if player:HasWeaponType(WeaponType.WEAPON_TEARS) then
-        tears = 0.8 * tears
-    end
-    if tears < 30 / 11 and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) then
-        return 30 / 11
-    end
-    return tears
 end
 
 local function GetHeartLimit(player)
@@ -459,7 +451,7 @@ function Warfarin:EvaluateCache(player, cacheFlag)
     if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
         local effects = player:GetEffects()
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
-            ty.Stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
+            stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
         elseif cacheFlag == CacheFlag.CACHE_FLYING and player:HasCollectible(CollectibleType.COLLECTIBLE_CHARM_VAMPIRE) then
             player.CanFly = true
         elseif effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
@@ -467,7 +459,7 @@ function Warfarin:EvaluateCache(player, cacheFlag)
                 player.TearFlags = player.TearFlags | TearFlags.TEAR_BURSTSPLIT
             end
             if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-                ty.Stat:AddTearsModifier(player, function(tears) return GetTears(player, tears) end)
+                stat:AddTearsMultiplier(player, 0.8)
             end
             if cacheFlag == CacheFlag.CACHE_SPEED then
                 player.MoveSpeed = player.MoveSpeed + 0.15

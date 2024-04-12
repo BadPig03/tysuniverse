@@ -1,5 +1,7 @@
 local ChocolatePancake = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 function ChocolatePancake:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) and player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
         local collectibleNum = player:GetCollectibleNum(ty.CustomCollectibles.CHOCOLATEPANCAKE)
@@ -7,7 +9,7 @@ function ChocolatePancake:EvaluateCache(player, cacheFlag)
             player.ShotSpeed = player.ShotSpeed + 0.2 * collectibleNum
         end
         if cacheFlag == CacheFlag.CACHE_SPEED then
-            player.MoveSpeed = player.MoveSpeed - 0.03 * collectibleNum
+            stat:AddSpeedUp(player, -0.03 * collectibleNum)
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
             player.Luck = player.Luck + collectibleNum

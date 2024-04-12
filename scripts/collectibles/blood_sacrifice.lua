@@ -1,5 +1,11 @@
 local BloodSacrifice = ty:DefineANewClass()
 
+ty.Revive:SetReviveConfig("TY_BLOODSACRIFICE_REVIVE", { BeforeVanilla = true })
+
+local stat = ty.Stat
+
+local realRoomIndex = GridRooms.ROOM_ERROR_IDX
+
 local function GetVesselFromSeed(seed)
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_SLOT, ty.CustomEntities.BLOODSACRIFICEVESSEL)) do
         if ent.InitSeed == seed then
@@ -37,7 +43,7 @@ end
 function BloodSacrifice:EvaluateCache(player, cacheFlag)
 	local data = ty:GetLibData(player)
 	if data.BloodSacrifice and data.BloodSacrifice.UsedCount[player:GetPlayerType()] then
-		ty.Stat:AddFlatDamage(player, 0.2 * data.BloodSacrifice.UsedCount[player:GetPlayerType()])
+		stat:AddFlatDamage(player, 0.2 * data.BloodSacrifice.UsedCount[player:GetPlayerType()])
 	end
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, BloodSacrifice.EvaluateCache, CacheFlag.CACHE_DAMAGE)
@@ -75,20 +81,30 @@ function BloodSacrifice:PostNewRoom()
         if data.Init and data.BloodSacrifice.Respawning then
             local vesselTable = data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]
             local vessel = GetVesselFromSeed(vesselTable.InitSeed)
-            vessel:GetSprite():Play("Wiggle", true)
-            vessel.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
-            player:PlayExtraAnimation("Appear")
-            player.Position = Vector(vesselTable.PositionX, vesselTable.PositionY)
-            ty.GAME:SpawnParticles(player.Position, EffectVariant.BLOOD_PARTICLE, 30, 1) 
-            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, player.Position, Vector(0, 0), nil)
-            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
-            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
+            if vessel then
+                vessel:GetSprite():Play("Wiggle", true)
+                vessel.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
+                player:PlayExtraAnimation("Appear")
+                player.Position = Vector(vesselTable.PositionX, vesselTable.PositionY)
+                ty.GAME:SpawnParticles(player.Position, EffectVariant.BLOOD_PARTICLE, 30, 1) 
+                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, player.Position, Vector(0, 0), nil)
+                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
+                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)    
+                realRoomIndex = GridRooms.ROOM_ERROR_IDX
+            end
             data.BloodSacrifice.PlaySound = true
             data.BloodSacrifice.Respawning = false
         end
     end
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, BloodSacrifice.PostNewRoom)
+
+function BloodSacrifice:PreChangeRoom(roomIndex, dimension)
+    if realRoomIndex ~= GridRooms.ROOM_ERROR_IDX then
+        return {realRoomIndex, Dimension.NORMAL}
+    end
+end
+BloodSacrifice:AddCallback(ModCallbacks.MC_PRE_CHANGE_ROOM, BloodSacrifice.PreChangeRoom)
 
 function BloodSacrifice:PostNewLevel()
     for _, player in pairs(PlayerManager.GetPlayers()) do
@@ -151,7 +167,7 @@ function BloodSacrifice:PostSlotUpdate(slot)
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_POST_SLOT_UPDATE, BloodSacrifice.PostSlotUpdate, ty.CustomEntities.BLOODSACRIFICEVESSEL)
 
-function BloodSacrifice:PostReviveBloodSacrifice(player, reviver)
+function BloodSacrifice:PostReviveBloodSacrifice(player, configKey, reviver)
     local data = ty:GetLibData(player)
     if #data.BloodSacrifice.VesselList > 0 and type(data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]) == "table" then
         local vesselTable = data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]
@@ -163,7 +179,8 @@ function BloodSacrifice:PostReviveBloodSacrifice(player, reviver)
         local color = player:GetSprite().Color
         player:GetSprite().Color = Color(color.R, color.G, color.B, 0, color.RO, color.GO, color.BO)
         data.BloodSacrifice.Respawning = true
-        ty.GAME:StartRoomTransition(vesselTable.RoomIndex, Direction.UP, RoomTransitionAnim.FADE_MIRROR, player, -1)
+        realRoomIndex = vesselTable.RoomIndex
+        ty.GAME:StartRoomTransition(vesselTable.RoomIndex, Direction.NO_DIRECTION, RoomTransitionAnim.FADE_MIRROR, player, -1)
         ty.SFXMANAGER:Stop(SoundEffect.SOUND_MIRROR_EXIT)
         ty.SFXMANAGER:Play(SoundEffect.SOUND_MEATY_DEATHS)
         ty.SFXMANAGER:Play(SoundEffect.SOUND_DEVILROOM_DEAL)
@@ -171,13 +188,14 @@ function BloodSacrifice:PostReviveBloodSacrifice(player, reviver)
         player:Die()
     end
 end
+BloodSacrifice:AddCallback("TY_POST_PLAYER_REVIVE", BloodSacrifice.PostReviveBloodSacrifice, "TY_BLOODSACRIFICE_REVIVE")
 
-function BloodSacrifice:PreRevive(player)
+function BloodSacrifice:PreReviveBloodSacrifice(player)
     local data = ty:GetLibData(player)
     if #data.BloodSacrifice.VesselList > 0 and type(data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]) == "table" then
-        return { BeforeVanilla = true, Callback = BloodSacrifice.PostReviveBloodSacrifice }
+        return "TY_BLOODSACRIFICE_REVIVE"
     end
 end
-BloodSacrifice:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 9, BloodSacrifice.PreRevive)
+BloodSacrifice:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 9, BloodSacrifice.PreReviveBloodSacrifice)
 
 return BloodSacrifice

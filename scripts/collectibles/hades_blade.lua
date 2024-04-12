@@ -1,5 +1,7 @@
 local HadesBlade = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local function GetDevilFamiliarCollectible(rng)
     local itemID = 1
     repeat
@@ -33,7 +35,7 @@ end
 function HadesBlade:EvaluateCache(player, cacheFlag)
 	local data = ty:GetLibData(player)
 	if data.Init and player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL_PASSIVE) then
-		ty.Stat:AddFlatDamage(player, 0.2 * data.HadesBlade.Count)
+		stat:AddFlatDamage(player, 0.2 * data.HadesBlade.Count)
 	end
 end
 HadesBlade:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HadesBlade.EvaluateCache, CacheFlag.CACHE_DAMAGE)

@@ -16,7 +16,6 @@ ty.CollectiblesList = {
     'chocolate_pancake',
     'collapse',
     'conjunctivitis',
-    'conservative_treatment',
     'cornucopia',
     'crown_of_kings',
     'cursed_destiny',
@@ -69,34 +68,36 @@ for _, title in pairs(ty.ClassesList) do
     local class = include("scripts."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
-    print("ty's Universe [+REPENTOGON]: Class "..title.." has loaded!")
 end
 for _, title in pairs(ty.CollectiblesList) do
     local class = include("scripts.collectibles."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
-    print("ty's Universe [+REPENTOGON]: Collectible "..title.." has loaded!")
-end
-for _, title in pairs(ty.PlayersList) do
-    local class = include("scripts.players."..title)
-	table.insert(ty.LoadedLua, class)
-	ty[_] = class
-    print("ty's Universe [+REPENTOGON]: Player "..title.." has loaded!")
 end
 for _, title in pairs(ty.ChallengesList) do
     local class = include("scripts.challenges."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
-    print("ty's Universe [+REPENTOGON]: Challenges "..title.." has loaded!")
 end
 for _, title in pairs(ty.CardsList) do
     local class = include("scripts.cards."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
-    print("ty's Universe [+REPENTOGON]: Cards "..title.." has loaded!")
+end
+for _, title in pairs(ty.PlayersList) do
+    local class = include("scripts.players."..title)
+	table.insert(ty.LoadedLua, class)
+	ty[_] = class
+end
+do
+    local class = include("scripts.collectibles.conservative_treatment")
+    table.insert(ty.LoadedLua, class)
+	ty[#ty.CollectiblesList + 1] = class
 end
 for _, title in pairs(ty.LoadedLua) do
     title:Register()
 end
+
+print("ty's Universe Version "..ty.VERSION.." has fully loaded!")
 
 return ty

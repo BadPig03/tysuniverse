@@ -1,6 +1,8 @@
 local Scapegoat = ty:DefineANewClass()
 
-function Scapegoat:PostReviveScapegoat(player, reviver)
+ty.Revive:SetReviveConfig("TY_SCAPEGOAT_REVIVE", { BeforeVanilla = true })
+
+function Scapegoat:PostReviveScapegoat(player, configKey, reviver)
     player:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
     player:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")
     if player:GetPlayerType() ~= PlayerType.PLAYER_AZAZEL and player:GetPlayerType() ~= PlayerType.PLAYER_AZAZEL_B and player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
@@ -22,12 +24,13 @@ function Scapegoat:PostReviveScapegoat(player, reviver)
     ty.SFXMANAGER:Play(SoundEffect.SOUND_UNHOLY, 0.6)
     ty.SFXMANAGER:Play(SoundEffect.SOUND_FLASHBACK, 0.6)
 end
+Scapegoat:AddCallback("TY_POST_PLAYER_REVIVE", Scapegoat.PostReviveScapegoat, "TY_SCAPEGOAT_REVIVE")
 
-function Scapegoat:PreRevive(player)
+function Scapegoat:PreReviveScapegoat(player)
     if not (player:GetCard(ActiveSlot.SLOT_PRIMARY) == Card.CARD_SOUL_LAZARUS or player:GetCard(ActiveSlot.SLOT_SECONDARY) == Card.CARD_SOUL_LAZARUS) and player:HasCollectible(ty.CustomCollectibles.SCAPEGOAT) then
-        return { BeforeVanilla = true, Callback = Scapegoat.PostReviveScapegoat }
+        return "TY_SCAPEGOAT_REVIVE"
     end
 end
-Scapegoat:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 10, Scapegoat.PreRevive)
+Scapegoat:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 10, Scapegoat.PreReviveScapegoat)
 
 return Scapegoat

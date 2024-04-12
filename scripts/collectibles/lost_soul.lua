@@ -1,12 +1,14 @@
 local LostSoul = ty:DefineANewClass()
 
+local stat = ty.Stat
+
 local function HasLostSoul(player)
     return player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.LOSTSOUL).ID)
 end
 
 function LostSoul:EvaluateCache(player, cacheFlag)
     if HasLostSoul(player) then
-        player.Damage = player.Damage * 0.2
+        stat:MultiplyDamage(player, 0.2)
     end
 end
 LostSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, LostSoul.EvaluateCache, CacheFlag.CACHE_DAMAGE)
