@@ -211,7 +211,7 @@ end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
 
 function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
-    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 then
+    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and amount > 0 and not (ty.PERSISTENTDATA.GlowingHourglass or ty.PERSISTENTDATA.Rewind) then
         if addHealthType & AddHealthType.SOUL == AddHealthType.SOUL or addHealthType & AddHealthType.BLACK == AddHealthType.BLACK then
             for i = 1, amount do
                 if player:GetActiveItem(ActiveSlot.SLOT_PRIMARY) == CollectibleType.COLLECTIBLE_ALABASTER_BOX and player:GetActiveCharge(ActiveSlot.SLOT_PRIMARY) < 12 then
@@ -269,6 +269,9 @@ function Warfarin:PostHUDUpdate()
             end
             if player:GetMaxHearts() + player:GetBoneHearts() * 2 > GetHeartLimit(player) then
                 player:AddBoneHearts((GetHeartLimit(player) - player:GetMaxHearts() - player:GetBoneHearts() * 2) / 2)
+            end
+            if player:GetMaxHearts() + player:GetBoneHearts() == 0 and player:GetSprite():GetAnimation() == "Death" and player:GetSprite():GetFrame() == 56 and player:WillPlayerRevive() then
+                player:AddMaxHearts(2)
             end
         end
     end
@@ -452,7 +455,7 @@ function Warfarin:EvaluateCache(player, cacheFlag)
         local effects = player:GetEffects()
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
             stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
-        elseif cacheFlag == CacheFlag.CACHE_FLYING and player:HasCollectible(CollectibleType.COLLECTIBLE_CHARM_VAMPIRE) then
+        elseif cacheFlag == CacheFlag.CACHE_FLYING and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) then
             player.CanFly = true
         elseif effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
             if cacheFlag == CacheFlag.CACHE_TEARFLAG then
@@ -462,7 +465,7 @@ function Warfarin:EvaluateCache(player, cacheFlag)
                 stat:AddTearsMultiplier(player, 0.8)
             end
             if cacheFlag == CacheFlag.CACHE_SPEED then
-                player.MoveSpeed = player.MoveSpeed + 0.15
+                stat:AddSpeedUp(player, 0.15)
             end
         end
     end

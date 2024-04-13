@@ -56,7 +56,7 @@
 	<passive id="34" quality="3" craftquality="3" description="Distant observation" gfx="collectibles_planetarium_telescope.png" name="Planetarium Telescope" cache="firedelay luck" tags="stars lazarusshared nogreed offensive"/>
 	<passive id="35" quality="3" craftquality="3" description="The loyalty!" gfx="collectibles_beggar_mask.png" name="Beggar Mask" tags="offensive"/>
 	<passive id="36" quality="2" craftquality="2" description="Sweet sensation" gfx="collectibles_peeled_banana.png" name="Peeled Banana" maxhearts="2" hearts="2" tags="food nolostbr" cache="luck range"/>
-	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" tags="devil nolostbr lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
+	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" devilprice="2" tags="devil nolostbr lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
 	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
 	<active	id="39" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
 </items>

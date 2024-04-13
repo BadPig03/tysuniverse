@@ -71,10 +71,11 @@ end
 local function RevealRooms()
     for i = 0, 168 do
         local room = ty.LEVEL:GetRoomByIdx(i)
-        if room.Data and (room.Data.Type == RoomType.ROOM_BOSS or room.Data.Type == RoomType.ROOM_SECRET) then
+        if room.Data and room.Data.Type == RoomType.ROOM_BOSS then
             room.DisplayFlags = 1 << 2
         end
     end
+    ty.LEVEL:ApplyBlueMapEffect()
     ty.LEVEL:ApplyMapEffect()
     ty.LEVEL:UpdateVisibility()
     ty.LEVEL:RemoveCurses(LevelCurse.CURSE_OF_THE_LOST)
@@ -82,12 +83,12 @@ end
 
 function CursedDestiny:EvaluateCache(player, cacheFlag)
     local globalData = ty.GLOBALDATA
-    if not ty.GAME:GetRoom():HasCurseMist() and player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
+    if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and not ty.GAME:GetRoom():HasCurseMist() then
         local data = ty:GetLibData(player)
         if cacheFlag == CacheFlag.CACHE_SPEED then
             stat:AddSpeedUp(player, data.CursedDestiny.Reward * 0.08)
             if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
-                stat:SetSpeedMultiplier(player, 0.8)
+                stat:SetSpeedMultiplier(player, 0.85)
             end
         end
         if cacheFlag == CacheFlag.CACHE_FIREDELAY then
@@ -96,14 +97,14 @@ function CursedDestiny:EvaluateCache(player, cacheFlag)
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
             stat:AddFlatDamage(player, data.CursedDestiny.Reward * 0.4)
             if globalData.CursedDestiny and globalData.CursedDestiny.InDarkness then
-                stat:MultiplyDamage(player, 0.8)
+                stat:MultiplyDamage(player, 0.85)
             end
         end
         if cacheFlag == CacheFlag.CACHE_RANGE then
             player.TearRange = player.TearRange + data.CursedDestiny.Reward * 40
         end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED then
-            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.08
+            player.ShotSpeed = player.ShotSpeed + data.CursedDestiny.Reward * 0.04
         end
         if cacheFlag == CacheFlag.CACHE_LUCK then
             player.Luck = player.Luck + data.CursedDestiny.Reward * 0.4

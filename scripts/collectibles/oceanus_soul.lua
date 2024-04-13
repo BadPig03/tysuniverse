@@ -413,10 +413,10 @@ function OceanusSoul:UpdateLaser(effect)
     end
     local rng = player:GetCollectibleRNG(ty.CustomCollectibles.OCEANUSSOUL)
     if effect.FrameCount >= 20 then
-        if not data.Whirl:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
+        if data.Whirl and not data.Whirl:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
             data.Whirl:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
         end
-        if data.Weapon | 1 << 8 == 1 << 8 and not data.WhirlParticle:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
+        if data.Weapon | 1 << 8 == 1 << 8 and data.WhirlParticle and not data.WhirlParticle:HasEntityFlags(EntityFlag.FLAG_MAGNETIZED) then
             data.WhirlParticle:AddEntityFlags(EntityFlag.FLAG_MAGNETIZED)
         end
     end
