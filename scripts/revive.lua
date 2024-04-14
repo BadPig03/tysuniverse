@@ -387,10 +387,14 @@ do
     end
     Revive:AddCallback(ModCallbacks.MC_POST_ENTITY_KILL, PostPlayerKilled, EntityType.ENTITY_PLAYER)
     local function PostPlayerUpdate(mod, player)
-        local deathAnimation = ty:GetLibData(player)._REVIVE.DeathAnimation
+        local data = ty:GetLibData(player)
+        if not data._REVIVE then
+            data._REVIVE = {}
+        end
+        local deathAnimation = data._REVIVE.DeathAnimation
         if deathAnimation then
             player:PlayExtraAnimation(deathAnimation)
-            ty:GetLibData(player)._REVIVE.DeathAnimation = nil
+            data._REVIVE.DeathAnimation = nil
         end
         if Revive:IsReviving(player) then
             Private:ReviveUpdate(player)

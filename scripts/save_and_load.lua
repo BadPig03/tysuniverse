@@ -20,7 +20,6 @@ local function GetInitData()
     data.CursedDestiny = { Reward = 0 }
     data.Guilt = { DealsCount = 0, CurrentFrame = 0, TempFrame = 1, DevilRoomSpawned = false, SoundPlayed = false, DisableDevilRoom = false, RemoveItems = false, RemoveItemList = {}, RemoveItemFrameList = {}, Effected = -1 }
     data.HadesBlade = { Count = 0 }
-    data.HiddenItemManager = { ItemList = {} }
     data.ItemQueue = { Frame = -1, ItemID = 0, RoomFrame = -1 }
     data.LaserGun = { IsHolding = false }
     data.LumigyroFly = { Count = 0, Target = nil, RotationList = {}, InProtect = false, DepthOffset = -1 }
@@ -32,6 +31,7 @@ local function GetInitData()
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Warfarin = { Original = -1, UsedCount = 0 }
     data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1 }
+    data.HiddenItemManager = { ItemList = {} }
     data.Stat = {}
     data._REVIVE = {}
     return data

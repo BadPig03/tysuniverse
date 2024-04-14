@@ -626,7 +626,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostLadderUpda
 
 function Warfarin:PostPickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
     local globalData = ty.GLOBALDATA.BloodSample
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and keepPrice and not keepSeed and not ignoreModifiers then
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and (keepPrice and not keepSeed and not ignoreModifiers) or (keepPrice and keepSeed and ignoreModifiers) then
         if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then
             table.insert(globalData.ItemList, pickup.InitSeed)
         end

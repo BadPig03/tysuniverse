@@ -4,13 +4,13 @@ local prized = false
 local slotType = SlotVariant.BEGGAR
 
 local function IsValidSlot(slot)
-    return slot.Variant == SlotVariant.BEGGAR or slot.Variant == SlotVariant.DEVIL_BEGGAR or slot.Variant == SlotVariant.BOMB_BUM or slot.Variant == SlotVariant.KEY_MASTER or slot.Variant == SlotVariant.BATTERY_BUM or slot.Variant == SlotVariant.ROTTEN_BEGGAR or slot.Variant == ty.CustomEntities.HEALING_BEGGAR
+    return slot.Variant == SlotVariant.BEGGAR or slot.Variant == SlotVariant.DEVIL_BEGGAR or slot.Variant == SlotVariant.BOMB_BUM or slot.Variant == SlotVariant.KEY_MASTER or slot.Variant == SlotVariant.BATTERY_BUM or slot.Variant == SlotVariant.ROTTEN_BEGGAR or slot.Variant == ty.CustomEntities.HEALINGBEGGAR
 end
 
 local function SpawnBonus(slot)
     local rng = slot:GetDropRNG()
     Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_NULL, 1, slot.Position, Vector(1, 0):Resized(2 + rng:RandomFloat() * 3):Rotated(rng:RandomInt(360)), nil):ToPickup()
-    ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN)
+    ty.SFXMANAGER:Play(SoundEffect.SOUND_SLOTSPAWN, 0.6)
 end
 
 function BeggerMask:PostNewRoom()
@@ -28,7 +28,7 @@ function BeggerMask:PostNewRoom()
             end
             local slot = nil
             if roomType == RoomType.ROOM_ANGEL then
-                slot = Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALING_BEGGAR, 0, pos, Vector(0, 0), nil)
+                slot = Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALINGBEGGAR, 0, pos, Vector(0, 0), nil)
             elseif roomType == RoomType.ROOM_DEVIL then
                 slot = Isaac.Spawn(EntityType.ENTITY_SLOT, SlotVariant.DEVIL_BEGGAR, 0, pos, Vector(0, 0), nil)
             elseif roomType == RoomType.ROOM_TREASURE then

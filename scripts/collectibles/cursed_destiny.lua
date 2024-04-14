@@ -224,6 +224,9 @@ function CursedDestiny:PostUpdate()
                     end
                 end
                 darken = 1
+                if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
+                    darken = 0.75
+                end
             else
                 if globalData.CursedDestiny.InDarkness then
                     globalData.CursedDestiny.InDarkness = false
@@ -233,9 +236,6 @@ function CursedDestiny:PostUpdate()
                         player:UsePill(PillEffect.PILLEFFECT_PERCS, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
                     end
                 end
-            end
-            if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_NIGHT_LIGHT) or PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_BLACK_CANDLE) then
-                darken = 0.75
             end
             if darken > 0 then
                 ty.GAME:Darken(darken, 1)

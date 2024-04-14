@@ -22,7 +22,8 @@ function Anorexia:PostAddCollectible(collectibleType, charge, firstTime, slot, v
 	if collectibleType == ty.CustomCollectibles.ANOREXIA then
 		if player:HasCollectible(CollectibleType.COLLECTIBLE_BINGE_EATER) then
 			player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(ty.CustomCollectibles.ANOREXIA))
-		else
+		elseif firstTime then
+			
 			local pillColor = ty.ITEMPOOL:GetPillColor(PillEffect.PILLEFFECT_HEMATEMESIS)
 			if pillColor == -1 then
 				pillColor = ty.ITEMPOOL:ForceAddPillEffect(PillEffect.PILLEFFECT_HEMATEMESIS)
