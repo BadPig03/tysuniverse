@@ -73,15 +73,4 @@ function Collectible:PostPickupCollectible(player, item, touched)
 end
 Collectible:AddCallback("TY_POST_PICK_UP_COLLECTIBLE", Collectible.PostPickupCollectible)
 
-function Collectible:PostPickupCollision(pickup, collider, low)
-    local player = collider:ToPlayer()
-    local language = Options.Language
-    if player and player:CanPickupItem() and not pickup:Exists() then
-        if cards[pickup.SubType] and language == "zh" then
-            ty.HUD:ShowItemText(cards[pickup.SubType].Name, cards[pickup.SubType].Description)
-        end    
-    end
-end
-Collectible:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, Collectible.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
-
 return Collectible

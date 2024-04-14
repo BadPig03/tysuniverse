@@ -67,8 +67,13 @@ AbsenceNote:AddCallback(ModCallbacks.MC_USE_PILL, AbsenceNote.UsePill)
 function AbsenceNote:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
     if data.Init and player:HasCollectible(ty.CustomCollectibles.ABSENCENOTE) and player:IsExtraAnimationFinished() and not data.AbsenceNote.Triggered then
-        if (data.AbsenceNote.Count > 0 and data.AbsenceNote.Count % 12 == 0) or (#data.AbsenceNote.Colors > 0 and #data.AbsenceNote.Colors % 4 == 0) then
+        if data.AbsenceNote.Count > 0 and data.AbsenceNote.Count % 12 == 0 then
             AddARandomItem(player)
+            data.AbsenceNote.Count = 0
+        end
+        if #data.AbsenceNote.Colors > 0 and #data.AbsenceNote.Colors % 4 == 0 and not ty:IsValueInTable(#data.AbsenceNote.Colors, data.AbsenceNote.TriggeredColorCount) then
+            AddARandomItem(player)
+            table.insert(data.AbsenceNote.TriggeredColorCount, #data.AbsenceNote.Colors)
         end
         data.AbsenceNote.Triggered = true
     end

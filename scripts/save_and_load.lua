@@ -9,7 +9,7 @@ local function GetInitData()
 	if data.Init == nil then
 		data.Init = false
 	end
-    data.AbsenceNote = { Colors = {}, Count = 0, Triggered = false }
+    data.AbsenceNote = { Colors = {}, Count = 0, TriggeredColorCount = {}, Triggered = true }
     data.AtonementVoucher = { Effected = false, DevilRoomVisited = false }
     data.BobsStomach = { LastDirectionX = 0, LastDirectionY = 0, Fired = false, CanFire = false }
     data.BloodSacrifice = { UsedCount = {}, VesselList = {}, Respawning = false, PlaySound = false }
