@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="ty" CreatedOn="2024/4/6 17:43:12" Version="44" Fps="10"/>
+	<Info CreatedBy="ty" CreatedOn="2024/4/14 14:58:58" Version="45" Fps="10"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="..\..\resources\gfx\items_death_pausescreen.png" Id="0"/>

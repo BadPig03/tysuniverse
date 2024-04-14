@@ -50,7 +50,7 @@ end
 AbsenceNote:AddCallback(ModCallbacks.MC_POST_ITEM_OVERLAY_SHOW, AbsenceNote.PostItemOverlayShow, Giantbook.SLEEP)
 
 function AbsenceNote:UsePill(pillEffect, player, useFlags, pillColor)
-    if player:HasCollectible(ty.CustomCollectibles.ABSENCENOTE) then
+    if player:HasCollectible(ty.CustomCollectibles.ABSENCENOTE) and pillColor ~= PillColor.PILL_NULL then
         local data = ty:GetLibData(player)
         data.AbsenceNote.Count = data.AbsenceNote.Count + 1
         if pillColor & PillColor.PILL_GIANT_FLAG == PillColor.PILL_GIANT_FLAG then

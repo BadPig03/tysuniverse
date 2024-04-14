@@ -43,9 +43,10 @@ Order:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, Order.PostNewLevel)
 function Order:PreGetCollectible(itemPoolType, decrease, seed)
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ORDER) and not PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_CHAOS) then
         local data = ty.GLOBALDATA
-        if itemPoolFlag and itemPoolType ~= data.Order.ItemPoolList[ty.LEVEL:GetAbsoluteStage()] then
+        local stage = ty.LEVEL:GetStage()
+        if itemPoolFlag and itemPoolType ~= data.Order.ItemPoolList[stage] then
             itemPoolFlag = false
-            local id = ty.ITEMPOOL:GetCollectible(data.Order.ItemPoolList[ty.LEVEL:GetAbsoluteStage()], decrease, seed)
+            local id = ty.ITEMPOOL:GetCollectible(data.Order.ItemPoolList[stage], decrease, seed)
             itemPoolFlag = true
             return id
         end
@@ -65,10 +66,11 @@ function Order:PostUpdate()
         elseif data.Order.Timeout == 0 then
             data.Order.Timeout = -1
             local language = Options.Language
+            local stage = ty.LEVEL:GetStage()
             if language == "zh" then
-                ty.HUD:ShowFortuneText("本层道具池为"..itemPoolCNName[data.Order.ItemPoolList[ty.LEVEL:GetAbsoluteStage()]])
+                ty.HUD:ShowFortuneText("本层道具池为"..itemPoolCNName[data.Order.ItemPoolList[stage]])
             else                                                                                                                                                    
-                ty.HUD:ShowFortuneText("The item pool is", itemPoolENName[data.Order.ItemPoolList[ty.LEVEL:GetAbsoluteStage()]])
+                ty.HUD:ShowFortuneText("The item pool is", itemPoolENName[data.Order.ItemPoolList[stage]])
             end
         end
     end

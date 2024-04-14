@@ -130,76 +130,7 @@ ty.CustomChallenges = {
 }
 
 ty.CustomSounds = {
-    WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt"),
-    OCEANUSSOULFLOW = Isaac.GetSoundIdByName("Oceanus Soul Flow")
-}
-
-ty.CharacterMultipliers = {
-    [PlayerType.PLAYER_ISAAC] = 1,
-    [PlayerType.PLAYER_MAGDALENA] = 1,
-    [PlayerType.PLAYER_CAIN] = 1.2,
-    [PlayerType.PLAYER_JUDAS] = 1.35,
-    [PlayerType.PLAYER_XXX] = 1.05,
-    [PlayerType.PLAYER_EVE] = function(player) if player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_WHORE_OF_BABYLON) then return 1 end return 0.75 end,
-    [PlayerType.PLAYER_SAMSON] = 1,
-    [PlayerType.PLAYER_AZAZEL] = 1.5,
-    [PlayerType.PLAYER_LAZARUS] = 1,
-    [PlayerType.PLAYER_THELOST] = 1,
-    [PlayerType.PLAYER_LAZARUS2] = 1.4,
-    [PlayerType.PLAYER_BLACKJUDAS] = 2,
-    [PlayerType.PLAYER_LILITH] = 1,
-    [PlayerType.PLAYER_KEEPER] = 1.2,
-    [PlayerType.PLAYER_APOLLYON] = 1,
-    [PlayerType.PLAYER_THEFORGOTTEN] = 1.5,
-    [PlayerType.PLAYER_THESOUL] = 1,
-    [PlayerType.PLAYER_BETHANY] = 1,
-    [PlayerType.PLAYER_JACOB] = 1,
-    [PlayerType.PLAYER_ESAU] = 1,
-    [PlayerType.PLAYER_ISAAC_B] = 1,
-    [PlayerType.PLAYER_MAGDALENA_B] = 0.75,
-    [PlayerType.PLAYER_CAIN_B] = 1,
-    [PlayerType.PLAYER_JUDAS_B] = 1,
-    [PlayerType.PLAYER_XXX_B] = 1,
-    [PlayerType.PLAYER_EVE_B] = 1.2,
-    [PlayerType.PLAYER_SAMSON_B] = 1,
-    [PlayerType.PLAYER_AZAZEL_B] = 1.5,
-    [PlayerType.PLAYER_LAZARUS_B] = 1,
-    [PlayerType.PLAYER_EDEN_B] = 1,
-    [PlayerType.PLAYER_THELOST_B] = 1.3,
-    [PlayerType.PLAYER_LILITH_B] = 1,
-    [PlayerType.PLAYER_KEEPER_B] = 1,
-    [PlayerType.PLAYER_APOLLYON_B] = 1,
-    [PlayerType.PLAYER_THEFORGOTTEN_B] = 1.5,
-    [PlayerType.PLAYER_BETHANY_B] = 1,
-    [PlayerType.PLAYER_JACOB_B] = 1,
-	[PlayerType.PLAYER_LAZARUS2_B] = 1.5,
-    [ty.CustomPlayerType.WARFARIN] = 1,
-}
-
-ty.CollectibleMultipliers = {
-    [CollectibleType.COLLECTIBLE_MEGA_MUSH] = function(player) if not player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_MEGA_MUSH) then return 1 end return 4 end,
-    [CollectibleType.COLLECTIBLE_MAXS_HEAD] = 1.5,
-    [CollectibleType.COLLECTIBLE_MAGIC_MUSHROOM] = function(player) if player:HasCollectible(CollectibleType.COLLECTIBLE_MAXS_HEAD) then return 1 end return 1.5 end,
-    [CollectibleType.COLLECTIBLE_BLOOD_MARTYR] = function(player) if not player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL) then return 1 end if player:HasCollectible(CollectibleType.COLLECTIBLE_MAXS_HEAD) or player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_MAGIC_MUSHROOM) then return 1 end return 1.5 end,
-    [CollectibleType.COLLECTIBLE_POLYPHEMUS] = 2,
-    [CollectibleType.COLLECTIBLE_SACRED_HEART] = 2.3,
-    [CollectibleType.COLLECTIBLE_EVES_MASCARA] = 2,
-    [CollectibleType.COLLECTIBLE_ODD_MUSHROOM_RATE] = 0.9,
-    [CollectibleType.COLLECTIBLE_20_20] = 0.75,
-    [CollectibleType.COLLECTIBLE_EVES_MASCARA] = 2,
-    [CollectibleType.COLLECTIBLE_SOY_MILK] = function(player) if player:HasCollectible(CollectibleType.COLLECTIBLE_ALMOND_MILK) then return 1 end return 0.2 end,
-    [CollectibleType.COLLECTIBLE_CROWN_OF_LIGHT] = function(player) if player:GetEffects():HasCollectibleEffect(CollectibleType.COLLECTIBLE_CROWN_OF_LIGHT) then return 2 end return 1 end,
-    [CollectibleType.COLLECTIBLE_ALMOND_MILK] = 0.33,
-    [CollectibleType.COLLECTIBLE_IMMACULATE_HEART] = 1.2
-}
-
-ty.CollectibleFlatDamages = {
-    [CollectibleType.COLLECTIBLE_SACRED_HEART] = function(player, num) return 0.1 end,
-    [CollectibleType.COLLECTIBLE_BOZO] = function(player, num) return 0.1 end
-}
-
-ty.TrinketFlatDamages = {
-    [TrinketType.TRINKET_CURVED_HORN] = 2
+    WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt")
 }
 
 return ty

@@ -853,6 +853,10 @@ end
 
 do
     function Stat:EvaluateCache(player, cache)
+        local data = ty:GetLibData(player).Stat
+        if not data then
+            ty:GetLibData(player).Stat = {}
+        end
         if cache == CacheFlag.CACHE_DAMAGE then
             local damageUp = Stat:GetDamageUpValue(player) + Stat:GetDamageUp(player)
             local flat = Stat:GetFlatDamage(player)

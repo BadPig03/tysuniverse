@@ -128,10 +128,10 @@ end
 NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, NoticeOfCriticalCondition.PostNewLevel)
 
 function NoticeOfCriticalCondition:UsePill(pillEffect, player, useFlags, pillColor)
-    if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
+    if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) and pillColor ~= PillColor.PILL_NULL then
         local rng = player:GetCollectibleRNG(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION)
         local pillConfig = ty.ITEMCONFIG:GetPillEffect(pillEffect)
-		if pillConfig.EffectSubClass > 0 and rng:RandomInt(100) < 20 and player:GetBrokenHearts() >= 1 then
+		if pillConfig.EffectSubClass == 1 and rng:RandomInt(100) < 20 and player:GetBrokenHearts() >= 1 then
 			ty.SFXMANAGER:Play(SoundEffect.SOUND_BAND_AID_PICK_UP, 0.6)
 			player:AddBrokenHearts(-1)
 		end

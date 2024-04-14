@@ -1,8 +1,11 @@
 ty.LoadedLua = {}
 ty.ClassesList = {
-    Revive = 'revive',
+    HiddenItemManager = 'hidden_item_manager',
+    Card = 'card',
+    Collectible = 'collectible',
     Stat = 'stat',
-    HiddenItemManager = 'hiddenitemmanager'
+    Revive = 'revive',
+    SaveAndLoad = 'save_and_load'
 }
 ty.CollectiblesList = {
     'absence_note',
@@ -61,8 +64,6 @@ include("scripts.class")
 include("scripts.constant")
 include("scripts.data")
 include("scripts.functions")
-include("scripts.collectible")
-include("scripts.card")
 
 for _, title in pairs(ty.ClassesList) do
     local class = include("scripts."..title)

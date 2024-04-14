@@ -97,8 +97,8 @@ local function GetCollectibleAtLeastQualityWithTag(rng, itemPoolType)
                 ty.ITEMPOOL:AddRoomBlacklist(i)
             end
         end
-        itemID = ty.ITEMPOOL:GetCollectible(itemPoolType, false, rng:Next(), CollectibleType.COLLECTIBLE_SAD_ONION)
-    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3 and ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_OFFENSIVE)
+        itemID = ty.ITEMPOOL:GetCollectible(itemPoolType, false, rng:Next(), CollectibleType.COLLECTIBLE_WIRE_COAT_HANGER)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3 and ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_OFFENSIVE) and not ty:IsValueInTable(itemID, BannedItems)
     ty.ITEMPOOL:RemoveCollectible(itemID)
     ty.ITEMPOOL:ResetRoomBlacklist()
     return itemID
@@ -161,15 +161,15 @@ function WakeUp:PostNewRoom()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
         if data.WakeUp.Used and ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetStageType() == StageType.STAGETYPE_WOTL and ty.LEVEL:GetCurrentRoomIndex() == 84 then
-            local rng = player:GetCollectibleRNG(ty.CustomCollectibles.WAKEUP)
-            local itemPoolType = rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS)
-            if data.WakeUp.VirtueTriggered then
-                itemPoolType = ItemPoolType.POOL_ANGEL
-            end
-            if data.WakeUp.BelialTriggered then
-                itemPoolType = ItemPoolType.POOL_DEVIL
-            end
             for i = 1, 3 do
+                local rng = player:GetCollectibleRNG(ty.CustomCollectibles.WAKEUP)
+                local itemPoolType = rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS)
+                if data.WakeUp.VirtueTriggered then
+                    itemPoolType = ItemPoolType.POOL_ANGEL
+                end
+                if data.WakeUp.BelialTriggered then
+                    itemPoolType = ItemPoolType.POOL_DEVIL
+                end
                 local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetCollectibleAtLeastQualityWithTag(rng, itemPoolType), room:FindFreePickupSpawnPosition(Vector(220, 200), 0, true), Vector(0, 0), nil):ToPickup()
                 item.ShopItemId = -2
                 item.Price = 0

@@ -1,18 +1,20 @@
+local Card = ty:DefineANewClass()
+
 local cards = {
     [ty.CustomCards.SOULOFFF0] = { Name="ff0的魂石", Description="血液活化" }
 }
 
 local pickingUpCard = nil
 
-function ty:PostPickupCollision(pickup, collider, low)
+function Card:PostPickupCollision(pickup, collider, low)
     local player = collider:ToPlayer()
     if player and player:CanPickupItem() then
         pickingUpCard = pickup
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, ty.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
+Card:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, Card.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
 
-function ty:CardPostUpdate()
+function Card:CardPostUpdate()
     if pickingUpCard then
         local pickup = pickingUpCard
         pickingUpCard = nil
@@ -29,14 +31,14 @@ function ty:CardPostUpdate()
         end
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_UPDATE, ty.CardPostUpdate)
+Card:AddCallback(ModCallbacks.MC_POST_UPDATE, Card.CardPostUpdate)
 
-function ty:PostPickUpCard(card, player)
+function Card:PostPickUpCard(card, player)
     local language = Options.Language
     if cards[card] and language == "zh" then
         ty.HUD:ShowItemText(cards[card].Name, cards[card].Description)
     end
 end
-ty:AddCallback("TY_POST_PICK_UP_CARD", ty.PostPickUpCard)
+Card:AddCallback("TY_POST_PICK_UP_CARD", Card.PostPickUpCard)
 
-return ty
+return Card

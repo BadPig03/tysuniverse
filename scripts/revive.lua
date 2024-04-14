@@ -376,7 +376,7 @@ do
         return Revive.Configs[key]
     end
     function Revive:IsReviving(player)
-        return ty:GetLibData(player)._REVIVE.ReviveConfigKey
+        return ty:GetLibData(player)._REVIVE and ty:GetLibData(player)._REVIVE.ReviveConfigKey
     end
 end
 

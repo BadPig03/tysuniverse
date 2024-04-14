@@ -1,3 +1,5 @@
+local Collectible = ty:DefineANewClass()
+
 local collectibles = {
     [ty.CustomCollectibles.HEPHAESTUSSOUL] = { Name="赫菲斯托斯之魂", Description="火焰化身" },
     [ty.CustomCollectibles.ABSOLUTION] = { Name="赦罪", Description="这不是你的错" },
@@ -41,11 +43,7 @@ local collectibles = {
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 
-local cards = {
-    [ty.CustomCards.SOULOFFF0] = { Name="ff0的魂石", Description="血液活化" }
-}
-
-function ty:ItemQueueUpdate(player)
+function Collectible:ItemQueueUpdate(player)
     if ty.GAME:GetFrameCount() > 0 then
         local data = ty:GetLibData(player)
         local queuedItem = player.QueuedItem
@@ -62,9 +60,9 @@ function ty:ItemQueueUpdate(player)
         end
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, ty.ItemQueueUpdate)
+Collectible:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Collectible.ItemQueueUpdate)
 
-function ty:PostPickupCollectible(player, item, touched)
+function Collectible:PostPickupCollectible(player, item, touched)
     local language = Options.Language
     if collectibles[item] and language == "zh" then
         ty.HUD:ShowItemText(collectibles[item].Name, collectibles[item].Description)
@@ -73,9 +71,9 @@ function ty:PostPickupCollectible(player, item, touched)
         ty.HUD:ShowItemText("长子名分", "更好的转换")
     end
 end
-ty:AddCallback("TY_POST_PICK_UP_COLLECTIBLE", ty.PostPickupCollectible)
+Collectible:AddCallback("TY_POST_PICK_UP_COLLECTIBLE", Collectible.PostPickupCollectible)
 
-function ty:PostPickupCollision(pickup, collider, low)
+function Collectible:PostPickupCollision(pickup, collider, low)
     local player = collider:ToPlayer()
     local language = Options.Language
     if player and player:CanPickupItem() and not pickup:Exists() then
@@ -84,6 +82,6 @@ function ty:PostPickupCollision(pickup, collider, low)
         end    
     end
 end
-ty:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, ty.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
+Collectible:AddCallback(ModCallbacks.MC_POST_PICKUP_COLLISION, Collectible.PostPickupCollision, PickupVariant.PICKUP_TAROTCARD)
 
-return ty
+return Collectible
