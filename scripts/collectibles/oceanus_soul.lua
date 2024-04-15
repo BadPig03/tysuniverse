@@ -821,9 +821,11 @@ function OceanusSoul:PostNewRoom()
     end
     if ty.LEVEL:HasAbandonedMineshaft() and ty.LEVEL:GetDimension() == Dimension.MINESHAFT then
         for _, player in pairs(PlayerManager.GetPlayers()) do
-            if player:GetPlayerType() == PlayerType.PLAYER_AZAZEL or player:GetPlayerType() == PlayerType.PLAYER_AZAZEL_B then
+            local playerType = player:GetPlayerType()
+            if playerType == PlayerType.PLAYER_AZAZEL or playerType == PlayerType.PLAYER_AZAZEL_B then
                 local weapon = Isaac.CreateWeapon(WeaponType.WEAPON_BRIMSTONE, player)
                 player:SetWeapon(weapon, 1)
+            elseif playerType == PlayerType.PLAYER_THEFORGOTTEN then
             else
                 local weapon = Isaac.CreateWeapon(WeaponType.WEAPON_TEARS, player)
                 player:SetWeapon(weapon, 1)

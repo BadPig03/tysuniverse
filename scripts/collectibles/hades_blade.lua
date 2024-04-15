@@ -26,8 +26,15 @@ local function GetADevilFamiliar(player, rng)
     ty.SFXMANAGER:Play(SoundEffect.SOUND_POWERUP1 + rng:RandomInt(2), 0.6)
     local item = GetDevilFamiliarCollectible(rng)
     local itemConfigCollectible = ty.ITEMCONFIG:GetCollectible(item)
-    player:AnimateCollectible(item)
-    player:QueueItem(itemConfigCollectible)
+    if ty:IsInventoryFull(player) then
+        local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, item, ty.GAME:GetRoom():FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil):ToPickup()
+        item.ShopItemId = -2
+        item.Price = 0
+        item:RemoveCollectibleCycle()
+    else
+        player:AnimateCollectible(item)
+        player:QueueItem(itemConfigCollectible)    
+    end
     ty.HUD:ShowItemText(player, itemConfigCollectible)
     ty.SFXMANAGER:Play(SoundEffect.SOUND_MEATY_DEATHS)
 end

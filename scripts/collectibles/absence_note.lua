@@ -52,9 +52,11 @@ AbsenceNote:AddCallback(ModCallbacks.MC_POST_ITEM_OVERLAY_SHOW, AbsenceNote.Post
 function AbsenceNote:UsePill(pillEffect, player, useFlags, pillColor)
     if player:HasCollectible(ty.CustomCollectibles.ABSENCENOTE) and pillColor ~= PillColor.PILL_NULL then
         local data = ty:GetLibData(player)
-        data.AbsenceNote.Count = data.AbsenceNote.Count + 1
-        if pillColor & PillColor.PILL_GIANT_FLAG == PillColor.PILL_GIANT_FLAG then
+        if pillEffect ~= PillEffect.PILLEFFECT_VURP then
             data.AbsenceNote.Count = data.AbsenceNote.Count + 1
+            if pillColor & PillColor.PILL_GIANT_FLAG == PillColor.PILL_GIANT_FLAG then
+                data.AbsenceNote.Count = data.AbsenceNote.Count + 1
+            end
         end
         if not ty:IsValueInTable(pillColor, data.AbsenceNote.Colors) then
             table.insert(data.AbsenceNote.Colors, pillColor)

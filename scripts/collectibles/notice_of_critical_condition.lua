@@ -76,7 +76,7 @@ end
 
 function NoticeOfCriticalCondition:PostHUDRender()
 	local data = ty.GLOBALDATA
-    if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) or not data.NoticeOfCriticalCondition or not ty.HUD:IsVisible() or not Options.FoundHUD or (ty.GAME:GetRoom():GetType() == RoomType.ROOM_DUNGEON and ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8) or ty.GAME:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD) or ty.GAME:IsGreedMode() then
+    if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) or not data.NoticeOfCriticalCondition or not ty.HUD:IsVisible() or not Options.FoundHUD or ty.GAME:GetRoom():GetType() == RoomType.ROOM_DUNGEON or ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 or ty.GAME:GetSeeds():HasSeedEffect(SeedEffect.SEED_NO_HUD) or ty.GAME:IsGreedMode() then
 		return
 	end
 	if data.NoticeOfCriticalCondition.Disabled then
@@ -107,20 +107,29 @@ NoticeOfCriticalCondition:AddCallback(ModCallbacks.MC_POST_HUD_RENDER, NoticeOfC
 
 function NoticeOfCriticalCondition:PostNewLevel()
 	local data = ty.GLOBALDATA
-	if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
-		data.NoticeOfCriticalCondition.MachineList = {}
-		if not data.NoticeOfCriticalCondition.Disabled then
-			AddChance(data, 30)
-			local spawnChance = data.NoticeOfCriticalCondition.CurrentSpawnChance
-			local rng = ty.LEVEL:GetDevilAngelRoomRNG()
-			if rng:RandomInt(100) < spawnChance then
-				Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALINGBEGGAR, 0, Vector(120, 200), Vector(0, 0), nil)
-				AddChance(data, -50)
-			end
+	if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) or not data.NoticeOfCriticalCondition or ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 or ty.GAME:IsGreedMode() then
+		return
+	end
+	data.NoticeOfCriticalCondition.MachineList = {}
+	if not data.NoticeOfCriticalCondition.Disabled then
+		AddChance(data, 30)
+		local spawnChance = data.NoticeOfCriticalCondition.CurrentSpawnChance
+		local rng = ty.LEVEL:GetDevilAngelRoomRNG()
+		if rng:RandomInt(100) < spawnChance then
+			Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.HEALINGBEGGAR, 0, Vector(120, 200), Vector(0, 0), nil)
+			AddChance(data, -50)
 		end
-		for _, player in pairs(PlayerManager.GetPlayers()) do
-			if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
-				player:AddBrokenHearts(2)
+	end
+	for _, player in pairs(PlayerManager.GetPlayers()) do
+		if player:HasCollectible(ty.CustomCollectibles.NOTICEOFCRITICALCONDITION) then
+			if not data.NoticeOfCriticalCondition.Disabled then
+				if player:GetHeartLimit() > 4 then
+					player:AddBrokenHearts(2)
+				elseif player:GetHeartLimit() == 4 then
+					player:AddBrokenHearts(1)
+				end
+			else
+				player:AddBrokenHearts(3)
 			end
 		end
 	end

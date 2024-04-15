@@ -526,9 +526,7 @@ function Warfarin:PostGridEntitySpawn(grid)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, grid.Position, Vector(0, 0), nil)
         globalData.BloodSample.BossDefeated = true
         globalData.BloodSample.GridIndex = room:GetGridIndex(grid.Position)
-        if not room:DestroyGrid(globalData.BloodSample.GridIndex, true) then
-            room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
-        end
+        room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
         replaceTrapDoor = false
     end
 end
@@ -536,7 +534,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_GRID_ENTITY_SPAWN, Warfarin.PostGridEn
 
 function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE4_1 and ty.LEVEL:GetCurses() | LevelCurse.CURSE_OF_LABYRINTH == LevelCurse.CURSE_OF_LABYRINTH) and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE4_1 and ty.LEVEL:GetCurses() & LevelCurse.CURSE_OF_LABYRINTH == LevelCurse.CURSE_OF_LABYRINTH) and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() and not ty.GAME:IsGreedMode() then
         replaceTrapDoor = not IsDevilAngelRoomOpened()
     end
 end
@@ -548,9 +546,7 @@ function Warfarin:PostNewRoom()
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
         if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
-            if not room:DestroyGrid(room:GetGridIndex(Vector(200, 160)), true) then
-                room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
-            end
+            room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
             for _, player in pairs(PlayerManager.GetPlayers()) do
                 player.Position = Vector(200, 280)
             end
@@ -562,9 +558,7 @@ function Warfarin:PostNewRoom()
                 end
                 restorePosition = false
             end
-            if not room:DestroyGrid(globalData.BloodSample.GridIndex, true) then
-                room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
-            end
+            room:RemoveGridEntity(globalData.BloodSample.GridIndex, 0, false)
             if #Isaac.FindByType(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE) == 0 then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.ISAACS_CARPET, ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE, room:GetGridPosition(globalData.BloodSample.GridIndex), Vector(0, 0), nil)
             end

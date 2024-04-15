@@ -238,4 +238,22 @@ function ty:GetLastBossRoomIndex()
     return ty.LEVEL:GetStartingRoomIndex()
 end
 
+function ty:IsInventoryFull(player)
+    if player:GetPlayerType() == PlayerType.PLAYER_ISAAC_B then
+        local count = 0
+        local limit = 8
+        for itemID, itemCount in pairs(player:GetCollectiblesList()) do
+            if ItemConfig.Config.IsValidCollectible(itemID) and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type ~= ItemType.ITEM_ACTIVE and itemID ~= CollectibleType.COLLECTIBLE_BIRTHRIGHT then
+                count = count + itemCount
+            end
+        end
+        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
+            limit = 12
+        end
+        return count >= limit
+    else
+        return false
+    end
+end
+
 return ty

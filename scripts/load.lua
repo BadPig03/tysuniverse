@@ -1,6 +1,5 @@
 ty.LoadedLua = {}
 ty.ClassesList = {
-    HiddenItemManager = 'hidden_item_manager',
     Card = 'card',
     Collectible = 'collectible',
     Stat = 'stat',

@@ -53,7 +53,8 @@ PhilosophersStaff:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, PhilosophersSt
 
 function PhilosophersStaff:PostNPCDeath(npc)
     local npc = npc:ToNPC()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.PHILOSOPHERSSTAFF) and npc:GetDropRNG():RandomInt(100) < 4 then
+    local rng = npc:GetDropRNG()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.PHILOSOPHERSSTAFF) and (npc.SpawnerEntity == nil and rng:RandomInt(100) < 4) or (npc.SpawnerEntity and rng:RandomInt(100) < 2) then
         Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TRINKET, 0, npc.Position, Vector(0, 0), nil) 
     end
 end

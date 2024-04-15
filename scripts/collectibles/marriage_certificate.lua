@@ -20,9 +20,9 @@ local bannedCollectibles = {
 }
 
 local allowCopying = false
+local preAdding = false
 local extraBlackHearts = false
 local itemCount = 0
-
 
 local function GetPlayerFromInitSeed(seed)
     for _, player in pairs(PlayerManager.GetPlayers()) do
@@ -100,15 +100,15 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
         return false
     end
     if type == ty.CustomCollectibles.MARRIAGECERTIFICATE then
+        if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN) then
+            player:AddBlackHearts(6)
+            return false
+        end
         if player:GetPlayerType() == PlayerType.PLAYER_ESAU then
             player:GetOtherTwin():AddCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
             return false
         elseif player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B then
             return CollectibleType.COLLECTIBLE_BIRTHRIGHT
-        end
-        if PlayerManager.AnyoneHasCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN) then
-            player:AddBlackHearts(6)
-            return false
         end
         if player:HasCollectible(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) then
             for i = 1, player:GetCollectibleNum(CollectibleType.COLLECTIBLE_DIVORCE_PAPERS) do
@@ -116,7 +116,7 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
             end
             extraBlackHearts = true
         end
-        if (PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR)) then
+        if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR) then
             return CollectibleType.COLLECTIBLE_DIVORCE_PAPERS
         end
     elseif type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
@@ -127,59 +127,66 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
     elseif type == CollectibleType.COLLECTIBLE_ESAU_JR and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
         allowCopying = false
         for _, player2 in pairs(PlayerManager.GetPlayers()) do
-            if IsSubPlayer(player) then
+            if IsSubPlayer(player2) then
                 player2:AddCollectible(CollectibleType.COLLECTIBLE_C_SECTION)
             end
         end
         allowCopying = true
+        return false
+    elseif not preAdding and type == CollectibleType.COLLECTIBLE_STRAW_MAN and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
+        player:AddBlackHearts(6)
         return false
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_PRE_ADD_COLLECTIBLE, MarriageCertificate.PreAddCollectible)
 
 function MarriageCertificate:PostAddCollectible(type, charge, firstTime, slot, varData, player)
-    if type == ty.CustomCollectibles.MARRIAGECERTIFICATE and player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) == 1 then
+    if type == ty.CustomCollectibles.MARRIAGECERTIFICATE and player:GetCollectibleNum(ty.CustomCollectibles.MARRIAGECERTIFICATE) == 1 and firstTime then
         player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.MARRIAGECERTIFICATEHEARTS).ID)
-        ty.HiddenItemManager:CreateHiddenItem(player, CollectibleType.COLLECTIBLE_STRAW_MAN)
+        preAdding = true
+        player:AddCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN)
+        preAdding = false
+        local history = player:GetHistory()
+        for index, item in pairs(history:GetCollectiblesHistory()) do
+            if item:GetItemID() == CollectibleType.COLLECTIBLE_STRAW_MAN then
+                history:RemoveHistoryItemByIndex(index - 1)
+                break
+            end
+        end
         InitSubPlayer(player)
-        ty.ITEMPOOL:RemoveCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN)
-    end
-    if type == CollectibleType.COLLECTIBLE_STRAW_MAN then
-        ty.ITEMPOOL:RemoveCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, MarriageCertificate.PostAddCollectible)
 
 function MarriageCertificate:PostTriggerCollectibleRemoved(player, type)
     player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.MARRIAGECERTIFICATEHEARTS).ID)
-    ty.HiddenItemManager:RemoveHiddenItem(player, CollectibleType.COLLECTIBLE_STRAW_MAN)
+    player:RemoveCollectible(CollectibleType.COLLECTIBLE_STRAW_MAN)
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, MarriageCertificate.PostTriggerCollectibleRemoved, ty.CustomCollectibles.MARRIAGECERTIFICATE)
 
 function MarriageCertificate:PostNewLevel()
-    if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
-        return
-    end
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        if IsSubPlayer(player) then
-            local data = ty:GetLibData(player)
-            if data.MarriageCertificate.IsAlive then
-                allowCopying = false
-                for _, itemID in pairs(CopyCollectiblesFromPlayer(GetMainPlayer(player), false)) do
-                    player:AddCollectible(itemID)
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
+        for _, player in pairs(PlayerManager.GetPlayers()) do
+            if IsSubPlayer(player) then
+                local data = ty:GetLibData(player)
+                if data.MarriageCertificate.IsAlive then
+                    allowCopying = false
+                    for _, itemID in pairs(CopyCollectiblesFromPlayer(GetMainPlayer(player), false)) do
+                        player:AddCollectible(itemID)
+                    end
+                    allowCopying = true
+                else
+                    local effects = player:GetEffects()
+                    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.LOSTSOUL).ID)
+                    effects:RemoveCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE, -1)
+                    player:ChangePlayerType(PlayerType.PLAYER_EVE)
+                    player:AddMaxHearts(4)
+                    player:AddHearts(2)
+                    player:AddSoulHearts(-1)
+                    data.MarriageCertificate.IsAlive = true
                 end
-                allowCopying = true
-            else
-                local effects = player:GetEffects()
-                effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.LOSTSOUL).ID)
-                effects:RemoveCollectibleEffect(CollectibleType.COLLECTIBLE_HOLY_MANTLE, -1)
-                player:ChangePlayerType(PlayerType.PLAYER_EVE)
-                player:AddMaxHearts(4)
-                player:AddHearts(2)
-                player:AddSoulHearts(-1)
-                data.MarriageCertificate.IsAlive = true
             end
-        end
+        end    
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, MarriageCertificate.PostNewLevel)
@@ -218,13 +225,6 @@ function MarriageCertificate:PostNewRoom()
             item:RemoveCollectibleCycle()
         end
         itemCount = 0
-    end
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            if player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then
-                ty.HiddenItemManager:RefreshHiddenItem(player)
-            end
-        end
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, MarriageCertificate.PostNewRoom)

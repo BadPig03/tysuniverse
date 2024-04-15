@@ -1,6 +1,21 @@
 local ToolBox = ty:DefineANewClass()
 
-local cardList = { Card.CARD_WILD, Card.CARD_CRACKED_KEY, Card.CARD_CHAOS, Card.CARD_CREDIT, Card.CARD_RULES, Card.CARD_HUMANITY, Card.CARD_SUICIDE_KING, Card.CARD_GET_OUT_OF_JAIL, Card.CARD_QUESTIONMARK, Card.CARD_DICE_SHARD, Card.CARD_EMERGENCY_CONTACT, Card.CARD_HOLY, Card.CARD_HUGE_GROWTH,  Card.CARD_ANCIENT_RECALL, Card.CARD_ERA_WALK }
+local itemOutcomes = WeightedOutcomePicker()
+
+itemOutcomes:AddOutcomeWeight(Card.CARD_WILD, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_CRACKED_KEY, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_CHAOS, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_CREDIT, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_RULES, 1)
+itemOutcomes:AddOutcomeWeight(Card.CARD_HUMANITY, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_GET_OUT_OF_JAIL, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_QUESTIONMARK, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_DICE_SHARD, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_EMERGENCY_CONTACT, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_HOLY, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_HUGE_GROWTH, 10)
+itemOutcomes:AddOutcomeWeight(Card.CARD_ANCIENT_RECALL, 1)
+itemOutcomes:AddOutcomeWeight(Card.CARD_ERA_WALK, 10)
 
 function ToolBox:EvaluateCache(player, cacheFlag)
     local count = player:GetCollectibleNum(ty.CustomCollectibles.TOOLBOX) + player:GetEffects():GetCollectibleEffectNum(ty.CustomCollectibles.TOOLBOX)
@@ -28,7 +43,7 @@ function ToolBox:FamiliarUpdate(familiar)
     end
     if familiar.Coins >= limit then
         local rng = player:GetCollectibleRNG(ty.CustomCollectibles.TOOLBOX)
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, cardList[rng:RandomInt(1, 15)], room:FindFreePickupSpawnPosition(familiar.Position, 0, true, false), Vector(0, 0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, itemOutcomes:PickOutcome(rng), room:FindFreePickupSpawnPosition(familiar.Position, 0, true, false), Vector(0, 0), nil)
         familiar.Coins = 0
         sprite:Play("Appear", true)
     end

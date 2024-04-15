@@ -379,8 +379,8 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "巧克力煎饼",
             Desc = "#{{EmptyHeart}} +1空的心之容器"..
-            "#{{DevilChance}} 与恶魔的一次交易免费"..
-            "#{{Warning}} 免费交易后失去该道具",
+            "#{{BlackHeart}} 击杀敌人时有2.5%的概率掉落一颗黑心"..
+            "#{{Warning}} 概率不可叠加",
             BingeEater = "{{ArrowUp}} +1幸运"..
             "#{{Collectible664}} {{ArrowUp}} +0.2弹速"..
             "#{{Collectible664}} {{ArrowDown}} -0.03移速"
@@ -388,8 +388,8 @@ EIDInfo.Collectibles = {
         [2] = {
             Name = "Chocolate Pancake",
             Desc = "#{{EmptyHeart}} +1 Empty heart container"..
-            "#{{DevilChance}} Makes a deal with the Devil free"..
-            "#{{Warning}} After dealing with the Devil, the collectible disappears",
+            "#{{BlackHeart}} Enemies have 2.5% chance to drop a black heart on death"..
+            "#{{Warning}} The chance is not stackable",
             BingeEater = "{{ArrowUp}} +1 Luck"..
             "#{{Collectible664}} {{ArrowUp}} +0.2 Shotspeed"..
             "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
@@ -465,12 +465,14 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "工具箱",
             Desc = "#生成一个工具箱跟班"..
-            "#{{Card}} 每清理六个房间后生成一张随机特殊卡牌"
+            "#{{Card}} 每清理六个房间后生成一张随机特殊卡牌"..
+            "#包括：混沌卡、信用卡、规则卡、反人类卡、免费保释卡、？卡、紧急联系电话、神圣卡、变巨术、先祖召唤、时空漫步、红钥匙碎片和万用牌"
         },
         [2] = {
             Name = "Tool Box",
             Desc = "#Spawns a tool box familiar"..
-            "#{{Card}} Randomly spawns a special tarot card every 6 rooms"
+            "#{{Card}} Randomly spawns a special tarot card every 6 rooms"..
+            "#Includes: Chaos Card, Credit Card, Rules Card, A Card Against Humanity, Get out of Jail Free Card, ? Card, Emergency Contact, Holy Card, Huge Growth, Ancient Recall, Era Walk, Cracked Key and Wild Card"
         }
     },
     [ty.CustomCollectibles.OCEANUSSOUL] = {
@@ -493,16 +495,18 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "请假条",
             Desc = "#每当角色睡觉或进入下一层时获得一颗胶囊"..
-            "#{{Pill}} 每使用4种不同颜色的胶囊或12次任意胶囊，直接获得一个随机疾病道具"..
+            "#{{Pill}} 每使用4种不同颜色的胶囊或12次胶囊，直接获得一个随机疾病道具"..
             "#{{Pill14}} 金胶囊视作单独的颜色，并算作使用1次"..
-            "#大胶囊视作单独的颜色，并算作使用2次",
+            "#大胶囊视作单独的颜色，并算作使用2次"..
+            "#{{Warning}} 嗝！视作单独的颜色，并算作使用0次",
         },
         [2] = {
             Name = "Absence Note",
             Desc = "#Grants a pill whenever Isaac sleeps or is on a new floor"..
-            "#{{Pill}} Obtains a random disease item directly by using 4 different colored pills or any pill 12 times"..
+            "#{{Pill}} Obtains a random disease item directly by using 4 different colored pills or pill 12 times"..
             "#{{Pill14}} Gold pills are considered as a separate color and count as using once"..
-            "#Horse pills are considered as a separate color and count as using twice",
+            "#Horse pills are considered as a separate color and count as using twice"..
+            "{{Warning}} Vurp! pills are considered as a separate color and doesn't count as used"
         }
     },
     [ty.CustomCollectibles.BONEINFISHSTEAK] = {
