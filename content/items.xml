@@ -49,7 +49,7 @@
 	<active id="27" quality="3" craftquality="-1" cooldown="60" description="Is it a dream?" gfx="collectibles_wake_up.png" name="Wake-up" maxcharges="0" tags="nogreed offensive nocantrip"/>
 	<active id="28" quality="2" craftquality="3" cooldown="60" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" tags="offensive nocantrip"/>
 	<passive id="29" quality="0" craftquality="3" description="It stinks" gfx="collectibles_expired_glue.png" name="Expired Glue" tags="offensive"/>
-	<familiar id="30" quality="2" craftquality="2" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
+	<familiar id="30" quality="3" craftquality="3" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared" achievement="oceanus_soul_unlocked"/>
 	<passive id="32" quality="2" craftquality="2" description="Take medicine on time" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive"/>
 	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay speed damage luck" tags="food nolostbr"/>

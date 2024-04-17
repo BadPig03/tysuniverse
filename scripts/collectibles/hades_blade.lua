@@ -2,21 +2,6 @@ local HadesBlade = ty:DefineANewClass()
 
 local stat = ty.Stat
 
-local function GetDevilFamiliarCollectible(rng)
-    local itemID = 1
-    repeat
-        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
-            if ItemConfig.Config.IsValidCollectible(i) and ty.ITEMCONFIG:GetCollectible(i).Type ~= ItemType.ITEM_FAMILIAR then
-                ty.ITEMPOOL:AddRoomBlacklist(i)
-            end
-        end
-        itemID = ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_DEVIL, false, rng:Next(), CollectibleType.COLLECTIBLE_DEMON_BABY)
-    until ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_FAMILIAR
-    ty.ITEMPOOL:RemoveCollectible(itemID)
-    ty.ITEMPOOL:ResetRoomBlacklist()
-    return itemID
-end
-
 local function GetADevilFamiliar(player, rng)
     local data = ty:GetLibData(player)
     data.HadesBlade.Count = data.HadesBlade.Count + 1
@@ -24,7 +9,7 @@ local function GetADevilFamiliar(player, rng)
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
     player:TakeDamage(0, DamageFlag.DAMAGE_FAKE | DamageFlag.DAMAGE_SPIKES | DamageFlag.DAMAGE_NO_PENALTIES | DamageFlag.DAMAGE_INVINCIBLE, EntityRef(player), 30)
     ty.SFXMANAGER:Play(SoundEffect.SOUND_POWERUP1 + rng:RandomInt(2), 0.6)
-    local item = GetDevilFamiliarCollectible(rng)
+    local item = ty:GetFamiliarsFromItemPool(ItemPoolType.POOL_DEVIL, CollectibleType.COLLECTIBLE_DEMON_BABY, rng)
     local itemConfigCollectible = ty.ITEMCONFIG:GetCollectible(item)
     if ty:IsInventoryFull(player) then
         local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, item, ty.GAME:GetRoom():FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil):ToPickup()

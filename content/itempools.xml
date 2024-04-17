@@ -47,7 +47,6 @@
   <Pool Name="goldenChest">
     <Item Name="Marriage Certificate" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Bob's Stomach" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Tool Box" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="greedDevil">

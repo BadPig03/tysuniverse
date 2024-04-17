@@ -56,7 +56,9 @@ function Absolution:EntityTakeDamage(entity, amount, flags, source, countdown)
     local player = entity:ToPlayer()
     if player and player:HasCollectible(ty.CustomCollectibles.ABSOLUTION) then
         if IsDamageSelfDamage(flags) then
-            return { Damage = math.max(1, math.floor(amount / 2)) }
+            if amount > 0 then
+                return { Damage = math.max(1, math.floor(amount / 2)) }
+            end
         else
             return { DamageFlags = flags | DamageFlag.DAMAGE_NO_PENALTIES }
         end

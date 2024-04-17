@@ -106,6 +106,21 @@ function ty:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, orig
 	return result
 end
 
+function ty:GetFamiliarsFromItemPool(itemPoolType, defaultItem, rng)
+    local itemID = 1
+    repeat
+        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
+            if ItemConfig.Config.IsValidCollectible(i) and ty.ITEMCONFIG:GetCollectible(i).Type ~= ItemType.ITEM_FAMILIAR then
+                ty.ITEMPOOL:AddRoomBlacklist(i)
+            end
+        end
+        itemID = ty.ITEMPOOL:GetCollectible(itemPoolType, false, rng:Next(), defaultItem)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_FAMILIAR
+    ty.ITEMPOOL:RemoveCollectible(itemID)
+    ty.ITEMPOOL:ResetRoomBlacklist()
+    return itemID
+end
+
 function ty:GetCollectibleFromAllItemPools(includeActives, excludeTags, rng)
 	includeActives = includeActives or false
 	excludeTags = excludeTags or ItemConfig.TAG_QUEST

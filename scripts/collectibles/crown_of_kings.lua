@@ -54,12 +54,15 @@ local function SpawnCrown(player)
 end
 
 local function GetCollectibleQualityFromRandomPool(lowQuality, highQuality, rng)
-	for itemID = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
-		if ItemConfig.Config.IsValidCollectible(itemID) and (ty.ITEMCONFIG:GetCollectible(itemID).Quality > highQuality or ty.ITEMCONFIG:GetCollectible(itemID).Quality < lowQuality) then
-			ty.ITEMPOOL:AddRoomBlacklist(itemID)
-		end
-	end
-	local itemID = ty.ITEMPOOL:GetCollectible(rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS), false, rng:Next(), CollectibleType.COLLECTIBLE_BREAKFAST)
+    local itemID
+    repeat 
+        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
+            if ItemConfig.Config.IsValidCollectible(i) and (ty.ITEMCONFIG:GetCollectible(i).Quality > highQuality or ty.ITEMCONFIG:GetCollectible(i).Quality < lowQuality) then
+                ty.ITEMPOOL:AddRoomBlacklist(i)
+            end
+        end
+        itemID = ty.ITEMPOOL:GetCollectible(rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS), false, rng:Next(), CollectibleType.COLLECTIBLE_BREAKFAST)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= lowQuality and ty.ITEMCONFIG:GetCollectible(itemID).Quality <= highQuality
     ty.ITEMPOOL:RemoveCollectible(itemID)
     ty.ITEMPOOL:ResetRoomBlacklist()
     return itemID
@@ -116,7 +119,7 @@ function CrownOfKings:PreSpawnCleanAward(rng, spawnPosition)
             else
                 collectibleID = GetCollectibleQualityFromRandomPool(0, 3, rng)
             end
-            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, collectibleID, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, collectibleID, room:FindFreePickupSpawnPosition(room:GetCenterPos() + Vector(0, 40), 0, true), Vector(0, 0), nil) 
             data.CrownOfKings.CanSpawn = false
             player:AnimateHappy()
         end

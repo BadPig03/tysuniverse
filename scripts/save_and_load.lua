@@ -54,7 +54,7 @@ local function GetGlobalInitData()
     local data = {}
     data.Init = true
     data.BloodSample = { BossDefeated = false, GridIndex = 37, ItemList = {}, InTriggered = false, OutTriggered = false }
-    data.CursedDestiny = { Rooms = ty.PERSISTENTDATA.LevelGeneratorRooms, ShortestPath = ty.PERSISTENTDATA.ShortestPath, OutOfBounds = false, Owned = false, InDarkness = false }
+    data.CursedDestiny = { ShortestPath = ty.PERSISTENTDATA.ShortestPath, OutOfBounds = false, Owned = false, InDarkness = false }
     data.Mirroring = { Broken = false }
     data.NoticeOfCriticalCondition = { FontAlpha = 0, PreviousSpawnChance = 20, CurrentSpawnChance = 20, MachineList = {}, Disabled = false, ItemList = { 13, 14, 70, 75, 92, 102, 103, 104, 119, 127, 135, 143, 149, 154, 169, 176, 214, 219, 240, 254, 261, 340, 345, 347, 350, 368, 379, 440, 446, 452, 453, 454, 459, 460, 466, 469, 475, 493, 496, 502, 525, 531, 532, 549, 553, 558, 600, 628, 637, 645, 654, 657, 658, 659, 678, 680, 683, 688, 694, 697, 724, 725, 726, 731, ty.CustomCollectibles.ANOREXIA, ty.CustomCollectibles.CONSERVATIVETREATMENT, ty.CustomCollectibles.CONJUNCTIVITIS } }
     data.OceanusSoul = { Strength = 0, RoomList = {} }
@@ -121,6 +121,7 @@ function SaveAndLoad:PostGameStarted(continued)
             end
         end
         ty.GLOBALDATA = ty:TableCopyTo(data["GlobalData"])
+        ty.PERSISTENTDATA.ShortestPath = data["GlobalData"].CursedDestiny.ShortestPath
     else
         ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
     end

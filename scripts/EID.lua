@@ -465,14 +465,14 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "工具箱",
             Desc = "#生成一个工具箱跟班"..
-            "#{{Card}} 每清理六个房间后生成一张随机特殊卡牌"..
-            "#包括：混沌卡、信用卡、规则卡、反人类卡、免费保释卡、？卡、紧急联系电话、神圣卡、变巨术、先祖召唤、时空漫步、红钥匙碎片和万用牌"
+            "#{{Card}} 每清理五个房间后生成一张随机特殊卡牌"..
+            "#包括：混沌卡、信用卡、规则卡、反人类卡、免费保释卡、？卡、紧急联系电话、神圣卡、变巨术、先祖召唤、时空漫步、红钥匙碎片、骰子碎片和万用牌"
         },
         [2] = {
             Name = "Tool Box",
             Desc = "#Spawns a tool box familiar"..
-            "#{{Card}} Randomly spawns a special tarot card every 6 rooms"..
-            "#Includes: Chaos Card, Credit Card, Rules Card, A Card Against Humanity, Get out of Jail Free Card, ? Card, Emergency Contact, Holy Card, Huge Growth, Ancient Recall, Era Walk, Cracked Key and Wild Card"
+            "#{{Card}} Randomly spawns a special card every 5 rooms"..
+            "#Includes: Chaos Card, Credit Card, Rules Card, A Card Against Humanity, Get out of Jail Free Card, ? Card, Emergency Contact, Holy Card, Huge Growth, Ancient Recall, Era Walk, Cracked Key, Dice Shard and Wild Card"
         }
     },
     [ty.CustomCollectibles.OCEANUSSOUL] = {

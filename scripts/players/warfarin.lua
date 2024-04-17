@@ -318,9 +318,10 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         local collectible = GetClosestCollectible(player)
         if collectible then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, collectible.Position, Vector(0, 0), nil)
-            collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType))
+            collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType), true, false, false)
             collectible.ShopItemId = -2
             collectible.Price = 0
+            collectible:ClearEntityFlags(EntityFlag.FLAG_ITEM_SHOULD_DUPLICATE)
             data.Warfarin.UsedCount = data.Warfarin.UsedCount + 1
             return { Discharge = true, Remove = false, ShowAnim = true }
         else
@@ -334,6 +335,15 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         end
         data.Warfarin.UsedCount = data.Warfarin.UsedCount + 1
         return { Discharge = true, Remove = false, ShowAnim = true }
+    elseif itemID == CollectibleType.COLLECTIBLE_DIPLOPIA or itemID == CollectibleType.COLLECTIBLE_CROOKED_PENNY then
+        for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
+            local pickup = ent:ToPickup()
+            if pickup.FrameCount <= 1 then
+                pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, pickup.SubType, true, false, false)
+                pickup.ShopItemId = -2
+                pickup.Price = 0
+            end
+        end
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_USE_ITEM, Warfarin.UseItem)

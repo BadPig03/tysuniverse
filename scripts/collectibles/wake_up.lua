@@ -114,8 +114,6 @@ function WakeUp:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
     end
     data.WakeUp.CurrentStage = GetAbsoluteStage()
     data.WakeUp.StageType = GetStageType()
-    data.WakeUp.Used = true
-    data.WakeUp.DetectDogma = true
     data.WakeUp.HealthFactor = math.min(math.max(ty.LEVEL:GetAbsoluteStage() / 22 + 5 / 11, 0.5), 1)
     data.WakeUp.Delay = 300
 	return { Discharge = false, Remove = true, ShowAnim = true }
@@ -131,6 +129,8 @@ function WakeUp:PostPlayerUpdate(player)
             ty.GAME:Darken((300 - data.WakeUp.Delay) / 300, 1)
         elseif data.WakeUp.Delay == 0 then
             data.WakeUp.Delay = -1
+            data.WakeUp.Used = true
+            data.WakeUp.DetectDogma = true
             player:SetSlowingCountdown(1)
             ty.LEVEL:SetStage(LevelStage.STAGE8, 1)
             if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then
@@ -186,9 +186,9 @@ end
 WakeUp:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, WakeUp.PostNewRoom)
 
 function WakeUp:PostNewLevel()
-    if ty.LEVEL:GetAbsoluteStage() ~= LevelStage.STAGE8 then
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            local data = ty:GetLibData(player)
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        local data = ty:GetLibData(player)
+        if data.WakeUp.Used and ty.LEVEL:GetAbsoluteStage() ~= LevelStage.STAGE8 then
             data.WakeUp.Used = false
             data.WakeUp.VirtueTriggered = false
             data.WakeUp.BelialTriggered = false

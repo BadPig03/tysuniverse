@@ -143,21 +143,21 @@ function CursedDestiny:PostLevelLayoutGenerated(levelGenerator)
     if IsValidStage() then
         newLevel = true
         ty.PERSISTENTDATA.LevelGeneratorRooms = {}
-        ty.PERSISTENTDATA.ShortestPath = {}    
+        ty.PERSISTENTDATA.ShortestPath = {}
     end
 end
 CursedDestiny:AddCallback(ModCallbacks.MC_POST_LEVEL_LAYOUT_GENERATED, CursedDestiny.PostLevelLayoutGenerated)
 
 function CursedDestiny:PostNewLevel()
+    local globalData = ty.GLOBALDATA
     if IsValidStage() and newLevel then
         local rooms = ty.PERSISTENTDATA.LevelGeneratorRooms
         for i, room in pairs(rooms) do
             rooms[i].Neighbors = GetNeighbors(rooms[i].Neighbors)
         end
-        ty.PERSISTENTDATA.ShortestPath = FindShortestPath()
+        ty.PERSISTENTDATA.ShortestPath = ty:TableCopyTo(FindShortestPath())
         newLevel = false
     end
-    local globalData = ty.GLOBALDATA
     if globalData.CursedDestiny then
         globalData.CursedDestiny.OutOfBounds = false
         globalData.CursedDestiny.Owned = false

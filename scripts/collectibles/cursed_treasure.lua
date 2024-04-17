@@ -93,6 +93,9 @@ function CursedTreasure:PostPickupInit(pickup)
         if ty.GAME:GetRoom():GetType() == RoomType.ROOM_SHOP and pickup:IsShopItem() and pickup.Variant ~= PickupVariant.PICKUP_COLLECTIBLE then
             local rng = pickup:GetDropRNG()
             local item = ty:GetCollectibleFromCurrentRoom(true, nil, rng)
+            if PlayerManager.AnyoneHasTrinket(TrinketType.TRINKET_ADOPTION_PAPERS) then
+                item = ty:GetFamiliarsFromItemPool(ItemPoolType.POOL_BABY_SHOP, CollectibleType.COLLECTIBLE_BROTHER_BOBBY, rng)
+            end
             pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, item, true, false, false)
             pickup:MakeShopItem(-1)
         end

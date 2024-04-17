@@ -55,8 +55,6 @@ function BloodSacrifice:UseItem(itemID, rng, player, useFlags, activeSlot, varDa
     local room = ty.GAME:GetRoom()
     local data = ty:GetLibData(player)
     if player:GetMaxHearts() > 0 and ty.LEVEL:GetDimension() == Dimension.NORMAL then
-        player:AddMaxHearts(-2)
-        player:TakeDamage(0, DamageFlag.DAMAGE_FAKE | DamageFlag.DAMAGE_SPIKES | DamageFlag.DAMAGE_NO_PENALTIES | DamageFlag.DAMAGE_INVINCIBLE, EntityRef(player), 30)
         ty.SFXMANAGER:Play(SoundEffect.SOUND_MEATY_DEATHS)
         data.BloodSacrifice.UsedCount[player:GetPlayerType()] = (data.BloodSacrifice.UsedCount[player:GetPlayerType()] or 0) + 1
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL_PASSIVE) then
@@ -68,6 +66,8 @@ function BloodSacrifice:UseItem(itemID, rng, player, useFlags, activeSlot, varDa
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
         Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
         table.insert(data.BloodSacrifice.VesselList, { PositionX = vessel.Position.X, PositionY = vessel.Position.Y, RoomIndex = ty.LEVEL:GetCurrentRoomIndex(), InitSeed = vessel.InitSeed })
+        player:AddMaxHearts(-2)
+        player:TakeDamage(0, DamageFlag.DAMAGE_FAKE | DamageFlag.DAMAGE_SPIKES | DamageFlag.DAMAGE_NO_PENALTIES | DamageFlag.DAMAGE_INVINCIBLE, EntityRef(player), 30)
         return { Discharge = true, Remove = false,  ShowAnim = true }
     else
         return { Discharge = false, Remove = false,  ShowAnim = true }

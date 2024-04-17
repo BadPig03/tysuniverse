@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w14m"
+ty.VERSION = "02w14n"
 ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()

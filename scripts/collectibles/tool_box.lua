@@ -2,20 +2,44 @@ local ToolBox = ty:DefineANewClass()
 
 local itemOutcomes = WeightedOutcomePicker()
 
-itemOutcomes:AddOutcomeWeight(Card.CARD_WILD, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_CRACKED_KEY, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_CHAOS, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_CREDIT, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_RULES, 1)
-itemOutcomes:AddOutcomeWeight(Card.CARD_HUMANITY, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_GET_OUT_OF_JAIL, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_QUESTIONMARK, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_DICE_SHARD, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_EMERGENCY_CONTACT, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_HOLY, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_HUGE_GROWTH, 10)
-itemOutcomes:AddOutcomeWeight(Card.CARD_ANCIENT_RECALL, 1)
-itemOutcomes:AddOutcomeWeight(Card.CARD_ERA_WALK, 10)
+do
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.CREDIT_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_CREDIT, 10)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.ANCIENT_RECALL) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_ANCIENT_RECALL, 10)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.WILD_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_WILD, 10)
+    end
+    itemOutcomes:AddOutcomeWeight(Card.CARD_QUESTIONMARK, 8)
+    itemOutcomes:AddOutcomeWeight(Card.CARD_DICE_SHARD, 8)
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.HOLY_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_HOLY, 8)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.RED_KEY) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_CRACKED_KEY, 6)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.GET_OUT_OF_JAIL_FREE_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_GET_OUT_OF_JAIL, 4)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.CHAOS_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_CHAOS, 4)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.CARD_AGAINST_HUMANITY) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_HUMANITY, 4)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.ERA_WALK) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_ERA_WALK, 2)
+    end
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.HUGE_GROWTH) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_HUGE_GROWTH, 2)
+    end
+    itemOutcomes:AddOutcomeWeight(Card.CARD_EMERGENCY_CONTACT, 2)    
+    if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.RULES_CARD) then
+        itemOutcomes:AddOutcomeWeight(Card.CARD_RULES, 1)
+    end
+end
 
 function ToolBox:EvaluateCache(player, cacheFlag)
     local count = player:GetCollectibleNum(ty.CustomCollectibles.TOOLBOX) + player:GetEffects():GetCollectibleEffectNum(ty.CustomCollectibles.TOOLBOX)
@@ -37,7 +61,7 @@ function ToolBox:FamiliarUpdate(familiar)
     if sprite:IsPlaying("Float") then
         familiar:FollowParent()
     end
-    local limit = 6
+    local limit = 5
     if player:HasCollectible(CollectibleType.COLLECTIBLE_BFFS) then
         limit = 4
     end
