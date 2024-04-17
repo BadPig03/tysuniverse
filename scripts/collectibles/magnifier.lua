@@ -1,10 +1,12 @@
 local Magnifier = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local function FindMinHealthEnemy(position)
     local minHealth = 99999
     local minHealthEnemy = nil
     for _, ent in pairs(Isaac.FindInRadius(position, 8192, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and ent.HitPoints < minHealth then
+        if functions:IsValidEnemy(ent) and ent.HitPoints < minHealth then
             minHealth = ent.HitPoints
             minHealthEnemy = ent
         end

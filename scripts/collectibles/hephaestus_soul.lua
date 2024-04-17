@@ -1,5 +1,7 @@
 local HephaestusSoul = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local laserCollectibles = {
     [1] = CollectibleType.COLLECTIBLE_TECHNOLOGY,
     [2] = CollectibleType.COLLECTIBLE_TECHNOLOGY_2,
@@ -169,7 +171,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, HephaestusSoul.Evalua
 
 function HephaestusSoul:PostFireTear(tear)
 	local tear = tear:ToTear()
-	local player = ty:GetPlayerFromTear(tear)
+	local player = functions:GetPlayerFromTear(tear)
 	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
 		SpawnAFlame(player, tear, false)
 	end
@@ -178,7 +180,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_FIRE_TEAR, HephaestusSoul.PostFi
 
 function HephaestusSoul:PostTearUpdate(tear)
 	local tear = tear:ToTear()
-	local player = ty:GetPlayerFromTear(tear)
+	local player = functions:GetPlayerFromTear(tear)
 	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and tear:HasTearFlags(TearFlags.TEAR_LUDOVICO) and ty:GetLibData(tear, true).FlameSpawned == nil then
 		SpawnAFlame(player, tear, true)
 		local tearData = ty:GetLibData(tear, true)
@@ -199,7 +201,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_FIRE_BOMB, HephaestusSoul.PostFi
 function HephaestusSoul:PostLaserCollision(laser, collider, low)
 	local laser = laser:ToLaser()
 	local player = laser.SpawnerEntity and laser.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValidCollider(collider) and laser.FrameCount % 3 == 0 then
+	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and functions:IsValidEnemy(collider) and laser.FrameCount % 3 == 0 then
 		local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
 		local fireData = ty:GetLibData(fireJet, true)
 		if laser.Variant == LaserVariant.THIN_RED or laser.Variant == LaserVariant.ELECTRIC then
@@ -216,7 +218,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_LASER_COLLISION, HephaestusSoul.
 function HephaestusSoul:PostKnifeCollision(knife, collider, low)
 	local knife = knife:ToKnife()
 	local player = knife.SpawnerEntity and knife.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValidCollider(collider) then
+	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and functions:IsValidEnemy(collider) then
 		if (knife:IsFlying() and knife:GetKnifeDistance() / knife.MaxDistance < 0.8) or ((not knife:IsFlying() or knife:GetKnifeDistance() / knife.MaxDistance >= 0.8) and ty.GAME:GetFrameCount() % 18 == 0) then
 			local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
 			local fireData = ty:GetLibData(fireJet, true)
@@ -287,7 +289,7 @@ function HephaestusSoul:PostAddCollectible(type, charge, firstTime, slot, varDat
 		player:GetEffects():AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.HEPHAESTUSSOUL).ID)
 		player:SetLaserColor(Color.LaserFireMind)
 	end
-	if player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValueInTable(type, laserCollectibles) then
+	if player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and ty:IsValueInTable(laserCollectibles, type) then
 		player:SetLaserColor(Color.LaserFireMind)
 	end
 end
@@ -295,7 +297,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, HephaestusSoul.
 
 function HephaestusSoul:PostTriggerCollectibleRemoved(player, type)
 	player:GetEffects():RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.HEPHAESTUSSOUL).ID)
-	player:SetLaserColor(ty:GetLaserColor(player))
+	player:SetLaserColor(functions:GetLaserColor(player))
 end
 HephaestusSoul:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, HephaestusSoul.PostTriggerCollectibleRemoved, ty.CustomCollectibles.HEPHAESTUSSOUL)
 
@@ -303,7 +305,7 @@ function HephaestusSoul:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
     local playerEffects = player:GetEffects()
     if data.Init and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) then
-		if ty:IsPlayerFiring(player) then
+		if ty.Functions:IsPlayerFiring(player) then
 			if HasCircle(player) and not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (player:HasWeaponType(WeaponType.WEAPON_TEARS) or player:HasWeaponType(WeaponType.WEAPON_FETUS) or player:HasWeaponType(WeaponType.WEAPON_BOMBS) or player:HasWeaponType(WeaponType.WEAPON_ROCKETS) or player:HasWeaponType(WeaponType.WEAPON_KNIFE) or player:HasWeaponType(WeaponType.WEAPON_BONE) or player:HasWeaponType(WeaponType.WEAPON_NOTCHED_AXE) or player:HasWeaponType(WeaponType.WEAPON_SPIRIT_SWORD)) then
 				local circleSprite = GetCircle(player):GetSprite()
 				if circleSprite.Scale.X <= GetCircleAttribute(player, "CircleMaxRange") then

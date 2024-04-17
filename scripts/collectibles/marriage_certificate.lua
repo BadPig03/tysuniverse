@@ -1,5 +1,7 @@
 local MarriageCertificate = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local bannedCollectibles = {
     CollectibleType.COLLECTIBLE_1UP,
     CollectibleType.COLLECTIBLE_DEAD_CAT,
@@ -36,7 +38,7 @@ end
 local function GetCollectiblesList(player)
     local list = {}
     for itemID, count in pairs(player:GetCollectiblesList()) do
-        if count > 0 and ItemConfig.Config.IsValidCollectible(itemID) and not ty:IsValueInTable(itemID, bannedCollectibles) and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type % ItemType.ITEM_ACTIVE == ItemType.ITEM_PASSIVE and not ty.ITEMCONFIG:GetCollectible(itemID).Hidden then
+        if count > 0 and ItemConfig.Config.IsValidCollectible(itemID) and not ty:IsValueInTable(bannedCollectibles, itemID) and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type % ItemType.ITEM_ACTIVE == ItemType.ITEM_PASSIVE and not ty.ITEMCONFIG:GetCollectible(itemID).Hidden then
             table.insert(list, itemID)
         end
     end
@@ -116,7 +118,7 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
             end
             extraBlackHearts = true
         end
-        if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR) then
+        if PlayerManager.GetEsauJrState(functions:GetPlayerIndex(player)) or player:HasCollectible(CollectibleType.COLLECTIBLE_ESAU_JR) then
             return CollectibleType.COLLECTIBLE_DIVORCE_PAPERS
         end
     elseif type == CollectibleType.COLLECTIBLE_DIVORCE_PAPERS and player:HasCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE) then

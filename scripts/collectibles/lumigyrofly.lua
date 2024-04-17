@@ -1,5 +1,7 @@
 local Lumigyrofly = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local function GetLumigyroflyCount()
     local count = 0
     for _, familiar in pairs(Isaac.FindByType(EntityType.ENTITY_FAMILIAR, ty.CustomEntities.LUMIGYROFLY)) do
@@ -43,7 +45,7 @@ local function GetNearestEnemy(position)
 	local distance = 192
     local nearestEnemy = nil
     for _, ent in pairs(Isaac.FindInRadius(position, 192, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
+        if functions:IsValidEnemy(ent) and (ent.Position - position):Length() < distance then
             distance = (ent.Position - position):Length()
             nearestEnemy = ent
         end

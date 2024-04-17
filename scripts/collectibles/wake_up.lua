@@ -93,12 +93,12 @@ local function GetCollectibleAtLeastQualityWithTag(rng, itemPoolType)
     local itemID
     repeat
         for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
-            if ItemConfig.Config.IsValidCollectible(i) and (ty.ITEMCONFIG:GetCollectible(i).Quality < 3 or not ty.ITEMCONFIG:GetCollectible(i):HasTags(ItemConfig.TAG_OFFENSIVE) or ty:IsValueInTable(i, BannedItems)) then
+            if ItemConfig.Config.IsValidCollectible(i) and (ty.ITEMCONFIG:GetCollectible(i).Quality < 3 or not ty.ITEMCONFIG:GetCollectible(i):HasTags(ItemConfig.TAG_OFFENSIVE) or ty:IsValueInTable(BannedItems, i)) then
                 ty.ITEMPOOL:AddRoomBlacklist(i)
             end
         end
         itemID = ty.ITEMPOOL:GetCollectible(itemPoolType, false, rng:Next(), CollectibleType.COLLECTIBLE_WIRE_COAT_HANGER)
-    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3 and ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_OFFENSIVE) and not ty:IsValueInTable(itemID, BannedItems)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Quality >= 3 and ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_OFFENSIVE) and not ty:IsValueInTable(BannedItems, itemID)
     ty.ITEMPOOL:RemoveCollectible(itemID)
     ty.ITEMPOOL:ResetRoomBlacklist()
     return itemID

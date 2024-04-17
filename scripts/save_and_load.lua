@@ -75,36 +75,36 @@ end
 
 local function RewindPlayerData()
     for _, player in pairs(PlayerManager.GetPlayers()) do
-        ty:SetLibData(player, ty:TableCopyTo(lastRoomData[tostring(player:GetPlayerType())]))
+        ty:SetLibData(player, ty:GetTableCopyFrom(lastRoomData[tostring(player:GetPlayerType())]))
         player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         if player:GetFlippedForm() then
             local player = player:GetFlippedForm()
-            ty:SetLibData(player, ty:TableCopyTo(lastRoomData[tostring(player:GetPlayerType())]))
+            ty:SetLibData(player, ty:GetTableCopyFrom(lastRoomData[tostring(player:GetPlayerType())]))
             player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         end
     end
-    ty.GLOBALDATA = ty:TableCopyTo(lastRoomData["GlobalData"])
+    ty.GLOBALDATA = ty:GetTableCopyFrom(lastRoomData["GlobalData"])
 end
 
 if (not ty.GLOBALDATA or not ty.GLOBALDATA.Init) and Isaac.IsInGame() then
     for _, player in pairs(PlayerManager.GetPlayers()) do
-        ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
-        lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
+        ty:SetLibData(player, ty:GetTableCopyFrom(GetInitData()))
+        lastRoomData[tostring(player:GetPlayerType())] = ty:GetTableCopyFrom(ty:GetLibData(player))
         player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         if player:GetFlippedForm() then
             local player = player:GetFlippedForm()
-            ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
-            lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
+            ty:SetLibData(player, ty:GetTableCopyFrom(GetInitData()))
+            lastRoomData[tostring(player:GetPlayerType())] = ty:GetTableCopyFrom(ty:GetLibData(player))
             player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
         end
     end
-    ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
-    lastRoomData["GlobalData"] = ty:TableCopyTo(ty.GLOBALDATA)
+    ty.GLOBALDATA = ty:GetTableCopyFrom(GetGlobalInitData())
+    lastRoomData["GlobalData"] = ty:GetTableCopyFrom(ty.GLOBALDATA)
     ResetInitData()
 end
 
 function SaveAndLoad:PostPlayerInit(player)
-	ty:SetLibData(player, ty:TableCopyTo(GetInitData()))
+	ty:SetLibData(player, ty:GetTableCopyFrom(GetInitData()))
 end
 SaveAndLoad:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, SaveAndLoad.PostPlayerInit)
 
@@ -120,10 +120,10 @@ function SaveAndLoad:PostGameStarted(continued)
                 player:AddCacheFlags(CacheFlag.CACHE_ALL, true)
             end
         end
-        ty.GLOBALDATA = ty:TableCopyTo(data["GlobalData"])
+        ty.GLOBALDATA = ty:GetTableCopyFrom(data["GlobalData"])
         ty.PERSISTENTDATA.ShortestPath = data["GlobalData"].CursedDestiny.ShortestPath
     else
-        ty.GLOBALDATA = ty:TableCopyTo(GetGlobalInitData())
+        ty.GLOBALDATA = ty:GetTableCopyFrom(GetGlobalInitData())
     end
     ResetInitData()
 end
@@ -147,11 +147,11 @@ SaveAndLoad:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, SaveAndLoad.PreGameExit)
 
 function SaveAndLoad:PreRoomExit(player, newLevel)
     if not ty.PERSISTENTDATA.Rewind and not newLevel then
-        lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
-        lastRoomData["GlobalData"] = ty:TableCopyTo(ty.GLOBALDATA)
+        lastRoomData[tostring(player:GetPlayerType())] = ty:GetTableCopyFrom(ty:GetLibData(player))
+        lastRoomData["GlobalData"] = ty:GetTableCopyFrom(ty.GLOBALDATA)
         if player:GetFlippedForm() then
             local player = player:GetFlippedForm()
-            lastRoomData[tostring(player:GetPlayerType())] = ty:TableCopyTo(ty:GetLibData(player))
+            lastRoomData[tostring(player:GetPlayerType())] = ty:GetTableCopyFrom(ty:GetLibData(player))
         end
     end
 end

@@ -66,7 +66,7 @@ local function GetItemFromPool(player)
     if #validItems > 0 then
         local index = rng:RandomInt(#validItems) + 1
         local selected_item = validItems[index]
-		ty:RemoveValueInTable(selected_item, data.NoticeOfCriticalCondition.ItemList)
+		ty:RemoveValueInTable(data.NoticeOfCriticalCondition.ItemList, selected_item)
 		ty.ITEMPOOL:RemoveCollectible(selected_item)
         return selected_item
     else
@@ -157,7 +157,7 @@ function NoticeOfCriticalCondition:PostSlotUpdate(slot)
 	local room = ty.GAME:GetRoom()
 	local sprite = slot:GetSprite()
 	if slotData == nil then
-		data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:TableCopyTo(GetInitData())
+		data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:GetTableCopyFrom(GetInitData())
 		slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 	end
 	if slotData.IsBroken then
@@ -248,7 +248,7 @@ function NoticeOfCriticalCondition:PreSlotCollision(slot, collider, low)
 		local data = ty.GLOBALDATA
 		local slotData = ty.GLOBALDATA.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 		if slotData == nil then
-			data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:TableCopyTo(GetInitData())
+			data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)] = ty:GetTableCopyFrom(GetInitData())
 			slotData = data.NoticeOfCriticalCondition.MachineList[tostring(slot.InitSeed)]
 		end
 		if sprite:IsPlaying("Idle") and player and player:GetBrokenHearts() >= 1 and player:GetNumCoins() >= 2 then

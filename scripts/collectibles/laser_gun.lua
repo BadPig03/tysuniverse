@@ -1,5 +1,19 @@
 local LaserGun = ty:DefineANewClass()
 
+local functions = ty.Functions
+
+local function GetNearestEnemy(position)
+	local distance = 8192
+    local nearestEnemy = nil
+    for _, ent in pairs(Isaac.FindInRadius(position, 8192, EntityPartition.ENEMY)) do
+        if functions:IsValidEnemy(ent) and (ent.Position - position):Length() < distance then
+            distance = (ent.Position - position):Length()
+            nearestEnemy = ent
+        end
+    end
+    return nearestEnemy
+end
+
 local function GetRotationAngle(player)
     local direction = player:GetShootingInput()
     if direction.X == 0 and direction.Y == 0 then
@@ -151,7 +165,7 @@ local function DoAttack(effect, player)
     local entityList = {}
     local scaleX = effect:GetSprite().Scale.X
     for _, entity in pairs(Isaac.FindInRadius(effect.Position, ty.ConstantValues.LASERGUNPLASMABALLRANGE * scaleX, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(entity) then
+        if functions:IsValidEnemy(entity) then
             local entityData = ty:GetLibData(entity, true)
             if entityData.PlasmaDamageScale == nil then
                 entityData.PlasmaDamageScale = 1
@@ -172,7 +186,7 @@ local function DoAttack(effect, player)
         end
         if effectData.Type & 1 << 5 == 1 << 5 then
             local laser = Isaac.Spawn(EntityType.ENTITY_LASER, LaserVariant.BRIM_TECH, LaserSubType.LASER_SUBTYPE_LINEAR, effect.Position, effect.Velocity, player):ToLaser()
-            laser.Color = ty:GetLaserColor(player)
+            laser.Color = functions:GetLaserColor(player)
             laser.AngleDegrees = (entityList[i].Position - effect.Position):GetAngleDegrees()
             laser.Timeout = 9
             laser.CollisionDamage = player.Damage * 1.5 * damageScale
@@ -290,7 +304,7 @@ function LaserGun:UpdateLaserSwirlEffect(effect)
             effectData.MovingCooldown = effectData.MovingCooldown - 1
         else
             if effectData.Type & 1 << 1 == 1 << 1 then
-                local target = ty:GetNearestEnemy(effect.Position)
+                local target = GetNearestEnemy(effect.Position)
                 if target then
                     effect:AddVelocity((target.Position - effect.Position):Resized(0.02))
                 end
@@ -372,7 +386,7 @@ function LaserGun:UpdateLaserSwirlEffect(effect)
     end
     SetColor(sprite, effectData.Laser)
     for _, entity in pairs(Isaac.FindInRadius(effect.Position, effect.Size * sprite.Scale.X, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(entity) then
+        if functions:IsValidEnemy(entity) then
             entity:TakeDamage(player.Damage, DamageFlag.DAMAGE_LASER, EntityRef(player), 0)
         end
     end

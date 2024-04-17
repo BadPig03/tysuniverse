@@ -107,11 +107,11 @@ function BeggerMask:PostPickupUpdate(pickup)
             local rng = pickup:GetDropRNG()
             local randomFloat = rng:RandomFloat()
             if randomFloat < 1/3 then
-                local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng), ty.GAME:GetRoom():FindFreePickupSpawnPosition(pickup.Position + Vector(80, 0):Rotated(rng:RandomInt(4) * 90), 0, true), Vector(0, 0), nil):ToPickup()
+                local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, functions:GetCollectibleFromCurrentRoom(true, nil, rng), ty.GAME:GetRoom():FindFreePickupSpawnPosition(pickup.Position + Vector(80, 0):Rotated(rng:RandomInt(4) * 90), 0, true), Vector(0, 0), nil):ToPickup()
                 item:MakeShopItem(-1)
                 item.Price = ty.ITEMCONFIG:GetCollectible(item.SubType).ShopPrice
             elseif randomFloat >= 1/3 and randomFloat < 2/3 then
-                local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng), ty.GAME:GetRoom():FindFreePickupSpawnPosition(pickup.Position + Vector(80, 0):Rotated(rng:RandomInt(4) * 90), 0, true), Vector(0, 0), nil):ToPickup()
+                local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, functions:GetCollectibleFromCurrentRoom(true, nil, rng), ty.GAME:GetRoom():FindFreePickupSpawnPosition(pickup.Position + Vector(80, 0):Rotated(rng:RandomInt(4) * 90), 0, true), Vector(0, 0), nil):ToPickup()
                 item:MakeShopItem(-2)
                 item.Price = ty.ITEMCONFIG:GetCollectible(item.SubType).DevilPrice
             else

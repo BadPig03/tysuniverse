@@ -729,7 +729,7 @@ do
         end
     end
     do
-        function Stat.GetAddFireRate(firedelay, addition)
+        function Stat:GetAddFireRate(firedelay, addition)
             return 30 / (30 / (firedelay + 1) + addition) - 1
         end
         function Stat:GetTearsUp(player)
@@ -787,6 +787,9 @@ do
                 for _, modi in ipairs(tearModifiers) do
                     tears = modi.Func(tears, origin)
                 end
+            end
+            if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and tears < 30 / 11 then
+                return 30 / 11
             end
             return tears
         end
@@ -846,6 +849,9 @@ do
                 damage = step(damage, player, false)
             end
             damage = damage * multiplier
+            if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and damage < 3.5 then
+                return 3.5
+            end
             return damage
         end
     end
@@ -882,14 +888,27 @@ do
             if lowerLimit >= 0 and addition < 0 then
                 addition = math.max(lowerLimit - speed, addition)
             end
-            player.MoveSpeed = speed + addition
+            if player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and speed + addition < 1 then
+                player.MoveSpeed = 1
+            else
+                player.MoveSpeed = speed + addition
+            end
             Stat:SetSpeedUp(player, nil)
             Stat:SetSpeedMultiplier(player, nil)
             Stat:SetSpeedLimit(player, nil)
             Stat:SetSpeedLowerLimit(player, nil)
+        elseif cache == CacheFlag.CACHE_RANGE and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and player.TearRange < 260 then
+            player.TearRange = 260
+            player.TearHeight = -23.75
+        end
+        if cache == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and player.ShotSpeed < 1 then
+            player.ShotSpeed = 1
+        end
+        if cache == CacheFlag.CACHE_LUCK and player:HasCollectible(ty.CustomCollectibles.CONSERVATIVETREATMENT) and player.Luck < 0 then
+            player.Luck = 0
         end
     end
-    Stat:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, CallbackPriority.LATE, Stat.EvaluateCache)
+    Stat:AddPriorityCallback(ModCallbacks.MC_EVALUATE_CACHE, 101, Stat.EvaluateCache)
 end
 
 --[[

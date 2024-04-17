@@ -12,7 +12,7 @@ local function GetItemFromPool(player)
     if #validItems > 0 then
         local index = rng:RandomInt(#validItems) + 1
         local selected_item = validItems[index]
-        ty:RemoveValueInTable(selected_item, data.NoticeOfCriticalCondition.ItemList)
+        ty:RemoveValueInTable(data.NoticeOfCriticalCondition.ItemList, selected_item)
         ty.ITEMPOOL:RemoveCollectible(selected_item)
         return selected_item
     else
@@ -58,7 +58,7 @@ function AbsenceNote:UsePill(pillEffect, player, useFlags, pillColor)
                 data.AbsenceNote.Count = data.AbsenceNote.Count + 1
             end
         end
-        if not ty:IsValueInTable(pillColor, data.AbsenceNote.Colors) then
+        if not ty:IsValueInTable(data.AbsenceNote.Colors, pillColor) then
             table.insert(data.AbsenceNote.Colors, pillColor)
         end
         data.AbsenceNote.Triggered = false
@@ -73,7 +73,7 @@ function AbsenceNote:PostPlayerUpdate(player)
             AddARandomItem(player)
             data.AbsenceNote.Count = 0
         end
-        if #data.AbsenceNote.Colors > 0 and #data.AbsenceNote.Colors % 4 == 0 and not ty:IsValueInTable(#data.AbsenceNote.Colors, data.AbsenceNote.TriggeredColorCount) then
+        if #data.AbsenceNote.Colors > 0 and #data.AbsenceNote.Colors % 4 == 0 and not ty:IsValueInTable(data.AbsenceNote.TriggeredColorCount, #data.AbsenceNote.Colors) then
             AddARandomItem(player)
             table.insert(data.AbsenceNote.TriggeredColorCount, #data.AbsenceNote.Colors)
         end

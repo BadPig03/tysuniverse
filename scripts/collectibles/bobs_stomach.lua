@@ -68,7 +68,7 @@ end
 function BobsStomach:PostPlayerUpdate(player)
 	local data = ty:GetLibData(player)
 	if data.Init and player:HasCollectible(ty.CustomCollectibles.BOBSSTOMACH) then
-		if ty:IsPlayerFiring(player) then
+		if ty.Functions:IsPlayerFiring(player) then
             local shootingInput = player:GetShootingInput()
             data.BobsStomach.LastDirectionX = shootingInput.X
             data.BobsStomach.LastDirectionY = shootingInput.Y

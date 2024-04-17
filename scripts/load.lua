@@ -1,5 +1,6 @@
 ty.LoadedLua = {}
 ty.ClassesList = {
+    Functions = 'functions',
     Card = 'card',
     Collectible = 'collectible',
     Stat = 'stat',
@@ -62,7 +63,6 @@ ty.TempDataName = "_TY_TEMP_"
 include("scripts.class")
 include("scripts.constant")
 include("scripts.data")
-include("scripts.functions")
 
 for _, title in pairs(ty.ClassesList) do
     local class = include("scripts."..title)

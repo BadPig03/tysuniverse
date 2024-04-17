@@ -1,6 +1,7 @@
 local Warfarin = ty:DefineANewClass()
 
 local stat = ty.Stat
+local functions = ty.Functions
 
 local shouldReviveWithRedHearts = false
 local stopHurtSound = false
@@ -251,7 +252,7 @@ function Warfarin:PostHUDUpdate()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
         if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
-            if PlayerManager.GetEsauJrState(ty:GetPlayerIndex(player)) and player:GetBlackHearts() > 0 then
+            if PlayerManager.GetEsauJrState(functions:GetPlayerIndex(player)) and player:GetBlackHearts() > 0 then
                 player:AddMaxHearts(2)
                 player:AddHearts(2)
             end
@@ -300,10 +301,10 @@ function Warfarin:PostPickupUpdate(pickup)
     if not globalData or not PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) or ty.LEVEL:GetDimension() == Dimension.DEATH_CERTIFICATE or ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_GENESIS_IDX or room:GetType() == RoomType.ROOM_SHOP or room:GetType() == RoomType.ROOM_ANGEL or pickup.SubType <= 0 then
         return
     end
-    if (room:GetType() == RoomType.ROOM_BOSS and pickup.ShopItemId ~= -2 and not ty:IsValueInTable(pickup.InitSeed, bossItemList) and pickup.FrameCount <= 1 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) or (pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) then
+    if (room:GetType() == RoomType.ROOM_BOSS and pickup.ShopItemId ~= -2 and not ty:IsValueInTable(bossItemList, pickup.InitSeed) and pickup.FrameCount <= 1 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) or (pickup:GetAlternatePedestal() == 0 and not ty:IsValueInTable(globalData.ItemList, pickup.InitSeed) and pickup.ShopItemId ~= -2 and not pickup.Touched and not itemConfig:HasTags(ItemConfig.TAG_QUEST) and not IsCollectibleHasNoItemPool(pickup.SubType)) then
         pickup:MakeShopItem(-2)
     end
-    if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then
+    if not ty:IsValueInTable(globalData.ItemList, pickup.InitSeed) then
         table.insert(globalData.ItemList, pickup.InitSeed)
     end
 end
@@ -318,7 +319,7 @@ function Warfarin:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         local collectible = GetClosestCollectible(player)
         if collectible then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, collectible.Position, Vector(0, 0), nil)
-            collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType), true, false, false)
+            collectible:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, functions:GetCollectibleFromCurrentRoom(true, nil, rng, collectible.SubType), true, false, false)
             collectible.ShopItemId = -2
             collectible.Price = 0
             collectible:ClearEntityFlags(EntityFlag.FLAG_ITEM_SHOULD_DUPLICATE)
@@ -554,14 +555,25 @@ function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
-        if room:GetType() == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
+        local roomType = room:GetType()
+        if roomType == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)
             room:RemoveGridEntity(room:GetGridIndex(Vector(200, 160)), 0, false)
             for _, player in pairs(PlayerManager.GetPlayers()) do
                 player.Position = Vector(200, 280)
             end
         end
-        if room:GetType() == RoomType.ROOM_BOSS and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() == ty:GetLastBossRoomIndex() and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
+        if roomType == RoomType.ROOM_BLACK_MARKET and ty.LEVEL:GetCurrentRoomDesc().Data.Variant == 7 and room:IsFirstVisit() then
+            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
+                local pickup = ent:ToPickup()
+                pickup.ShopItemId = -2
+                pickup.Price = 0
+            end
+            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_SLOT, SlotVariant.SHOP_RESTOCK_MACHINE)) do
+                ent:Remove()
+            end
+        end
+        if roomType == RoomType.ROOM_BOSS and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() == functions:GetLastBossRoomIndex() and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
             if restorePosition then
                 for _, player in pairs(PlayerManager.GetPlayers()) do
                     player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)
@@ -619,7 +631,7 @@ function Warfarin:PostLadderUpdate(effect)
             sprite.Color = Color(1, 1, 1, 1)
             for _, ent in pairs(Isaac.FindInRadius(effect.Position, 8, EntityPartition.PLAYER)) do
                 restorePosition = true
-                ty.GAME:StartRoomTransition(ty:GetLastBossRoomIndex(), Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
+                ty.GAME:StartRoomTransition(functions:GetLastBossRoomIndex(), Direction.NO_DIRECTION, RoomTransitionAnim.PIXELATION, ent:ToPlayer(), 0)
             end
         else
             sprite.Color = Color(1, 1, 1, 0.1)
@@ -631,7 +643,7 @@ Warfarin:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, Warfarin.PostLadderUpda
 function Warfarin:PostPickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
     local globalData = ty.GLOBALDATA.BloodSample
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and (keepPrice and not keepSeed and not ignoreModifiers) or (keepPrice and keepSeed and ignoreModifiers) then
-        if not ty:IsValueInTable(pickup.InitSeed, globalData.ItemList) then
+        if not ty:IsValueInTable(globalData.ItemList, pickup.InitSeed) then
             table.insert(globalData.ItemList, pickup.InitSeed)
         end
     end

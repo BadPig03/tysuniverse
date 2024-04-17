@@ -1,6 +1,7 @@
 local Conjunctivitis = ty:DefineANewClass()
 
 local stat = ty.Stat
+local functions = ty.Functions
 
 local cached = false
 local playSound = true
@@ -89,7 +90,7 @@ Conjunctivitis:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Conjunctivitis.Po
 
 function Conjunctivitis:PostFireTear(tear)
     local tear = tear:ToTear()
-    local player = ty:GetPlayerFromTear(tear)
+    local player = functions:GetPlayerFromTear(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) then
         playSound = true
     end
@@ -111,7 +112,7 @@ Conjunctivitis:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Conjunctivitis.PreSFXPl
 
 function Conjunctivitis:PostTearUpdate(tear)
     local tear = tear:ToTear()
-    local player = ty:GetPlayerFromTear(tear)
+    local player = functions:GetPlayerFromTear(tear)
     local tearData = ty:GetLibData(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) then
         if tearData.Tailed == nil and tear.CollisionDamage >= 1 then
@@ -152,7 +153,7 @@ Conjunctivitis:AddCallback(ModCallbacks.MC_POST_TEAR_UPDATE, Conjunctivitis.Post
 
 function Conjunctivitis:PostTearInit(tear)
     local tear = tear:ToTear()
-    local player = ty:GetPlayerFromTear(tear)
+    local player = functions:GetPlayerFromTear(tear)
     local tearData = ty:GetLibData(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) and not tearData.MaxTailed then
         tear:ChangeVariant(TearVariant.GRIDENT)

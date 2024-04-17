@@ -1,5 +1,7 @@
 local Cornucopia = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local chargeIcon = Sprite("gfx/ui/cornucopia_charge.anm2", true)
 chargeIcon:Play("Idle", true)
 
@@ -9,6 +11,21 @@ local function GetMaxCharge(player)
         maxCharge = 36
     end
     return maxCharge
+end
+
+local function GetZeroFilledString(number)
+	if number < 10 then
+		return "0"..tostring(number)
+	else
+		return tostring(number)
+	end
+end
+
+local function SpawnFakeSprite(entity, animation)
+    local effect = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.EMPTYHELPER, 0, entity.Position, Vector(0, 0), nil)
+    local sprite = effect:GetSprite()
+    sprite:Load(entity:GetSprite():GetFilename(), true)
+    sprite:Play(animation, true)
 end
 
 local function GetPickupCharge(pickup, player, real)
@@ -150,7 +167,7 @@ local function SpawnAnItem(player, rng, index)
     local room = ty.GAME:GetRoom()
     local data = ty:GetLibData(player)
     local globalData = ty.GLOBALDATA
-    local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty:GetCollectibleFromCurrentRoom(true, nil, rng), room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil):ToPickup()
+    local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, functions:GetCollectibleFromCurrentRoom(true, nil, rng), room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil):ToPickup()
     item:ClearEntityFlags(EntityFlag.FLAG_ITEM_SHOULD_DUPLICATE)
     item.OptionsPickupIndex = index
     item.ShopItemId = -2
@@ -188,7 +205,7 @@ local function RenderChargeIcon(player)
         renderPos = renderPos + Vector(6, 0)
     end
     chargeIcon:Render(renderPos - Vector(15, 1))
-    ty.PFTEMP:DrawStringScaledUTF8(ty:ToStringFillZero(data.Cornucopia.Charge).." / "..GetMaxCharge(player), renderPos.X, renderPos.Y, 1, 1, KColor(1, 1, 1, 1))
+    ty.PFTEMP:DrawStringScaledUTF8(GetZeroFilledString(data.Cornucopia.Charge).." / "..GetMaxCharge(player), renderPos.X, renderPos.Y, 1, 1, KColor(1, 1, 1, 1))
 end
 
 local function RenderPickupChargeNum(player)
@@ -260,9 +277,9 @@ function Cornucopia:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         for _, item in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
             if item.SubType > 0 then
                 local pickup = item:ToPickup()
-                pickup:AddCollectibleCycle(ty:GetCollectibleFromCurrentRoom(true, nil, rng))
+                pickup:AddCollectibleCycle(functions:GetCollectibleFromCurrentRoom(true, nil, rng))
                 if player:HasCollectible(CollectibleType.COLLECTIBLE_CAR_BATTERY) then
-                    pickup:AddCollectibleCycle(ty:GetCollectibleFromCurrentRoom(true, nil, rng))
+                    pickup:AddCollectibleCycle(functions:GetCollectibleFromCurrentRoom(true, nil, rng))
                 end
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, pickup.Position, Vector(0, 0), nil)
                 flag = false    
@@ -320,7 +337,7 @@ function Cornucopia:PrePickupCollision(pickup, collider, low)
                 if pickup.Variant == PickupVariant.PICKUP_COLLECTIBLE or pickup.Variant == PickupVariant.PICKUP_TRINKET then
                     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, pickup.Position, Vector(0, 0), nil)
                 else
-                    ty:SpawnFakeSprite(pickup, "Collect")
+                    SpawnFakeSprite(pickup, "Collect")
                 end
                 pickup:Remove()
                 return true

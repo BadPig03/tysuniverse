@@ -1,54 +1,11 @@
-local questionMarkSprite = Sprite("gfx/005.100_collectible.anm2")
-questionMarkSprite:ReplaceSpritesheet(1,"gfx/items/collectibles/questionmark.png", true)
+local Functions = ty:DefineANewClass()
 
-function ty:TableCopyTo(origin)
-	if type(origin) ~= "table" then
-		return origin
-	end
-	local new = {}
-	for key, value in pairs(origin) do
-		local vType = type(value)
-		if vType == "table" then
-			new[key] = ty:TableCopyTo(value)
-		else
-			new[key] = value
-		end
-	end
-	return new
-end
-
-function ty:IsValueInTable(value, origin)
-    if origin == nil then
-        return false
-    end
-	for _, item in pairs(origin) do
-		if value == item then
-			return true
-		end
-	end
-	return false
-end
-
-function ty:RemoveValueInTable(value, origin)
-    if origin == nil then
-        return
-    end
-	for _, item in pairs(origin) do
-		if value == item then
-			table.remove(origin, _)
-		end
-	end
-end
-
-function ty:IsPlayerFiring(player)
+function Functions:IsPlayerFiring(player)
     local controllerIndex = player.ControllerIndex
-	if Input.IsActionPressed(ButtonAction.ACTION_SHOOTUP, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTDOWN, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTRIGHT, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTLEFT, controllerIndex) then
-		return true
-	end
-	return false
+	return Input.IsActionPressed(ButtonAction.ACTION_SHOOTUP, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTDOWN, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTRIGHT, controllerIndex) or Input.IsActionPressed(ButtonAction.ACTION_SHOOTLEFT, controllerIndex)
 end
 
-function ty:GetPlayerFromTear(tear)
+function Functions:GetPlayerFromTear(tear)
     if tear.SpawnerEntity and tear.SpawnerEntity:ToPlayer() then
         return tear.SpawnerEntity:ToPlayer()
     elseif tear.SpawnerEntity and tear.SpawnerEntity:ToFamiliar() and (tear.SpawnerEntity.Variant == FamiliarVariant.CAINS_OTHER_EYE or tear.SpawnerEntity.Variant == FamiliarVariant.INCUBUS or tear.SpawnerEntity.Variant == FamiliarVariant.FATES_REWARD or tear.SpawnerEntity.Variant == FamiliarVariant.TWISTED_BABY or tear.SpawnerEntity.Variant == FamiliarVariant.BLOOD_BABY or tear.SpawnerEntity.Variant == FamiliarVariant.UMBILICAL_BABY) and tear.SpawnerEntity:ToFamiliar().Player and tear.SpawnerEntity:ToFamiliar().Player:ToPlayer() then
@@ -57,7 +14,7 @@ function ty:GetPlayerFromTear(tear)
     return nil
 end
 
-function ty:GetPlayerIndex(player)
+function Functions:GetPlayerIndex(player)
     for index = 0, ty.GAME:GetNumPlayers() - 1 do
         if GetPtrHash(player) == GetPtrHash(Isaac.GetPlayer(index)) then
             return index
@@ -66,21 +23,18 @@ function ty:GetPlayerIndex(player)
     return 0
 end
 
-function ty:IsValidCollider(collider)
-    if collider:IsActiveEnemy() and collider:IsVulnerableEnemy() and collider.Type ~= EntityType.ENTITY_FIREPLACE and not collider:HasEntityFlags(EntityFlag.FLAG_FRIENDLY | EntityFlag.FLAG_CHARM) then
-        return true
-    end
-    return false
+function Functions:IsValidEnemy(enemy)
+    return enemy:IsActiveEnemy() and enemy:IsVulnerableEnemy() and enemy.Type ~= EntityType.ENTITY_FIREPLACE and not enemy:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not enemy:HasEntityFlags(EntityFlag.FLAG_CHARM)
 end
 
-function ty:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, originalItem)
+function Functions:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, originalItem)
 	includeActives = includeActives or false
 	excludeTags = excludeTags or ItemConfig.TAG_QUEST
     originalItem = originalItem or CollectibleType.COLLECTIBLE_BREAKFAST
 	local room = ty.GAME:GetRoom()
-	local result = nil
+    local roomType = room:GetType()
+	local result
 	repeat
-        local roomType = room:GetType()
 		local newPool = ItemPoolType.POOL_TREASURE
 		if type(rng) == "userdata" then
 			newPool = ty.ITEMPOOL:GetPoolForRoom(roomType, rng:Next())
@@ -106,7 +60,7 @@ function ty:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, orig
 	return result
 end
 
-function ty:GetFamiliarsFromItemPool(itemPoolType, defaultItem, rng)
+function Functions:GetFamiliarsFromItemPool(itemPoolType, defaultItem, rng)
     local itemID = 1
     repeat
         for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
@@ -121,43 +75,7 @@ function ty:GetFamiliarsFromItemPool(itemPoolType, defaultItem, rng)
     return itemID
 end
 
-function ty:GetCollectibleFromAllItemPools(includeActives, excludeTags, rng)
-	includeActives = includeActives or false
-	excludeTags = excludeTags or ItemConfig.TAG_QUEST
-    local seed = rng
-    if type(rng) ~= "userdata" then
-        rng = RNG()
-        rng:SetSeed(seed)
-    end
-	local result = nil
-	repeat
-        result = ty.ITEMPOOL:GetCollectible(rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS), false, rng:Next())
-		local item = ty.ITEMCONFIG:GetCollectible(result)
-	until item.Tags & excludeTags ~= excludeTags and (includeActives or item.Type % ItemType.ITEM_ACTIVE == 1)
-	return result
-end
-
-function ty:ToStringFillZero(number)
-	if number < 10 then
-		return "0"..tostring(number)
-	else
-		return tostring(number)
-	end
-end
-
-function ty:GetNearestEnemy(position)
-	local distance = 8192
-    local nearestEnemy = nil
-    for _, ent in pairs(Isaac.FindInRadius(position, 8192, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
-            distance = (ent.Position - position):Length()
-            nearestEnemy = ent
-        end
-    end
-    return nearestEnemy
-end
-
-function ty:GetLaserColor(player)
+function Functions:GetLaserColor(player)
     local color = Color.Default
     if player:HasCollectible(CollectibleType.COLLECTIBLE_IPECAC) then
         color = Color.LaserIpecac
@@ -204,26 +122,7 @@ function ty:GetLaserColor(player)
     return color
 end
 
-function ty:SpawnFakeSprite(entity, animation)
-    local effect = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.EMPTYHELPER, 0, entity.Position, Vector(0, 0), nil)
-    local sprite = effect:GetSprite()
-    sprite:Load(entity:GetSprite():GetFilename(), true)
-    sprite:Play(animation, true)
-end
-
-function ty:RemoveOtherPickupIndex(index)
-    if index ~= 0 then
-        for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP)) do
-            local pickup = ent:ToPickup()
-            if pickup.OptionsPickupIndex == index then
-                Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF01, 0, ent.Position, Vector(0, 0), nil)
-                ent:Remove()
-            end
-        end
-    end
-end
-
-function ty:GetLastBossRoomIndex()
+function Functions:GetLastBossRoomIndex()
     local function HasOneOrLessDoor(roomDesc)
         local count = 0
         for i = DoorSlot.LEFT0, DoorSlot.DOWN1 do
@@ -253,22 +152,4 @@ function ty:GetLastBossRoomIndex()
     return ty.LEVEL:GetStartingRoomIndex()
 end
 
-function ty:IsInventoryFull(player)
-    if player:GetPlayerType() == PlayerType.PLAYER_ISAAC_B then
-        local count = 0
-        local limit = 8
-        for itemID, itemCount in pairs(player:GetCollectiblesList()) do
-            if ItemConfig.Config.IsValidCollectible(itemID) and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type ~= ItemType.ITEM_ACTIVE and itemID ~= CollectibleType.COLLECTIBLE_BIRTHRIGHT then
-                count = count + itemCount
-            end
-        end
-        if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
-            limit = 12
-        end
-        return count >= limit
-    else
-        return false
-    end
-end
-
-return ty
+return Functions

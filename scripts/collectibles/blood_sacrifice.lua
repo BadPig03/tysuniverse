@@ -1,10 +1,10 @@
 local BloodSacrifice = ty:DefineANewClass()
 
-ty.Revive:SetReviveConfig("TY_BLOODSACRIFICE_REVIVE", { BeforeVanilla = true })
-
 local stat = ty.Stat
 
 local realRoomIndex = GridRooms.ROOM_ERROR_IDX
+
+ty.Revive:SetReviveConfig("TY_BLOODSACRIFICE_REVIVE", { BeforeVanilla = true })
 
 local function GetVesselFromSeed(seed)
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_SLOT, ty.CustomEntities.BLOODSACRIFICEVESSEL)) do
@@ -21,23 +21,6 @@ local function DestroyVessel(slot)
     slot:TakeDamage(1, DamageFlag.DAMAGE_EXPLOSION, EntityRef(nil), 0)
     slot.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
     slot:GetSprite():Play("Broken", true)
-end
-
-local function RemoveFromList(seed)
-    for _, player in pairs(PlayerManager.GetPlayers()) do
-        local data = ty:GetLibData(player)
-        local list = data.BloodSacrifice.VesselList
-        local i = 0
-        for index, vesselTable in pairs(list) do
-            if vesselTable.InitSeed == seed then
-                i = index
-                break
-            end
-        end
-        if i ~= 0 then
-            table.remove(list, i)
-        end    
-    end
 end
 
 function BloodSacrifice:EvaluateCache(player, cacheFlag)
@@ -162,7 +145,10 @@ function BloodSacrifice:PostSlotUpdate(slot)
         creep.CollisionDamage = 8
         creep:SetTimeout(160)
         creep:Update()
-        RemoveFromList(vessel.InitSeed)
+        for _, player in pairs(PlayerManager.GetPlayers()) do
+            local data = ty:GetLibData(player)
+            ty:RemoveValueInTable(data.BloodSacrifice.VesselList, vessel.InitSeed)
+        end
     end
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_POST_SLOT_UPDATE, BloodSacrifice.PostSlotUpdate, ty.CustomEntities.BLOODSACRIFICEVESSEL)

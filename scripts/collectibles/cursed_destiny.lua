@@ -1,13 +1,14 @@
 local CursedDestiny = ty:DefineANewClass()
 
 local stat = ty.Stat
+local functions = ty.Functions
 
 local roomGenerationIndices = {}
 local newLevel = false
 
 local function FindShortestPath(start, target)
     start = start or ty.LEVEL:GetStartingRoomIndex()
-    target = target or ty:GetLastBossRoomIndex()
+    target = target or functions:GetLastBossRoomIndex()
 
     local function GetNeighborsByGridIndex(gridIndex)
         local rooms = ty.PERSISTENTDATA.LevelGeneratorRooms
@@ -155,7 +156,7 @@ function CursedDestiny:PostNewLevel()
         for i, room in pairs(rooms) do
             rooms[i].Neighbors = GetNeighbors(rooms[i].Neighbors)
         end
-        ty.PERSISTENTDATA.ShortestPath = ty:TableCopyTo(FindShortestPath())
+        ty.PERSISTENTDATA.ShortestPath = ty:GetTableCopyFrom(FindShortestPath())
         newLevel = false
     end
     if globalData.CursedDestiny then
@@ -168,7 +169,7 @@ CursedDestiny:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, CursedDestiny.PostNewL
 function CursedDestiny:PreSpawnCleanAward(rng, spawnPosition)
     local room = ty.GAME:GetRoom()
     local roomIndex = ty.LEVEL:GetCurrentRoomIndex()
-    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
+    if IsValidStage() and PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CURSEDDESTINY) and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == functions:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
         for _, player in pairs(PlayerManager.GetPlayers()) do
             if player:HasCollectible(ty.CustomCollectibles.CURSEDDESTINY) then
                 local data = ty:GetLibData(player)
@@ -211,7 +212,7 @@ function CursedDestiny:PostUpdate()
             local room = ty.GAME:GetRoom()
             local darken = 0
             local roomIndex = ty.LEVEL:GetRoomByIdx(ty.LEVEL:GetCurrentRoomIndex()).SafeGridIndex
-            if not ty:IsValueInTable(roomIndex, ty.PERSISTENTDATA.ShortestPath) and roomIndex >= 0 then
+            if not ty:IsValueInTable(ty.PERSISTENTDATA.ShortestPath, roomIndex) and roomIndex >= 0 then
                 if not globalData.CursedDestiny.OutOfBounds then
                     globalData.CursedDestiny.OutOfBounds = true
                 end
@@ -220,7 +221,8 @@ function CursedDestiny:PostUpdate()
                 end
                 if room:GetFrameCount() <= 1 then
                     for _, player in pairs(PlayerManager.GetPlayers()) do
-                        player:UsePill(PillEffect.PILLEFFECT_ADDICTED, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
+                        player:GetEffects():AddNullEffect(NullItemID.ID_OVERDOSE)
+                        player:AnimateSad()
                     end
                 end
                 darken = 1
@@ -231,9 +233,10 @@ function CursedDestiny:PostUpdate()
                 if globalData.CursedDestiny.InDarkness then
                     globalData.CursedDestiny.InDarkness = false
                 end
-                if room:GetFrameCount() <= 1 and not globalData.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == ty:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
+                if room:GetFrameCount() <= 1 and not globalData.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == functions:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
                     for _, player in pairs(PlayerManager.GetPlayers()) do
-                        player:UsePill(PillEffect.PILLEFFECT_PERCS, PillColor.PILL_NULL, UseFlag.USE_NOANIM | UseFlag.USE_NOHUD | UseFlag.USE_NOANNOUNCER)
+                        player:GetEffects():AddCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER)
+                        player:AnimateHappy()
                     end
                 end
             end

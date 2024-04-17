@@ -58,7 +58,7 @@ TheGospelOfJohn:AddCallback(ModCallbacks.MC_USE_ITEM, TheGospelOfJohn.UseItem, t
 
 function TheGospelOfJohn:PostPickupUpdate(pickup)
     local pickup = pickup:ToPickup()
-    if ty.GLOBALDATA.TheGospelOfJohn and ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart) and pickup:IsShopItem() and pickup:GetAlternatePedestal() == -1 and not pickup.Touched then
+    if ty.GLOBALDATA.TheGospelOfJohn and ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) and pickup:IsShopItem() and pickup:GetAlternatePedestal() == -1 and not pickup.Touched then
         local sprite = pickup:GetPriceSprite()
         if sprite:GetFilename() ~= "gfx/items/shops/broken_heart_deal.anm2" then
             sprite:Load("gfx/items/shops/broken_heart_deal.anm2", true)
@@ -77,18 +77,18 @@ TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, TheGospelOfJohn.
 
 function TheGospelOfJohn:PostPickupShopPurchase(pickup, player, moneySpent)
     local pickup = pickup:ToPickup()
-    if ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart) then
+    if ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) then
         player:AddBrokenHearts(player.QueuedItem.Item.Quality - 1)
-        ty:RemoveValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart)
+        ty:RemoveValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed)
     end
-    if ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.Money) then
-        ty:RemoveValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.Money)
+    if ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed) then
+        ty:RemoveValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)
     end
 end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PICKUP_SHOP_PURCHASE, TheGospelOfJohn.PostPickupShopPurchase, PickupVariant.PICKUP_COLLECTIBLE)
 
 function TheGospelOfJohn:PrePickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
-    if pickup:IsShopItem() and (ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart) or ty:IsValueInTable(pickup.InitSeed, ty.GLOBALDATA.TheGospelOfJohn.Money)) and keepPrice and not keepSeed and not ignoreModifiers then
+    if pickup:IsShopItem() and (ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) or ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)) and keepPrice and not keepSeed and not ignoreModifiers then
         return false
     end
 end

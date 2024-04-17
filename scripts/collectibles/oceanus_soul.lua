@@ -1,12 +1,13 @@
 local OceanusSoul = ty:DefineANewClass()
 
-ty.Revive:SetReviveConfig("TY_OCEANUSSOUL_REVIVE", { BeforeVanilla = true })
-
 local stat = ty.Stat
+local functions = ty.Functions
 
 local burningEnemies = { [10] = 2, [15] = 3, [41] = 4, [54] = 0,  [87] = 1, [208] = 2, [226] = 2, [818] = 2, [824] = 1, [825] = 0, [841] = true, [915] = 0 }
 local bannedGridRooms = { GridRooms.ROOM_DUNGEON_IDX, GridRooms.ROOM_GIDEON_DUNGEON_IDX, GridRooms.ROOM_ROTGUT_DUNGEON1_IDX, GridRooms.ROOM_ROTGUT_DUNGEON2_IDX }
 local stopFlushSound = false
+
+ty.Revive:SetReviveConfig("TY_OCEANUSSOUL_REVIVE", { BeforeVanilla = true })
 
 local function GetHighestDamageFromAllPlayers()
     local damage = 0
@@ -84,7 +85,7 @@ local function DisappearChargeBar(player)
 end
 
 local function IsInValidRoom(room)
-    return room:GetType() ~= RoomType.ROOM_DUNGEON and not ty:IsValueInTable(ty.LEVEL:GetCurrentRoomIndex(), bannedGridRooms)
+    return room:GetType() ~= RoomType.ROOM_DUNGEON and not ty:IsValueInTable(bannedGridRooms, ty.LEVEL:GetCurrentRoomIndex())
 end
 
 local function GetDefaultLaserColor(player)
@@ -358,7 +359,7 @@ local function GetNearestEnemyInOrder(position)
 	local distance = 256
     local nearestEnemy = nil
     for _, ent in pairs(Isaac.FindInRadius(position, 256, EntityPartition.ENEMY)) do
-        if ty:IsValidCollider(ent) and (ent.Position - position):Length() < distance then
+        if functions:IsValidEnemy(ent) and (ent.Position - position):Length() < distance then
             distance = (ent.Position - position):Length()
             nearestEnemy = ent
         end
@@ -715,7 +716,7 @@ function OceanusSoul:FamiliarUpdate(familiar)
     local player = familiar:ToFamiliar().Player
     local room = ty.GAME:GetRoom()
     if player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) and (familiar.Variant == FamiliarVariant.CAINS_OTHER_EYE or familiar.Variant == FamiliarVariant.INCUBUS or familiar.Variant == FamiliarVariant.TWISTED_BABY or familiar.Variant == FamiliarVariant.BLOOD_BABY or familiar.Variant == FamiliarVariant.UMBILICAL_BABY) and familiar:GetWeapon() == nil then
-        if ty:IsPlayerFiring(player) or (player:HasCollectible(CollectibleType.COLLECTIBLE_MARKED) and not room:IsClear()) then
+        if ty.Functions:IsPlayerFiring(player) or (player:HasCollectible(CollectibleType.COLLECTIBLE_MARKED) and not room:IsClear()) then
             if not HasChargeBar(familiar) then
                 SpawnChargeBar(familiar)
             end
@@ -745,7 +746,7 @@ function OceanusSoul:PostPlayerUpdate(player)
             data.OceanusSoul.Metronome = true
         end
         if (ty.LEVEL:HasAbandonedMineshaft() and ty.LEVEL:GetDimension() ~= Dimension.MINESHAFT) or not ty.LEVEL:HasAbandonedMineshaft() then
-            if ty:IsPlayerFiring(player) or (player:HasCollectible(CollectibleType.COLLECTIBLE_MARKED) and not room:IsClear()) then
+            if ty.Functions:IsPlayerFiring(player) or (player:HasCollectible(CollectibleType.COLLECTIBLE_MARKED) and not room:IsClear()) then
                 if not HasChargeBar(player) then
                     SpawnChargeBar(player)
                 end
@@ -771,11 +772,11 @@ function OceanusSoul:PostPlayerUpdate(player)
             else
                 room:SetWaterCurrent(player:GetLastDirection():Normalized():Resized(globalData.OceanusSoul.Strength ^ 2))
             end
-            if room:GetFrameCount() >= 1 and not ty:IsValueInTable(ty.LEVEL:GetCurrentRoomDesc().ListIndex, globalData.OceanusSoul.RoomList) then
+            if room:GetFrameCount() >= 1 and not ty:IsValueInTable(globalData.OceanusSoul.RoomList, ty.LEVEL:GetCurrentRoomDesc().ListIndex) then
                 DoFlushEnemies(player)
                 table.insert(globalData.OceanusSoul.RoomList, ty.LEVEL:GetCurrentRoomDesc().ListIndex)
             end
-            if ty:IsValueInTable(ty.LEVEL:GetCurrentRoomDesc().ListIndex, globalData.OceanusSoul.RoomList) and room:GetWaterAmount() == 0 then
+            if ty:IsValueInTable(globalData.OceanusSoul.RoomList, ty.LEVEL:GetCurrentRoomDesc().ListIndex) and room:GetWaterAmount() == 0 then
                 DoFlushEnemies(player)
             end
         end
