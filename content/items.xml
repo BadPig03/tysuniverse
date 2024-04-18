@@ -1,4 +1,5 @@
 <items gfxroot="gfx/items/" deathanm2="gfx/deathitems.anm2" version="1">
+	<!--Null Items-->
 	<null id="1" name="Hephaestus' Soul Fire" persistent="true"/>
 	<null id="2" name="Marriage Certificate Hearts" persistent="true"/>
 	<null id="3" name="Lost Soul" persistent="true" cache="damage flying"/>
@@ -19,6 +20,8 @@
 	<null id="18" name="Warfarin Esau Jr Hair" persistent="true"/>
 	<null id="19" name="Warfarin Guppy Wings" persistent="true" cache="flying"/>
 	<null id="20" name="Warfarin Reverse Empress" persistent="true"/>
+
+	<!--Passive and Active Items-->
 	<passive id="0" quality="4" craftquality="4" description="God of fire" gfx="collectibles_hephaestus_soul.png" name="Hephaestus' Soul" cache="flying" devilprice="2" shopprice="30" tags="offensive summonable"/>
 	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="lazarusshared"/>
 	<passive id="2" quality="3" craftquality="3" description="Sink into the quicksand of evil" gfx="collectibles_guilt.png" name="Guilt" devilprice="2" tags="nolostbr nokeeper devil lazarusshared"/>
@@ -59,4 +62,7 @@
 	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" devilprice="2" tags="devil nolostbr lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
 	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
 	<active	id="39" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
+    
+	<!--Trinkets-->
+	<trinket id="1" name="Lost Bottle Cap" description="One more bottle!" gfx="trinket_lost_bottle_cap.png" />
 </items>

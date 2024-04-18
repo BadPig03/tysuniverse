@@ -112,11 +112,13 @@ function WakeUp:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
     if ty.GAME:IsGreedMode() or ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 or ty.LEVEL:IsAscent() then
         return { Discharge = false, Remove = false, ShowAnim = true }
     end
+    local removeAfterUsed = not data.WakeUp.Keep
+    data.WakeUp.Keep = false
     data.WakeUp.CurrentStage = GetAbsoluteStage()
     data.WakeUp.StageType = GetStageType()
     data.WakeUp.HealthFactor = math.min(math.max(ty.LEVEL:GetAbsoluteStage() / 22 + 5 / 11, 0.5), 1)
     data.WakeUp.Delay = 300
-	return { Discharge = false, Remove = true, ShowAnim = true }
+	return { Discharge = false, Remove = removeAfterUsed, ShowAnim = true }
 end
 WakeUp:AddCallback(ModCallbacks.MC_USE_ITEM, WakeUp.UseItem, ty.CustomCollectibles.WAKEUP)
 

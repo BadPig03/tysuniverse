@@ -23,10 +23,27 @@ local function DestroyVessel(slot)
     slot:GetSprite():Play("Broken", true)
 end
 
+local function RemoveVesselFromList(seed)
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        local data = ty:GetLibData(player)
+        local index = 0
+        for __, vesselTable in pairs(data.BloodSacrifice.VesselList) do
+            if vesselTable.InitSeed == seed then
+                index = __
+                break
+            end
+        end
+        if index > 0 then
+            table.remove(data.BloodSacrifice.VesselList, index)
+        end
+    end
+end
+
 function BloodSacrifice:EvaluateCache(player, cacheFlag)
 	local data = ty:GetLibData(player)
-	if data.BloodSacrifice and data.BloodSacrifice.UsedCount[player:GetPlayerType()] then
-		stat:AddFlatDamage(player, 0.2 * data.BloodSacrifice.UsedCount[player:GetPlayerType()])
+    local playerType = player:GetPlayerType()
+	if data.BloodSacrifice and data.BloodSacrifice.UsedCount[playerType] then
+		stat:AddFlatDamage(player, 0.2 * data.BloodSacrifice.UsedCount[playerType])
 	end
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, BloodSacrifice.EvaluateCache, CacheFlag.CACHE_DAMAGE)
@@ -39,9 +56,10 @@ function BloodSacrifice:UseItem(itemID, rng, player, useFlags, activeSlot, varDa
     local data = ty:GetLibData(player)
     if player:GetMaxHearts() > 0 and ty.LEVEL:GetDimension() == Dimension.NORMAL then
         ty.SFXMANAGER:Play(SoundEffect.SOUND_MEATY_DEATHS)
-        data.BloodSacrifice.UsedCount[player:GetPlayerType()] = (data.BloodSacrifice.UsedCount[player:GetPlayerType()] or 0) + 1
+        local playerType = player:GetPlayerType()
+        data.BloodSacrifice.UsedCount[playerType] = (data.BloodSacrifice.UsedCount[playerType] or 0) + 1
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL_PASSIVE) then
-            data.BloodSacrifice.UsedCount[player:GetPlayerType()] = data.BloodSacrifice.UsedCount[player:GetPlayerType()] + 1
+            data.BloodSacrifice.UsedCount[playerType] = data.BloodSacrifice.UsedCount[playerType] + 1
         end
         local vessel = Isaac.Spawn(EntityType.ENTITY_SLOT, ty.CustomEntities.BLOODSACRIFICEVESSEL, 0, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
         vessel:AddEntityFlags(EntityFlag.FLAG_NO_KNOCKBACK | EntityFlag.FLAG_NO_PHYSICS_KNOCKBACK)
@@ -74,6 +92,8 @@ function BloodSacrifice:PostNewRoom()
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, player.Position, Vector(0, 0), nil)    
                 realRoomIndex = GridRooms.ROOM_ERROR_IDX
+            else
+                player:Die()
             end
             data.BloodSacrifice.PlaySound = true
             data.BloodSacrifice.Respawning = false
@@ -126,32 +146,31 @@ function BloodSacrifice:PreSlotCreateExplosionDrops(slot)
 end
 BloodSacrifice:AddCallback(ModCallbacks.MC_PRE_SLOT_CREATE_EXPLOSION_DROPS, BloodSacrifice.PreSlotCreateExplosionDrops, ty.CustomEntities.BLOODSACRIFICEVESSEL)
 
-function BloodSacrifice:PostSlotUpdate(slot)
-    local vessel = slot:ToSlot()
-    local slotData = ty:GetLibData(vessel)
-    if not slotData.Broken and vessel.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
-        vessel.Velocity = Vector(0, 0)
-        vessel:GetSprite():Play("Broken", true)
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, vessel.Position, Vector(0, 0), nil)
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, vessel.Position, Vector(0, 0), nil)
-        Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, vessel.Position, Vector(0, 0), nil)
-        slotData.Broken = true
-        vessel.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
-        local rng = vessel:GetDropRNG()
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BONE, vessel.Position, Vector(1, 1):Normalized():Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil):ToPickup()
-        local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_LEMON_MISHAP, 0, vessel.Position, Vector(0, 0), player):ToEffect()
-        creep.Color = Color(0, 0, 0, 1, 123/255, 12/255, 12/255)
-        creep:SetDamageSource(EntityType.ENTITY_PLAYER)
-        creep.CollisionDamage = 8
-        creep:SetTimeout(160)
-        creep:Update()
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            local data = ty:GetLibData(player)
-            ty:RemoveValueInTable(data.BloodSacrifice.VesselList, vessel.InitSeed)
+function BloodSacrifice:PostUpdate()
+    for _, slot in pairs(Isaac.FindByType(EntityType.ENTITY_SLOT, ty.CustomEntities.BLOODSACRIFICEVESSEL)) do
+        local vessel = slot:ToSlot()
+        local slotData = ty:GetLibData(vessel)
+        if not slotData.Broken and vessel.GridCollisionClass == EntityGridCollisionClass.GRIDCOLL_GROUND then
+            vessel.Velocity = Vector(0, 0)
+            vessel:GetSprite():Play("Broken", true)
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_SPLAT, 0, vessel.Position, Vector(0, 0), nil)
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BLOOD_EXPLOSION, 0, vessel.Position, Vector(0, 0), nil)
+            Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.LARGE_BLOOD_EXPLOSION, 0, vessel.Position, Vector(0, 0), nil)
+            slotData.Broken = true
+            vessel.EntityCollisionClass = EntityCollisionClass.ENTCOLL_NONE
+            local rng = vessel:GetDropRNG()
+            Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BONE, vessel.Position, Vector(1, 1):Normalized():Resized(3 + rng:RandomFloat() * 5):Rotated(rng:RandomInt(360)), nil):ToPickup()
+            local creep = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_LEMON_MISHAP, 0, vessel.Position, Vector(0, 0), player):ToEffect()
+            creep.Color = Color(0, 0, 0, 1, 123 / 255, 12 / 255, 12 / 255)
+            creep:SetDamageSource(EntityType.ENTITY_PLAYER)
+            creep.CollisionDamage = 8
+            creep:SetTimeout(160)
+            creep:Update()
+            RemoveVesselFromList(slot.InitSeed)
         end
     end
 end
-BloodSacrifice:AddCallback(ModCallbacks.MC_POST_SLOT_UPDATE, BloodSacrifice.PostSlotUpdate, ty.CustomEntities.BLOODSACRIFICEVESSEL)
+BloodSacrifice:AddCallback(ModCallbacks.MC_POST_UPDATE, BloodSacrifice.PostUpdate)
 
 function BloodSacrifice:PostReviveBloodSacrifice(player, configKey, reviver)
     local data = ty:GetLibData(player)

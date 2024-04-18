@@ -43,6 +43,10 @@ local collectibles = {
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 
+local trinkets = {
+    [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" }
+}
+
 function Collectible:ItemQueueUpdate(player)
     if ty.GAME:GetFrameCount() > 0 then
         local data = ty:GetLibData(player)
@@ -51,7 +55,7 @@ function Collectible:ItemQueueUpdate(player)
             if data.ItemQueue and data.ItemQueue.ItemID == 0 then
                 data.ItemQueue.ItemID = queuedItem.Item
                 data.ItemQueue.Frame = ty.GAME:GetFrameCount()
-                Isaac.RunCallback("TY_POST_PICK_UP_COLLECTIBLE", player, queuedItem.Item.ID, queuedItem.Touched)
+                Isaac.RunCallback("TY_POST_PICK_UP_COLLECTIBLE", player, queuedItem.Item.ID, queuedItem.Touched, queuedItem.Item:IsTrinket())
             end
         end
         if player:IsItemQueueEmpty() and not queuedItem.Item and data.ItemQueue and data.ItemQueue.ItemID ~= 0 then
@@ -62,13 +66,22 @@ function Collectible:ItemQueueUpdate(player)
 end
 Collectible:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Collectible.ItemQueueUpdate)
 
-function Collectible:PostPickupCollectible(player, item, touched)
+function Collectible:PostPickupCollectible(player, itemID, touched, isTrinket)
     local language = Options.Language
-    if collectibles[item] and language == "zh" then
-        ty.HUD:ShowItemText(collectibles[item].Name, collectibles[item].Description)
+    if language ~= "zh" then
+        return
     end
-    if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and item == CollectibleType.COLLECTIBLE_BIRTHRIGHT and language == "zh" then
-        ty.HUD:ShowItemText("长子名分", "更好的转换")
+    if isTrinket then
+        if trinkets[itemID] then
+            ty.HUD:ShowItemText(trinkets[itemID].Name, trinkets[itemID].Description)
+        end
+    else
+        if collectibles[itemID] then
+            ty.HUD:ShowItemText(collectibles[itemID].Name, collectibles[itemID].Description)
+        end
+        if player:GetPlayerType() == ty.CustomPlayerType.WARFARIN and itemID == CollectibleType.COLLECTIBLE_BIRTHRIGHT then
+            ty.HUD:ShowItemText("长子名分", "更好的转换")
+        end
     end
 end
 Collectible:AddCallback("TY_POST_PICK_UP_COLLECTIBLE", Collectible.PostPickupCollectible)

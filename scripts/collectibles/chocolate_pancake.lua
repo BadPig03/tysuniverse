@@ -21,7 +21,7 @@ ChocolatePancake:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, ChocolatePancake.Ev
 function ChocolatePancake:PostNPCDeath(npc)
     local npc = npc:ToNPC()
     local rng = npc:GetDropRNG()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) and (npc.SpawnerEntity == nil and rng:RandomInt(200) < 5) or (npc.SpawnerEntity and rng:RandomInt(100) < 1) then
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.CHOCOLATEPANCAKE) and ((npc.SpawnerEntity == nil and rng:RandomInt(200) < 5) or (npc.SpawnerEntity and rng:RandomInt(100) < 1)) then
         Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_HEART, HeartSubType.HEART_BLACK, npc.Position, Vector(0, 0), nil) 
     end
 end

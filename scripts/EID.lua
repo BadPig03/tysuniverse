@@ -624,6 +624,31 @@ EIDInfo.Collectibles = {
     }
 }
 
+EIDInfo.Trinkets = {
+    [ty.CustomTrinkets.LOSTBOTTLECAP] = {
+        [1] = {
+            Name = "丢失的瓶盖",
+            Desc = "#一次性主动道具使用后保留主动道具，改为消耗该饰品",
+            GoldenInfo = {append = true},
+            GoldenEffect = {
+                "有50%的概率再生成该饰品",
+                "有50%的概率再生成该饰品", 
+                "有75%的概率再生成该饰品"
+            }
+        },
+        [2] = {
+            Name = "Lost Bottle Cap",
+            Desc = "#After using a disposable active item, it will be retained instead of being removed, and the trinket will be consumed instead",
+            GoldenInfo = {append = true},
+            GoldenEffect = {
+                "There is a 50% chance to respawn the trinket",
+                "There is a 50% chance to respawn the trinket", 
+                "There is a 75% chance to respawn the trinket"
+            }
+        }
+    }
+}
+
 EIDInfo.Cards = {
     [ty.CustomCards.SOULOFFF0] = {
         [1] = {
@@ -650,13 +675,22 @@ for ID, descTable in pairs(EIDInfo.Collectibles) do
         EID:addCollectible(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
     end
 end
-
+for ID, descTable in pairs(EIDInfo.Trinkets) do
+    for i = 1, 2 do
+        EID:addTrinket(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
+        if descTable[i].GoldenInfo then
+            EID.GoldenTrinketData[ID] = descTable[i].GoldenInfo
+        end
+        if descTable[i].GoldenEffect then
+            EID.descriptions[EIDLanguage[i]].goldenTrinketEffects[ID] = descTable[i].GoldenEffect
+        end
+    end
+end
 for ID, descTable in pairs(EIDInfo.Cards) do
     for i = 1, 2 do
         EID:addCard(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
     end
 end
-
 do
     local function VirtueCondition(descObj)
         return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and EID.collectiblesOwned[CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES]

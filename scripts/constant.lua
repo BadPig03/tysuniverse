@@ -41,6 +41,10 @@ ty.CustomCollectibles = {
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
 
+ty.CustomTrinkets = {
+    LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap")
+}
+
 ty.CustomChallenges = {
     LASERFAN = Isaac.GetChallengeIdByName("Laser Fan")
 }

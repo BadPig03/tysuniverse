@@ -46,14 +46,17 @@ ty.CollectiblesList = {
     'tool_box',
     'wake_up'
 }
-ty.PlayersList = {
-    'warfarin'
+ty.CardsList = {
+    'soul_of_ff0'
+}
+ty.TrinketsList = {
+    'lost_bottle_cap'
 }
 ty.ChallengesList = {
     'glue_prohibition'
 }
-ty.CardsList = {
-    'soul_of_ff0'
+ty.PlayersList = {
+    'warfarin'
 }
 
 ty.GlobalDataName = "_TY_GLOBAL_"
@@ -74,13 +77,18 @@ for _, title in pairs(ty.CollectiblesList) do
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
 end
-for _, title in pairs(ty.ChallengesList) do
-    local class = include("scripts.challenges."..title)
+for _, title in pairs(ty.TrinketsList) do
+    local class = include("scripts.trinkets."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
 end
 for _, title in pairs(ty.CardsList) do
     local class = include("scripts.cards."..title)
+	table.insert(ty.LoadedLua, class)
+	ty[_] = class
+end
+for _, title in pairs(ty.ChallengesList) do
+    local class = include("scripts.challenges."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
 end
