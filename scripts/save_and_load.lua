@@ -30,8 +30,7 @@ local function GetInitData()
     data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Warfarin = { Original = -1, UsedCount = 0 }
-    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1, Keep = false }
-    data.HiddenItemManager = { ItemList = {} }
+    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1 }
     data.Stat = {}
     data._REVIVE = {}
     return data

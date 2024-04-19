@@ -50,15 +50,15 @@ EIDInfo.Collectibles = {
             Name = "倒带",
             Desc = "#使用后，90%概率随机进入一个与曾进入过的特殊房间种类相同的特殊房间，否则随机进入一个普通房间"..
             "#{{Warning}} 充能数量会因为进入的特殊房间种类不同而产生变化",
-            Virtue = "有5%额外概率随机进入一个天使房",
-            Belial = "有5%额外概率随机进入一个恶魔房"
+            BookOfVirtues = "有5%额外概率随机进入一个天使房",
+            BookOfBelial = "有5%额外概率随机进入一个恶魔房"
         },
         [2] = {
             Name = "Rewind",
             Desc = "#Upon use, there is a 90% chance to randomly enters a special room of the same type as one previously visited; otherwise, randomly enter a normal room"..
             "#{{Warning}} The charge varies depending on the type of special room entered",
-            Virtue = "There is a 5% additional chance to randomly enter an Angel Room",
-            Belial = "There is a 5% additional chance to randomly enter a Devil Room"
+            BookOfVirtues = "There is a 5% additional chance to randomly enter an Angel Room",
+            BookOfBelial = "There is a 5% additional chance to randomly enter a Devil Room"
         }
     },
     [ty.CustomCollectibles.ANOREXIA] = {
@@ -66,7 +66,7 @@ EIDInfo.Collectibles = {
             Name = "厌食症",
             Desc = "#{{Heart}} 触发一次'呕血'效果"..
             "#{{Trinket88}} 自动重置'食物'标签的道具"..
-            "#{{Warning}} 被大胃王 {{Collectible664}} 覆盖"
+            "#{{Warning}} 被大胃王 覆盖"
         },
         [2] = {
             Name = "Anorexia",
@@ -81,14 +81,14 @@ EIDInfo.Collectibles = {
             Desc = "#将正常角色转换为对应的堕化角色"..
             "#{{Warning}} 犹大与犹大之影均转换为堕化犹大"..
             "#复活的拉撒路、以扫和ff0无法转换",
-            Virtue = "生成血量为6的不可发射泪弹的黑色魂火"
+            BookOfVirtues = "生成血量为6的不可发射泪弹的黑色魂火"
         },
         [2] = {
             Name = "Mirroring",
             Desc = "#Transforms the non-tainted character into the corresponding tainted character"..
             "#{{Warning}} Both Judas and Dark Judas are transformed into Tainted Judas"..
             "#Lazarus Risen, Esau and ff0 can't be transformed",
-            Virtue = "Spawns a black wisp with 6 health which can't shoot"
+            BookOfVirtues = "Spawns a black wisp with 6 health which can't shoot"
         }
     },
     [ty.CustomCollectibles.BROKENMIRRORING] = {
@@ -96,13 +96,13 @@ EIDInfo.Collectibles = {
             Name = "碎镜像",
             Desc = "#将堕化角色转换为对应的正常角色"..
             "#{{Warning}} 死亡的堕化拉撒路无法转换",
-            Virtue = "生成血量为9的不可发射泪弹的白色魂火",
+            BookOfVirtues = "生成血量为9的不可发射泪弹的白色魂火",
         },
         [2] = {
             Name = "Broken Mirroring",
             Desc = "#Transforms the tainted character into the corresponding non-tainted character"..
             "#{{Warning}} Dead Tainted Lazarus can't be transformed",
-            Virtue = "Spawns a white wisp with 9 health which can't shoot"
+            BookOfVirtues = "Spawns a white wisp with 9 health which can't shoot"
         }
     },
     [ty.CustomCollectibles.LASERGUN] = {
@@ -124,16 +124,16 @@ EIDInfo.Collectibles = {
             Name = "丰饶羊角",
             Desc = "#{{Battery}} 使用后，吸收角色接触到的掉落物、道具和饰品，并转换为充能"..
             "#充能满后使用，如果当前房间内有道具，则为所有道具增加一个道具选择；否则生成一个来自当前房间道具池的道具",
-            Virtue = "有10%的概率额外生成一个天使房道具",
-            Belial = "有10%的概率额外生成一个恶魔房道具"
+            BookOfVirtues = "有10%的概率额外生成一个天使房道具",
+            BookOfBelial = "有10%的概率额外生成一个恶魔房道具"
         },
         [2] = {
             Name = "Cornucopia",
             Desc = "#{{Battery}} When used, absorbs all pickups, collectibles and trinkets that the player comes into contact with, and converts them into a certain amount of charge"..
             "#{{ArrowUp}} When used if the item is fully charged, spawn a collectible from current room's item pool"..
             "#{{Warning}} The quality of the item is gradually increased",
-            Virtue = "Has 10% chance to spawn an extra Angel Room item",
-            Belial = "Has 10% chance to spawn an extra Devil Room item"
+            BookOfVirtues = "Has 10% chance to spawn an extra Angel Room item",
+            BookOfBelial = "Has 10% chance to spawn an extra Devil Room item"
         }
     },
     [ty.CustomCollectibles.NOTICEOFCRITICALCONDITION] = {
@@ -199,16 +199,16 @@ EIDInfo.Collectibles = {
             Desc = "#使用后，清除一颗碎心并重置所在房间的道具为品质{{Quality3}}或{{Quality4}}的天使房道具交易"..
             "#{{BrokenHeart}} 进行道具交易会获得对应数量的碎心"..
             "#{{Warning}} 若天使房道具池过空，则生成{{Collectible390}}撒拉弗",
-            Virtue = "生成一个天使房道具魂火跟班",
-            Belial = "生成一个恶魔房道具魂火跟班"
+            BookOfVirtues = "生成一个天使房道具魂火跟班",
+            BookOfBelial = "生成一个恶魔房道具魂火跟班"
         },
         [2] = {
             Name = "The Gospel of John",
             Desc = "#{{BrokenHeart}} Upon use, removes a broken heart and rerolls collectibles in the room, replacing them with collectibles of {{Quality3}} or {{Quality4}} from the Angel Room pool"..
             "#{{BrokenHeart}} Replaced collectible grants broken hearts on purchase"..
             "#{{Warning}} If the Angel Room pool is exhausted, {{Collectible390}}the Seraphim will be selected instead",
-            Virtue = "Spawns an Angel item wisp",
-            Belial = "Spawns a Devil item wisp"
+            BookOfVirtues = "Spawns an Angel item wisp",
+            BookOfBelial = "Spawns a Devil item wisp"
         }
     },
     [ty.CustomCollectibles.MAGNIFIER] = {
@@ -245,16 +245,16 @@ EIDInfo.Collectibles = {
             Desc = "#{{ArrowUp}} +1心之容器"..
             "#{{Heart}} 回满红心",
             BingeEater = "{{ArrowUp}} +1额外伤害"..
-            "#{{Collectible664}} {{ArrowUp}} +0.2弹速"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
+            "#{{ArrowUp}} +0.2弹速"..
+            "#{{ArrowDown}} -0.03移速"
         },
         [2] = {
             Name = "Guppy's Food",
             Desc = "#{{ArrowUp}} +1 Health up"..
             "#{{Heart}} Full health",
             BingeEater = "{{ArrowUp}} +1 extra Damage"..
-            "#{{Collectible664}} {{ArrowUp}} +0.2 Shot Speed"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
+            "#{{ArrowUp}} +0.2 Shot Speed"..
+            "#{{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.CONSERVATIVETREATMENT] = {
@@ -329,8 +329,8 @@ EIDInfo.Collectibles = {
             "#{{SoulHeart}} 若为魂心角色，则移除两个魂心"..
             "#{{BoneHeart}} 优先扣除骨心"..
             "#{{Warning}} 如果恶魔房道具池过空，则生成{{Collectible113}}恶魔宝宝",
-            Virtue = "生成血量为10，伤害为2的红色魂火",
-            Belial = "额外获得0.2伤害提升"
+            BookOfVirtues = "生成血量为10，伤害为2的红色魂火",
+            BookOfBelial = "额外获得0.2伤害提升"
         },
         [2] = {
             Name = "Hades Blade",
@@ -339,8 +339,8 @@ EIDInfo.Collectibles = {
             "#{{BoneHeart}} Bone hearts are removed first"..
             "#{{Conjoined}} Grants a familiar selected from the Devil Room pool"..
             "#{{Warning}} If the Devil Room pool is exhausted, {{Collectible113}}Demon Baby will be selected instead",
-            Virtue = "Spawns a red wisp with 10 health and can deal 2 damage to enemies",
-            Belial = "Grants +0.2 damage up"
+            BookOfVirtues = "Spawns a red wisp with 10 health and can deal 2 damage to enemies",
+            BookOfBelial = "Grants +0.2 damage up"
         }
     },
     [ty.CustomCollectibles.BOBSSTOMACH] = {
@@ -363,16 +363,16 @@ EIDInfo.Collectibles = {
             Desc = "#{{Heart}} 使用时移除一个心之容器并提供0.2伤害加成"..
             "#在角色附近生成一个肉身，可以作为当前层的复活点"..
             "#{{Warning}} 一层内可以放置多个肉身，优先从最后放置的肉身处复活",
-            Virtue = "生成血量为8，伤害为3的红色魂火",
-            Belial = "额外获得0.2伤害提升"
+            BookOfVirtues = "生成血量为8，伤害为3的红色魂火",
+            BookOfBelial = "额外获得0.2伤害提升"
         },
         [2] = {
             Name = "Blood Sacrifice",
             Desc = "#{{Heart}} Upon use, removes one red heart container and grants +0.2 damage up"..
             "#Spawns a body which can revive Isaac in current floor"..
             "#{{Warning}} Multiple bodies can exist and Isaac will be revived at the position of the last placed body",
-            Virtue = "Spawns a red wisp with 8 health and can deal 3 damage to enemies",
-            Belial = "Grants +0.2 damage up"
+            BookOfVirtues = "Spawns a red wisp with 8 health and can deal 3 damage to enemies",
+            BookOfBelial = "Grants +0.2 damage up"
         }
     },
     [ty.CustomCollectibles.CHOCOLATEPANCAKE] = {
@@ -382,8 +382,8 @@ EIDInfo.Collectibles = {
             "#{{BlackHeart}} 击杀敌人时有2.5%的概率掉落一颗黑心"..
             "#{{Warning}} 概率不可叠加",
             BingeEater = "{{ArrowUp}} +1幸运"..
-            "#{{Collectible664}} {{ArrowUp}} +0.2弹速"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
+            "#{{ArrowUp}} +0.2弹速"..
+            "#{{ArrowDown}} -0.03移速"
         },
         [2] = {
             Name = "Chocolate Pancake",
@@ -391,8 +391,8 @@ EIDInfo.Collectibles = {
             "#{{BlackHeart}} Enemies have 2.5% chance to drop a black heart on death"..
             "#{{Warning}} The chance is not stackable",
             BingeEater = "{{ArrowUp}} +1 Luck"..
-            "#{{Collectible664}} {{ArrowUp}} +0.2 Shotspeed"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
+            "#{{ArrowUp}} +0.2 Shotspeed"..
+            "#{{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.ATONEMENTVOUCHER] = {
@@ -415,8 +415,8 @@ EIDInfo.Collectibles = {
             Desc = "#{{IsaacsRoom}} 传送到'家'一层并随机生成3个最低品质为3的攻击道具"..
             "#{{Heart}} 恢复所有血量"..
             "#{{Warning}} 击败教条后直接进入下一层",
-            Virtue = "道具来自天使房道具池",
-            Belial = "道具来自恶魔房道具池",
+            BookOfVirtues = "道具来自天使房道具池",
+            BookOfBelial = "道具来自恶魔房道具池",
             WakeUp = "#{{ArrowUp}} 教条血量百分比为"
         },
         [2] = {
@@ -424,8 +424,8 @@ EIDInfo.Collectibles = {
             Desc = "#{{IsaacsRoom}} Teleports Isaac to Home and spawns 3 offensive items of at least quality 3 from random item pools"..
             "#{{Heart}} Full Health"..
             "#{{Warning}} Go to next stage if the Dogma is killed",
-            Virtue = "Collectibles are selected from Angel Room item pool instead",
-            Belial = "Collectibles are selected from Devil Room item pool instead",
+            BookOfVirtues = "Collectibles are selected from Angel Room item pool instead",
+            BookOfBelial = "Collectibles are selected from Devil Room item pool instead",
             WakeUp = "#{{ArrowUp}} The percent of the health of the Dogma is "
         }
     },
@@ -435,16 +435,16 @@ EIDInfo.Collectibles = {
             Desc = "#{{ArrowUp}} 持有时，角色身上的饰品会转化为对应金饰品"..
             "#击杀敌人时有4%的概率掉落随机饰品"..
             "#使用后，摧毁房间内的所有饰品，每摧毁一个饰品将生成4-8个随机硬币",
-            Virtue = "15%概率发射点金术眼泪",
-            Belial = "额外生成3个随机硬币",
+            BookOfVirtues = "15%概率发射点金术眼泪",
+            BookOfBelial = "额外生成3个随机硬币"
         },
         [2] = {
             Name = "Philosopher's Staff",
             Desc = "#{{ArrowUp}} When held, trinkets on Isaac will transform into their corresponding golden trinkets"..
             "Enemies have 4% chance to drop a trinket on death"..
             "#Upon use, consume all trinkets in the room. For each trinket consumed, spawns 4-8 random coins",
-            Virtue = "15% chance for {{Collectible202}} Midas' Touch tears",
-            Belial = "Spawns 3 random coins"
+            BookOfVirtues = "15% chance for {{Collectible202}} Midas' Touch tears",
+            BookOfBelial = "Spawns 3 random coins"
         }
     },
     [ty.CustomCollectibles.EXPIREDGLUE] = {
@@ -517,8 +517,8 @@ EIDInfo.Collectibles = {
             "#{{Collectible486}} 使角色受伤但不掉血"..
             "#{{Tears}} 永久+0.2射速修正",
             BingeEater = "{{ArrowUp}} +1额外伤害"..
-            "#{{Collectible664}} {{ArrowUp}} +1幸运"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
+            "#{{ArrowUp}} +1幸运"..
+            "#{{ArrowDown}} -0.03移速"
         },
         [2] = {
             Name = "Bone-in Fish Steak",
@@ -527,8 +527,8 @@ EIDInfo.Collectibles = {
             "#{{Collectible486}} Causes Isaac to take damage without taking away health"..
             "#{{Tears}} +0.2 Fire rate permanently",
             BingeEater = "{{ArrowUp}} +1 Extra damage"..
-            "#{{Collectible664}} {{ArrowUp}} +1 Luck"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
+            "#{{ArrowUp}} +1 Luck"..
+            "#{{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.PLANETARIUMTELESCOPE] = {
@@ -571,8 +571,8 @@ EIDInfo.Collectibles = {
             "#{{Heart}} 进入新的房间时，有25%的概率治疗半颗红心"..
             "#{{Warning}} 多个道具的概率可叠加",
             BingeEater = "{{ArrowUp}} +2.5射程"..
-            "#{{Collectible664}} {{ArrowUp}} +1幸运"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03移速"
+            "#{{ArrowUp}} +1幸运"..
+            "#{{ArrowDown}} -0.03移速"
         },
         [2] = {
             Name = "Peeled Banana",
@@ -580,8 +580,8 @@ EIDInfo.Collectibles = {
             "#{{Heart}}Has 25% chance to heal half a heart every new room"..
             "#{{Warning}}The probabilities of multiple bananas can stack",
             BingeEater = "{{ArrowUp}} +2.5 Tear range"..
-            "#{{Collectible664}} {{ArrowUp}} +1 Luck"..
-            "#{{Collectible664}} {{ArrowDown}} -0.03 Speed"
+            "#{{ArrowUp}} +1 Luck"..
+            "#{{ArrowDown}} -0.03 Speed"
         }
     },
     [ty.CustomCollectibles.CURSEDDESTINY] = {
@@ -654,106 +654,108 @@ EIDInfo.Cards = {
         [1] = {
             Name = "ff0的魂石",
             Desc = "#{{Heart}} 给予可获得心之容器的能力并立即获得两颗心之容器"..
-            "#{{Warning}} 效果仅持续一层，结束后将所有的心之容器转换为原本可接受的血量"
+            "#{{Warning}} 效果仅持续一层，结束后将所有的心之容器转换为原本可接受的血量",
+            MimicCharge = 12,
+            IsRune = true
         },
         [2] = {
             Name = "Soul of ff0",
             Desc = "#{{Heart}} Grant the ability to obtain heart containers and immediately receive two heart containers"..
-            "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted"
+            "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted",
+            MimicCharge = 12,
+            IsRune = true
         }
     }
 }
 
-EID:addIcon("Player"..ty.CustomPlayerType.WARFARIN, "Players", 0, 16, 16, 0, 0, Sprite("gfx/eid/player_icons.anm2", true))
-EID:addIcon("Card"..ty.CustomCards.SOULOFFF0, "Soul of ff0", -1, 9, 9, -1, 0, Sprite("gfx/eid/eid_cardfronts.anm2", true))
-EID:addIcon("Water", "Water", 0, 10, 10, 0, 0, Sprite("gfx/eid/inline_icons.anm2", true))
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} 使用血液样本时额外恢复一颗红心 #{{ArrowUp}} 心上限数量增加到9个", "ff0", "zh_cn")
-EID:addBirthright(ty.CustomPlayerType.WARFARIN, "#{{Heart}} Heals one red heart when using the Blood Sample #{{ArrowUp}} The max amount of heart containers is raised to 9", "ff0", "en_us")
+EIDInfo.Players = {
+    [ty.CustomPlayerType.WARFARIN] = {
+        [1] = {
+            Name = "ff0",
+            Desc = "#{{Heart}} 使用血液样本时额外恢复一颗红心"..
+            "#{{ArrowUp}} 心上限数量增加到9个"
+        },
+        [2] = {
+            Name = "ff0",
+            Desc = "{{Heart}} Heals one red heart when using the Blood Sample"..
+            "#{{ArrowUp}} The max amount of heart containers is raised to 9"
+        }
+    }
+}
 
-for ID, descTable in pairs(EIDInfo.Collectibles) do
+EIDInfo.Icons = {
+    ["Player"..ty.CustomPlayerType.WARFARIN] = {
+        AnimationName = "Players",
+        AnimationFrame = 0,
+        Width = 16,
+        Height = 16,
+        LeftOffset = 0,
+        TopOffset = 0,
+        SpriteObject = Sprite("gfx/eid/player_icons.anm2", true)
+    },
+    ["Card"..ty.CustomCards.SOULOFFF0] = {
+        AnimationName = "Soul of ff0",
+        AnimationFrame = 0,
+        Width = 9,
+        Height = 9,
+        LeftOffset = 0.5,
+        TopOffset = 1.5,
+        SpriteObject = Sprite("gfx/eid/eid_cardfronts.anm2", true)
+    },
+    ["Water"] = {
+        AnimationName = "Water",
+        AnimationFrame = 0,
+        Width = 10,
+        Height = 10,
+        LeftOffset = 0,
+        TopOffset = 0,
+        SpriteObject = Sprite("gfx/eid/inline_icons.anm2", true)
+    }
+}
+
+for ID, Info in pairs(EIDInfo.Collectibles) do
     for i = 1, 2 do
-        EID:addCollectible(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
+        local descTable = Info[i]
+        EID:addCollectible(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
+        if descTable.BookOfVirtues then
+            EID.descriptions[EIDLanguage[i]].bookOfVirtuesWisps[ID] = descTable.BookOfVirtues
+        end
+        if descTable.BookOfBelial then
+            EID.descriptions[EIDLanguage[i]].bookOfBelialBuffs[ID] = descTable.BookOfBelial
+        end
+        if descTable.BingeEater then
+            EID.descriptions[EIDLanguage[i]].bingeEaterBuffs[ID] = descTable.BingeEater
+        end
     end
 end
-for ID, descTable in pairs(EIDInfo.Trinkets) do
+for ID, Info in pairs(EIDInfo.Trinkets) do
     for i = 1, 2 do
-        EID:addTrinket(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
-        if descTable[i].GoldenInfo then
-            EID.GoldenTrinketData[ID] = descTable[i].GoldenInfo
+        local descTable = Info[i]
+        EID:addTrinket(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
+        if descTable.GoldenInfo then
+            EID.GoldenTrinketData[ID] = descTable.GoldenInfo
         end
-        if descTable[i].GoldenEffect then
-            EID.descriptions[EIDLanguage[i]].goldenTrinketEffects[ID] = descTable[i].GoldenEffect
+        if descTable.GoldenEffect then
+            EID.descriptions[EIDLanguage[i]].goldenTrinketEffects[ID] = descTable.GoldenEffect
         end
     end
 end
-for ID, descTable in pairs(EIDInfo.Cards) do
+for ID, Info in pairs(EIDInfo.Cards) do
     for i = 1, 2 do
-        EID:addCard(ID, descTable[i].Desc, descTable[i].Name, EIDLanguage[i])
+        local descTable = Info[i]
+        EID:addCard(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
+        EID:addCardMetadata(ID, descTable.MimicCharge, descTable.IsRune)
     end
 end
-do
-    local function VirtueCondition(descObj)
-        return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and EID.collectiblesOwned[CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES]
+for ID, Info in pairs(EIDInfo.Players) do
+    for i = 1, 2 do
+        local descTable = Info[i]
+        EID:addBirthright(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
     end
-    local function VirtueCallback(descObj)
-        local subType = descObj.ObjSubType
-        local language, languageIndex = Options.Language, 2
-        if language == "zh" then
-            languageIndex = 1
-        end
-        if EIDInfo.Collectibles[subType] then
-            local virtueDesc = EIDInfo.Collectibles[subType][languageIndex].Virtue
-            if virtueDesc then
-                EID:appendToDescription(descObj, "#{{Collectible584}} "..virtueDesc)
-            end
-        end
-        return descObj
-    end
-    EID:addDescriptionModifier("tyVirtueModifier", VirtueCondition, VirtueCallback)
 end
-
-do
-    local function BelialCondition(descObj)
-        return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and EID.collectiblesOwned[CollectibleType.COLLECTIBLE_BOOK_OF_BELIAL_PASSIVE]
-    end
-    local function BelialCallback(descObj)
-        local subType = descObj.ObjSubType
-        local language, languageIndex = Options.Language, 2
-        if language == "zh" then
-            languageIndex = 1
-        end
-        if EIDInfo.Collectibles[subType] then
-            local belialDesc = EIDInfo.Collectibles[subType][languageIndex].Belial
-            if belialDesc then
-                EID:appendToDescription(descObj, "#{{Collectible59}} "..belialDesc)
-            end
-        end
-        return descObj
-    end
-    EID:addDescriptionModifier("tyBelialModifier", BelialCondition, BelialCallback)
+for ShortCut, descTable in pairs(EIDInfo.Icons) do
+    EID:addIcon(ShortCut, descTable.AnimationName, descTable.AnimationFrame, descTable.Width, descTable.Height, descTable.LeftOffset, descTable.TopOffset, descTable.SpriteObject)
 end
-
-do
-    local function BingeEaterCondition(descObj)
-        return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and EID.collectiblesOwned[CollectibleType.COLLECTIBLE_BINGE_EATER]
-    end
-    local function BingeEaterCallback(descObj)
-        local subType = descObj.ObjSubType
-        local language, languageIndex = Options.Language, 2
-        if language == "zh" then
-            languageIndex = 1
-        end
-        if EIDInfo.Collectibles[subType] then
-            local bingeEaterDesc = EIDInfo.Collectibles[subType][languageIndex].BingeEater
-            if bingeEaterDesc then
-                EID:appendToDescription(descObj, "#{{Collectible664}} "..bingeEaterDesc)
-            end
-        end
-        return descObj
-    end
-    EID:addDescriptionModifier("tyBingeEaterModifier", BingeEaterCondition, BingeEaterCallback)
-end
-
 do
     local function WakeUpCondition(descObj)
         return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and descObj.ObjSubType == ty.CustomCollectibles.WAKEUP

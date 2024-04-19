@@ -1,21 +1,8 @@
 local LostBottleCap = ty:DefineANewClass()
 
-local disposableActives = {
-    CollectibleType.COLLECTIBLE_FORGET_ME_NOW,
-    CollectibleType.COLLECTIBLE_BLUE_BOX,
-    CollectibleType.COLLECTIBLE_DIPLOPIA,
-    CollectibleType.COLLECTIBLE_PLAN_C,
-    CollectibleType.COLLECTIBLE_MAMA_MEGA,
-    CollectibleType.COLLECTIBLE_EDENS_SOUL,
-    CollectibleType.COLLECTIBLE_MYSTERY_GIFT,
-    CollectibleType.COLLECTIBLE_SACRIFICIAL_ALTAR,
-    CollectibleType.COLLECTIBLE_DAMOCLES,
-    CollectibleType.COLLECTIBLE_ALABASTER_BOX,
-    CollectibleType.COLLECTIBLE_GENESIS,
-    CollectibleType.COLLECTIBLE_DEATH_CERTIFICATE,
-    CollectibleType.COLLECTIBLE_R_KEY,
-    ty.CustomCollectibles.WAKEUP
-}
+local detectItem = false
+local itemType = 0
+local previousItemCount = 0
 
 local function RemoveBottleCap(player)
     local rng = player:GetTrinketRNG(ty.CustomTrinkets.LOSTBOTTLECAP)
@@ -58,19 +45,39 @@ local function RemoveBottleCap(player)
     end
 end
 
+local function GetActiveItemCounts(player)
+    local count = 0
+    for index = ActiveSlot.SLOT_PRIMARY, ActiveSlot.SLOT_SECONDARY do
+        if player:GetActiveItem(index) > 0 then
+            count = count + 1
+        end
+    end
+    return count
+end
+
 function LostBottleCap:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
-    local multiplier = player:GetTrinketMultiplier(ty.CustomTrinkets.LOSTBOTTLECAP)
-    if multiplier > 0 and ty:IsValueInTable(disposableActives, itemID) then
-        RemoveBottleCap(player)
-        if itemID == ty.CustomCollectibles.WAKEUP then
-            local data = ty:GetLibData(player)
-            data.WakeUp.Keep = true
-        else
-            return { Discharge = true, Remove = false, ShowAnim = true }
+    if activeSlot ~= ActiveSlot.SLOT_POCKET and useFlags & UseFlag.USE_OWNED == UseFlag.USE_OWNED and ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_ACTIVE then
+        local multiplier = player:GetTrinketMultiplier(ty.CustomTrinkets.LOSTBOTTLECAP)
+        if multiplier > 0 then
+            itemType = itemID
+            previousItemCount = GetActiveItemCounts(player)
+            detectItem = true
         end
     end
 end
 LostBottleCap:AddPriorityCallback(ModCallbacks.MC_USE_ITEM, CallbackPriority.IMPORTANT, LostBottleCap.UseItem)
 
+function LostBottleCap:PostPlayerUpdate(player)
+    if detectItem then
+        if GetActiveItemCounts(player) ~= previousItemCount then
+            player:AddCollectible(itemType, 0, false)
+            RemoveBottleCap(player)
+        end
+        previousItemCount = 0
+        itemType = 0
+        detectItem = false
+    end
+end
+LostBottleCap:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, LostBottleCap.PostPlayerUpdate)
 
 return LostBottleCap
