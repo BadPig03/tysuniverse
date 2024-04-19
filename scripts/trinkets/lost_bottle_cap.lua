@@ -67,11 +67,28 @@ function LostBottleCap:UseItem(itemID, rng, player, useFlags, activeSlot, varDat
 end
 LostBottleCap:AddPriorityCallback(ModCallbacks.MC_USE_ITEM, CallbackPriority.IMPORTANT, LostBottleCap.UseItem)
 
+function LostBottleCap:PreMMorphActive(player, type)
+    if detectItem then
+        itemType = type
+    end
+end
+LostBottleCap:AddCallback(ModCallbacks.MC_PRE_M_MORPH_ACTIVE, LostBottleCap.PreMMorphActive)
+
 function LostBottleCap:PostPlayerUpdate(player)
     if detectItem then
         if GetActiveItemCounts(player) ~= previousItemCount then
-            player:AddCollectible(itemType, 0, false)
-            RemoveBottleCap(player)
+            local flag = true
+            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
+                local pickup = ent:ToPickup()
+                if pickup.SubType == itemType and pickup.Touched and pickup.FrameCount <= 1 then
+                    flag = false
+                    break
+                end
+            end
+            if flag then
+                player:AddCollectible(itemType, 0, false)
+                RemoveBottleCap(player)
+            end
         end
         previousItemCount = 0
         itemType = 0

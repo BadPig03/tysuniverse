@@ -14,6 +14,21 @@ local function GetNearestEnemy(position)
     return nearestEnemy
 end
 
+local function GetActiveItemsFromRandomPool(rng)
+    local itemID
+    repeat 
+        for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
+            if ItemConfig.Config.IsValidCollectible(i) and ty.ITEMCONFIG:GetCollectible(i).Type ~= ItemType.ITEM_ACTIVE then
+                ty.ITEMPOOL:AddRoomBlacklist(i)
+            end
+        end
+        itemID = ty.ITEMPOOL:GetCollectible(rng:RandomInt(ItemPoolType.NUM_ITEMPOOLS), false, rng:Next(), CollectibleType.COLLECTIBLE_POOP)
+    until ty.ITEMCONFIG:GetCollectible(itemID).Type == ItemType.ITEM_ACTIVE
+    ty.ITEMPOOL:RemoveCollectible(itemID)
+    ty.ITEMPOOL:ResetRoomBlacklist()
+    return itemID
+end
+
 local function GetRotationAngle(player)
     local direction = player:GetShootingInput()
     if direction.X == 0 and direction.Y == 0 then
@@ -229,10 +244,34 @@ local function RemoveChargeLaserGun(player)
         end
         player:SetActiveCharge(0, activeSlot)
     end
+    if player:GetTrinketMultiplier(TrinketType.TRINKET_M) > 0 then
+        local newItem = GetActiveItemsFromRandomPool(player:GetTrinketRNG(TrinketType.TRINKET_M))
+        if player:GetTrinketMultiplier(TrinketType.TRINKET_BUTTER) > 0 then
+            player:DropCollectible(ty.CustomCollectibles.LASERGUN)
+            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.CustomCollectibles.LASERGUN)) do
+                local pickup = ent:ToPickup()
+                if pickup.Touched and pickup.FrameCount <= 1 then
+                    pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem, true, false, false)
+                    pickup.Charge = 0
+                    pickup.Touched = true
+                    break
+                end
+            end
+        else
+            player:RemoveCollectible(ty.CustomCollectibles.LASERGUN)
+            player:AddCollectible(newItem, 0, false)
+        end
+    else
+        if player:GetTrinketMultiplier(TrinketType.TRINKET_BUTTER) > 0 then
+            player:DropCollectible(ty.CustomCollectibles.LASERGUN)
+        end
+    end
 end
 
 function LaserGun:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
-    local data = ty:GetLibData(player)
+    if useFlags & UseFlag.USE_ALLOWWISPSPAWN == UseFlag.USE_ALLOWWISPSPAWN then
+        return { Discharge = true, Remove = false, ShowAnim = false }
+    end
     if useFlags & UseFlag.USE_CARBATTERY == UseFlag.USE_CARBATTERY or useFlags & UseFlag.USE_OWNED ~= UseFlag.USE_OWNED then
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
@@ -240,6 +279,7 @@ function LaserGun:UseItem(itemID, rng, player, useFlags, activeSlot, varData)
         SpawnPlasmaBall(player, player:GetRecentMovementVector())
         return { Discharge = false, Remove = false, ShowAnim = false }
     end
+    local data = ty:GetLibData(player)
     if not data.LaserGun.IsHolding then
         player:AnimateCollectible(ty.CustomCollectibles.LASERGUN, "LiftItem")
         data.LaserGun.IsHolding = true
