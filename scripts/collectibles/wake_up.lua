@@ -57,6 +57,7 @@ local BannedItems = {
     CollectibleType.COLLECTIBLE_MOMS_SHOVEL,
     CollectibleType.COLLECTIBLE_DEATH_CERTIFICATE,
     CollectibleType.COLLECTIBLE_R_KEY,
+    CollectibleType.COLLECTIBLE_URN_OF_SOULS,
     CollectibleType.COLLECTIBLE_GLITCHED_CROWN,
     CollectibleType.COLLECTIBLE_SACRED_ORB,
     CollectibleType.COLLECTIBLE_ABYSS,
@@ -67,7 +68,9 @@ local BannedItems = {
     ty.CustomCollectibles.HADESBLADE,
     ty.CustomCollectibles.WAKEUP,
     ty.CustomCollectibles.TELESCOPE,
-    ty.CustomCollectibles.BEGGARMASK
+    ty.CustomCollectibles.BEGGARMASK,
+    ty.CustomCollectibles.MIRRORING,
+    ty.CustomCollectibles.BROKENMIRRORING
 }
 
 local bannedActives = {

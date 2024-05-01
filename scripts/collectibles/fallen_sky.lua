@@ -8,7 +8,7 @@ chainSprite:Play("Idle", true)
 local function CanTriggerEffect(player, rng, multiplier)
     rng = rng or player:GetCollectibleRNG(ty.CustomCollectibles.FALLENSKY)
     multiplier = multiplier or 1
-    return rng:RandomFloat() < multiplier / math.max(5 / 3, 10 - player.Luck / 1.5)
+    return rng:RandomFloat() < multiplier / math.max(5 / 3, 20 / 3 - math.floor(player.Luck / 2))
 end
 
 local function GetChainedEnemies(origin)
@@ -26,7 +26,7 @@ local function MarkTheEnemy(enemy, player, parent, multiplier)
     local newData = {}
     newData.Player = player
     newData.Parent = parent
-    newData.Timeout = 110
+    newData.Timeout = 120
     newData.Multiplier = multiplier
     ty:GetLibData(enemy).FallenSky = newData
 end
@@ -101,17 +101,17 @@ local function HarmNearbyEnemies(effect)
     local enemyFound = false
     for _, enemy in pairs(Isaac.FindInRadius(effect.Position, player.TearRange / 2, EntityPartition.ENEMY)) do
         if GetPtrHash(enemy) == GetPtrHash(target) then
+            HarmTheEnemy(enemy, player, multiplier)
             if chain and ty:GetLibData(enemy).FallenSky == nil then
                 MarkTheEnemy(enemy, player, nil, multiplier)
             end
-            HarmTheEnemy(enemy, player, multiplier)
         elseif functions:IsValidEnemy(enemy) then
-            if chain and ty:GetLibData(enemy).FallenSky == nil then
-                MarkTheEnemy(enemy, player, target, multiplier)
-            end
             if enemy.Position:Distance(effect.Position) <= 24 then
                 HarmTheEnemy(enemy, player, multiplier)
                 enemyFound = true
+            end
+            if chain and ty:GetLibData(enemy).FallenSky == nil then
+                MarkTheEnemy(enemy, player, target, multiplier)
             end
         end
     end
@@ -125,11 +125,15 @@ function FallenSky:PostFireTear(tear)
     local player = functions:GetPlayerFromTear(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) then
         if CanTriggerEffect(player) then
-            local newTear = Isaac.Spawn(EntityType.ENTITY_TEAR, (tear.Variant == TearVariant.FETUS and TearVariant.FETUS) or TearVariant.SWORD_BEAM, 0, tear.Position - Vector(0, 16), tear.Velocity * (((tear.Variant == TearVariant.FETUS or tear:HasTearFlags(TearFlags.TEAR_LASERSHOT)) and 1) or 1.5), tear.SpawnerEntity):ToTear()
+            local newTear = Isaac.Spawn(EntityType.ENTITY_TEAR, (tear.Variant == TearVariant.FETUS and TearVariant.FETUS) or TearVariant.SWORD_BEAM, 0, tear.Position - Vector(0, 16), tear.Velocity, tear.SpawnerEntity):ToTear()
             if newTear.Variant == TearVariant.SWORD_BEAM then
                 newTear:GetSprite():ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_effect.png", true)
             end
             newTear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY
+            newTear.FallingSpeed = tear.FallingSpeed
+            newTear.FallingAcceleration = tear.FallingAcceleration
+            newTear.ContinueVelocity = tear.ContinueVelocity
+            newTear.Height = tear.Height
             newTear.CollisionDamage = tear.CollisionDamage
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, newTear.Position + Vector(0, 20), Vector(0, 0), nil):GetSprite().PlaybackSpeed = 1.5
             tear:Remove()
@@ -171,7 +175,7 @@ FallenSky:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, FallenSky.UpdateSword,
 
 function FallenSky:PostNPCRender(npc, offset)
     local data = ty:GetLibData(npc).FallenSky
-    if data then
+    if data and data.Timeout <= 118 then
         local enemyPos = npc.Position
         local parent = data.Parent
         if parent == nil and #GetChainedEnemies(npc) > 0 then
@@ -196,10 +200,6 @@ function FallenSky:PostNPCUpdate(npc)
         local player = npcData.Player
         local parent = npcData.Parent
         local multiplier = npcData.Multiplier
-        if npcData.Timeout > 0 then
-            npcData.Timeout = npcData.Timeout - 1
-            npc:AddBurn(EntityRef(player), 2, player.Damage)
-        end
         if npcData.Timeout == 0 then
             if parent then
                 SpawnFallenSword(npc, player, nil, multiplier) 
@@ -208,6 +208,12 @@ function FallenSky:PostNPCUpdate(npc)
         end
         if npc.EntityCollisionClass == EntityCollisionClass.ENTCOLL_NONE or (parent and parent:ToNPC() and (not parent:Exists() or ty:GetLibData(parent).FallenSky == nil)) then
             ty:GetLibData(npc).FallenSky = nil
+        end
+        if npcData.Timeout > 0 then
+            if npcData.Timeout < 118 then
+                npc:AddBurn(EntityRef(player), 2, player.Damage)
+            end
+            npcData.Timeout = npcData.Timeout - 1
         end
     end
 end
