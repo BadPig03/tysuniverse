@@ -146,7 +146,7 @@ function Mirroring:PostUpdate()
         end
         if targetPos then
             local rng = Isaac.GetPlayer(0):GetCollectibleRNG(ty.CustomCollectibles.MIRRORING)
-            if rng:RandomInt(100) < 100 then
+            if rng:RandomInt(100) < 20 then
                 local item = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, ty.CustomCollectibles.MIRRORING, ty.GAME:GetRoom():FindFreePickupSpawnPosition(targetPos), Vector(0, 0), nil):ToPickup()
                 item.ShopItemId = -2
                 item.Price = 0

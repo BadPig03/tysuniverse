@@ -3,6 +3,8 @@ local BeggerMask = ty:DefineANewClass()
 local prized = false
 local slotType = SlotVariant.BEGGAR
 
+local functions = ty.Functions
+
 local function IsValidSlot(slot)
     return slot.Variant == SlotVariant.BEGGAR or slot.Variant == SlotVariant.DEVIL_BEGGAR or slot.Variant == SlotVariant.BOMB_BUM or slot.Variant == SlotVariant.KEY_MASTER or slot.Variant == SlotVariant.BATTERY_BUM or slot.Variant == SlotVariant.ROTTEN_BEGGAR or slot.Variant == ty.CustomEntities.HEALINGBEGGAR
 end

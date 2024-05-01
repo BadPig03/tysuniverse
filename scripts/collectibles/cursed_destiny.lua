@@ -138,7 +138,7 @@ function CursedDestiny:PreLevelPlaceRoom(levelGeneratorRoom, roomConfigRoom, see
 		end
     end
 end
-CursedDestiny:AddCallback(ModCallbacks.MC_PRE_LEVEL_PLACE_ROOM, CursedDestiny.PreLevelPlaceRoom)
+CursedDestiny:AddPriorityCallback(ModCallbacks.MC_PRE_LEVEL_PLACE_ROOM, CallbackPriority.IMPORTANT, CursedDestiny.PreLevelPlaceRoom)
 
 function CursedDestiny:PostLevelLayoutGenerated(levelGenerator)
     if IsValidStage() then
@@ -222,7 +222,9 @@ function CursedDestiny:PostUpdate()
                 if room:GetFrameCount() <= 1 then
                     for _, player in pairs(PlayerManager.GetPlayers()) do
                         player:GetEffects():AddNullEffect(NullItemID.ID_OVERDOSE)
-                        player:AnimateSad()
+                        if room:IsFirstVisit() then
+                            player:AnimateSad()
+                        end
                     end
                 end
                 darken = 1
@@ -236,7 +238,9 @@ function CursedDestiny:PostUpdate()
                 if room:GetFrameCount() <= 1 and not globalData.CursedDestiny.OutOfBounds and room:GetType() == RoomType.ROOM_BOSS and (roomIndex == functions:GetLastBossRoomIndex() or roomIndex == GridRooms.ROOM_MEGA_SATAN_IDX or roomIndex == GridRooms.ROOM_SECRET_EXIT_IDX) then
                     for _, player in pairs(PlayerManager.GetPlayers()) do
                         player:GetEffects():AddCollectibleEffect(CollectibleType.COLLECTIBLE_WAFER)
-                        player:AnimateHappy()
+                        if room:IsFirstVisit() then
+                            player:AnimateHappy()
+                        end
                     end
                 end
             end

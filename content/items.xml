@@ -29,13 +29,13 @@
 	<passive id="4" quality="2" craftquality="2" description="I can't eat anymore" gfx="collectibles_anorexia.png" name="Anorexia" tags="nolostbr"/>
 	<active id="5" quality="3" craftquality="3" description="Another me" gfx="collectibles_mirroring.png" name="Mirroring" maxcharges="6" tags="offensive nocantrip"/>
 	<active id="6" quality="3" craftquality="3" description="Another me" gfx="collectibles_mirroring_broken.png" name="Broken Mirroring" maxcharges="6" hidden="true" tags="offensive nocantrip"/>
-	<active	id="7" quality="3" craftquality="3" cooldown="60" description="Burning plasma" gfx="collectibles_laser_gun.png" maxcharges="300" chargetype="timed" name="Laser Gun" tags="offensive nocantrip"/>
-	<active	id="8" quality="4" craftquality="-1" cooldown="12" description="Turning trash into treasure" gfx="collectibles_cornucopia.png" maxcharges="0" chargetype="special" devilprice="2" shopprice="30" name="Cornucopia" tags="offensive nocantrip"/>
+	<active	id="7" quality="3" craftquality="3" description="Burning plasma" gfx="collectibles_laser_gun.png" maxcharges="300" chargetype="timed" name="Laser Gun" cooldown="60" tags="offensive nocantrip"/>
+	<active	id="8" quality="4" craftquality="-1" description="Turning trash into treasure" gfx="collectibles_cornucopia.png" maxcharges="0" chargetype="special" devilprice="2" shopprice="30" name="Cornucopia" cooldown="12" tags="offensive nocantrip"/>
 	<passive id="9" quality="3" craftquality="3" description="Uncertain fate" gfx="collectibles_notice_of_critical_condition.png" name="Notice of Critical Condition" tags="nolostbr nogreed nokeeper"/>
 	<familiar id="10" quality="3" craftquality="3" description="They're more violent" gfx="collectibles_lumigyrofly.png" name="Lumigyro Fly" cache="familiars" tags="fly offensive"/>
 	<passive id="11" quality="0" craftquality="0" description="I'm attractive" gfx="collectibles_collapse.png" name="Collapse" tags="nolostbr offensive"/>
 	<passive id="12" quality="2" craftquality="2" description="More goods... but at what cost?" gfx="collectibles_cursed_treasure.png" name="Cursed Treasure" tags="offensive"/>
-	<active	id="13" quality="4" craftquality="4" cooldown="60" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="8" devilprice="2" shopprice="30" name="The Gospel of John" tags="angel book offensive"/>
+	<active	id="13" quality="4" craftquality="4" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="8" devilprice="2" shopprice="30" name="The Gospel of John" cooldown="60" tags="angel book offensive"/>
 	<familiar id="14" quality="2" craftquality="2" description="Bigger than ever" gfx="collectibles_magnifier.png" name="Magnifier" cache="familiars" tags="offensive uniquefamiliar"/>
 	<passive id="15" quality="3" craftquality="3" description="Takes on all sins and impurities" gfx="collectibles_scapegoat.png" name="Scapegoat" tags="nocantrip"/>
 	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppys_food.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
@@ -49,8 +49,8 @@
 	<active id="24" quality="2" craftquality="2" description="Forged in blood and flesh" gfx="collectibles_blood_sacrifice.png" name="Blood Sacrifice" maxcharges="5" cache="damage" tags="nolostbr nokeeper"/>
 	<passive id="25" quality="2" craftquality="2" description="Demon's favorite" gfx="collectibles_chocolate_pancake.png" name="Chocolate Pancake" maxhearts="2" cache="speed shotspeed luck" tags="food nolostbr"/>
 	<passive id="26" quality="1" craftquality="1" description="Confess my sin" gfx="collectibles_atonement_voucher.png" name="Atonement Voucher" tags="nolostbr"/>
-	<active id="27" quality="3" craftquality="-1" cooldown="60" description="Is it a dream?" gfx="collectibles_wake_up.png" name="Wake-up" maxcharges="0" tags="nogreed offensive nocantrip"/>
-	<active id="28" quality="2" craftquality="3" cooldown="60" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" tags="offensive nocantrip"/>
+	<active id="27" quality="3" craftquality="-1" description="Is it a dream?" gfx="collectibles_wake_up.png" name="Wake-up" maxcharges="0" cooldown="60" tags="nogreed offensive nocantrip"/>
+	<active id="28" quality="2" craftquality="3" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" cooldown="60" tags="offensive nocantrip"/>
 	<passive id="29" quality="0" craftquality="3" description="It stinks" gfx="collectibles_expired_glue.png" name="Expired Glue" tags="offensive"/>
 	<familiar id="30" quality="3" craftquality="3" description="What's inside?" gfx="collectibles_tool_box.png" name="Tool Box" cache="familiars" tags="offensive"/>
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive summonable lazarusshared" achievement="oceanus_soul_unlocked"/>
@@ -60,9 +60,11 @@
 	<passive id="35" quality="3" craftquality="3" description="The loyalty!" gfx="collectibles_beggar_mask.png" name="Beggar Mask" tags="offensive"/>
 	<passive id="36" quality="2" craftquality="2" description="Sweet sensation" gfx="collectibles_peeled_banana.png" name="Peeled Banana" maxhearts="2" hearts="2" tags="food nolostbr" cache="luck range"/>
 	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" devilprice="2" tags="devil nolostbr lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
-	<active	id="38" quality="0" craftquality="-1" cooldown="30" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" tags="nolostbr nokeeper nogreed nocantrip"/>
-	<active	id="39" quality="0" craftquality="-1" cooldown="30" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<passive id="38" quality="3" craftquality="3" description="Plunge into the abyss" gfx="collectibles_fallen_sky.png" name="Fallen Sky" devilprice="2" tags="devil" cache="tearflag"/>
+	<active	id="39" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="40" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
     
 	<!--Trinkets-->
 	<trinket id="1" name="Lost Bottle Cap" description="One more bottle!" gfx="trinket_lost_bottle_cap.png" />
+	<trinket id="2" name="Broken Glass Eye" description="It used to be whole" gfx="trinket_broken_glass_eye.png" cache="firedelay"/>
 </items>

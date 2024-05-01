@@ -24,7 +24,7 @@ function Functions:GetPlayerIndex(player)
 end
 
 function Functions:IsValidEnemy(enemy)
-    return enemy:IsActiveEnemy() and enemy:IsVulnerableEnemy() and enemy.Type ~= EntityType.ENTITY_FIREPLACE and not enemy:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not enemy:HasEntityFlags(EntityFlag.FLAG_CHARM)
+    return enemy:ToNPC() and enemy:IsActiveEnemy() and enemy:IsVulnerableEnemy() and enemy.Type ~= EntityType.ENTITY_FIREPLACE and not enemy:HasEntityFlags(EntityFlag.FLAG_FRIENDLY) and not enemy:HasEntityFlags(EntityFlag.FLAG_CHARM)
 end
 
 function Functions:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rng, originalItem)

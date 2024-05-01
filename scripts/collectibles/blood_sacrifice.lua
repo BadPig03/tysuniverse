@@ -120,7 +120,7 @@ BloodSacrifice:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, BloodSacrifice.PostNe
 function BloodSacrifice:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
     local sprite = player:GetSprite()
-    if data.Init and data.BloodSacrifice.PlaySound and sprite:GetAnimation() == "Appear" then
+    if data.Init and data.BloodSacrifice and data.BloodSacrifice.PlaySound and sprite:GetAnimation() == "Appear" then
         local vesselTable = data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]
         local vessel = GetVesselFromSeed(vesselTable.InitSeed)
         if sprite:GetFrame() == 20 then

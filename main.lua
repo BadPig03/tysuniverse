@@ -1,6 +1,6 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w15c"
+ty.VERSION = "02w16a"
 ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
@@ -53,10 +53,10 @@ function ty:PostRender()
     if REPENTOGON then
         if ty.GAME:GetFrameCount() < 120 then
             if Options.Language == "zh" then
-                local warningString = "请注意群内是否有新版本可用!"
+                local warningString = "请勿使用rewind指令，这会导致潜在的bug!"
                 ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
             else
-                local warningString = "Please check for updates!"
+                local warningString = "Do not use the command rewind, as it may cause potential bugs!"
                 ty.PFTEMP:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.PFTEMP:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.PFTEMP:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
             end
         end

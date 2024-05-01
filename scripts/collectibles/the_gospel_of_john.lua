@@ -1,5 +1,8 @@
 local TheGospelOfJohn = ty:DefineANewClass()
 
+local purchased = false
+local preventMorph = true
+
 local function GetAngelRoomCollectible(rng)
     local itemID
     repeat
@@ -16,10 +19,15 @@ local function GetAngelRoomCollectible(rng)
 end
 
 local function MorphAllCollectibles(rng, flag)
+    local room = ty.GAME:GetRoom()
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
         if pickup.SubType > 0 and pickup.SubType ~= CollectibleType.COLLECTIBLE_DADS_NOTE then
-            local newItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetAngelRoomCollectible(rng), pickup.Position, Vector(0, 0), nil):ToPickup()
+            local position = pickup.Position
+            if pickup:GetAlternatePedestal() == 14 then
+                position = room:FindFreePickupSpawnPosition(position, 0, true)
+            end
+            local newItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetAngelRoomCollectible(rng), position, Vector(0, 0), nil):ToPickup()
             newItem:MakeShopItem(pickup.ShopItemId)
             newItem:RemoveCollectibleCycle()
             newItem.AutoUpdatePrice = false
@@ -45,7 +53,9 @@ function TheGospelOfJohn:UseItem(itemID, rng, player, useFlags, activeSlot, varD
         ItemOverlay.Show(ty.CustomGiantBooks.THEGOSPELOFJOHN, 3, player)
     end
     player:AddBrokenHearts(-1)
+    preventMorph = false
     MorphAllCollectibles(rng, PlayerManager.AnyoneIsPlayerType(PlayerType.PLAYER_KEEPER) or PlayerManager.AnyoneIsPlayerType(PlayerType.PLAYER_KEEPER_B))
+    preventMorph = true
     if player:HasCollectible(CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES) then
         player:AddItemWisp(ty.ITEMPOOL:GetCollectible(ItemPoolType.POOL_ANGEL, false), player.Position, true)
     end
@@ -79,6 +89,7 @@ function TheGospelOfJohn:PostPickupShopPurchase(pickup, player, moneySpent)
     local pickup = pickup:ToPickup()
     if ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) then
         player:AddBrokenHearts(player.QueuedItem.Item.Quality - 1)
+        purchased = true
         ty:RemoveValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed)
     end
     if ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed) then
@@ -88,7 +99,7 @@ end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PICKUP_SHOP_PURCHASE, TheGospelOfJohn.PostPickupShopPurchase, PickupVariant.PICKUP_COLLECTIBLE)
 
 function TheGospelOfJohn:PrePickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
-    if pickup:IsShopItem() and (ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) or ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)) and keepPrice and not keepSeed and not ignoreModifiers then
+    if preventMorph and pickup:IsShopItem() and (ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) or ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)) then
         return false
     end
 end
@@ -97,9 +108,17 @@ TheGospelOfJohn:AddCallback(ModCallbacks.MC_PRE_PICKUP_MORPH, TheGospelOfJohn.Pr
 function TheGospelOfJohn:PostNewLevel()
     if ty.GLOBALDATA.TheGospelOfJohn then
         ty.GLOBALDATA.TheGospelOfJohn.Money = {}
-        ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart = {}    
+        ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart = {}
     end
 end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, TheGospelOfJohn.PostNewLevel)
+
+function TheGospelOfJohn:PostPlayerUpdate(player)
+    if purchased and player:IsExtraAnimationFinished() and player:GetHealthType() == HealthType.LOST and player:GetHeartLimit() == 0 then
+        player:Die()
+        purchased = false
+    end
+end
+TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, TheGospelOfJohn.PostPlayerUpdate)
 
 return TheGospelOfJohn

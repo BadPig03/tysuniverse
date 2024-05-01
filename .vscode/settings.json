@@ -1,0 +1,14 @@
+{
+    "Lua.diagnostics.globals": [
+        "Game",
+        "ty",
+        "RegisterMod",
+        "Isaac",
+        "SFXManager",
+        "Font",
+        "include",
+        "EID",
+        "REPENTOGON",
+        "Options"
+    ]
+}

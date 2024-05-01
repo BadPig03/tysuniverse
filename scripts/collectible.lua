@@ -39,12 +39,14 @@ local collectibles = {
     [ty.CustomCollectibles.BEGGARMASK] = { Name="丐帮面具", Description="忠诚！" },
     [ty.CustomCollectibles.PEELEDBANANA] = { Name="剥皮香蕉", Description="甜甜的感觉" },
     [ty.CustomCollectibles.CURSEDDESTINY] = { Name="被诅咒的命运", Description="命中注定" },
+    [ty.CustomCollectibles.FALLENSKY] = { Name="天坠", Description="直坠深渊" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
 
 local trinkets = {
-    [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" }
+    [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" },
+    [ty.CustomTrinkets.BROKENGLASSEYE] = { Name="损坏的玻璃眼", Description="它曾经是完整的" }
 }
 
 function Collectible:ItemQueueUpdate(player)

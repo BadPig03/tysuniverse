@@ -412,18 +412,18 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.WAKEUP] = {
         [1] = {
             Name = "唤醒",
-            Desc = "#{{IsaacsRoom}} 传送到'家'一层并随机生成3个最低品质为3的攻击道具"..
+            Desc = "#{{IsaacsRoom}} 传送到'家'一层并随机生成2个最低品质为3的攻击道具"..
             "#{{Heart}} 恢复所有血量"..
-            "#{{Warning}} 击败教条后直接进入下一层",
+            "#{{Warning}} 击败教条后获得{{Collectible633}}教条并直接进入下一层",
             BookOfVirtues = "道具来自天使房道具池",
             BookOfBelial = "道具来自恶魔房道具池",
             WakeUp = "#{{ArrowUp}} 教条血量百分比为"
         },
         [2] = {
             Name = "Wake-up",
-            Desc = "#{{IsaacsRoom}} Teleports Isaac to Home and spawns 3 offensive items of at least quality 3 from random item pools"..
+            Desc = "#{{IsaacsRoom}} Teleports Isaac to Home and spawns 2 offensive items of at least quality 3 from random item pools"..
             "#{{Heart}} Full Health"..
-            "#{{Warning}} Go to next stage if the Dogma is killed",
+            "#{{Warning}} Grants {{Collectible633}} the Dogma and goes to next stage if the Dogma is killed",
             BookOfVirtues = "Collectibles are selected from Angel Room item pool instead",
             BookOfBelial = "Collectibles are selected from Devil Room item pool instead",
             WakeUp = "#{{ArrowUp}} The percent of the health of the Dogma is "
@@ -602,6 +602,24 @@ EIDInfo.Collectibles = {
             "#{{Warning}} Doesn't work on certain floors and other dimensions"
         }
     },
+    [ty.CustomCollectibles.FALLENSKY] = {
+        [1] = {
+            Name = "天坠",
+            Desc = "#有10%的概率发射击中敌人后坠下圣剑的剑气泪弹"..
+            "#圣剑击中敌人后会利用锁链连锁一定范围的其他敌人并给予燃烧效果"..
+            "#锁链一段时间后会坠下不会继续触发锁链的圣剑"..
+            "#{{Warning}} 无敌状态的敌人会直接移除锁链"..
+            "#{{Luck}} 幸运13：60%"
+        },
+        [2] = {
+            Name = "Fallen Sky",
+            Desc = "#There is a 10% chance to fire a sword projectile that falls a holy sword after hitting an enemy"..
+            "#After hitting an enemy, the holy sword will chain other enemies within a certain range and inflict a burning effect"..
+            "#After a period of time, another holy sword that no longer triggers chains will fall down"..
+            "#{{Warning}} Chains on invincible enemies will be removed"..
+            "#{{Luck}} At 13 luck: 60%"
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
@@ -644,6 +662,28 @@ EIDInfo.Trinkets = {
                 "There is a 50% chance to respawn the trinket",
                 "There is a 50% chance to respawn the trinket", 
                 "There is a 75% chance to respawn the trinket"
+            }
+        }
+    },
+    [ty.CustomTrinkets.BROKENGLASSEYE] = {
+        [1] = {
+            Name = "损坏的玻璃眼",
+            Desc = "#{{ArrowUp}} 额外发射1颗泪弹 #{{ArrowDown}} -40%射速修正",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "40",
+                "25", 
+                "10"
+            }
+        },
+        [2] = {
+            Name = "Broken Glass Eye",
+            Desc = "#{{ArrowUp}} Isaac shoots 1 extra tear #{{ArrowDown}} 60% Fire rate multiplier",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "60",
+                "75", 
+                "90"
             }
         }
     }

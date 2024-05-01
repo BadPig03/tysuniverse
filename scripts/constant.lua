@@ -37,12 +37,14 @@ ty.CustomCollectibles = {
     BEGGARMASK = Isaac.GetItemIdByName("Beggar Mask"),
     PEELEDBANANA = Isaac.GetItemIdByName("Peeled Banana"),
     CURSEDDESTINY = Isaac.GetItemIdByName("Cursed Destiny"),
+    FALLENSKY = Isaac.GetItemIdByName("Fallen Sky"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
 
 ty.CustomTrinkets = {
-    LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap")
+    LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap"),
+    BROKENGLASSEYE = Isaac.GetTrinketIdByName("Broken Glass Eye")
 }
 
 ty.CustomChallenges = {
@@ -77,6 +79,10 @@ ty.CustomNullItems = {
     WARFARINREVERSEEMPRESS = Isaac.GetNullItemIdByName("Warfarin Reverse Empress")
 }
 
+ty.CustomTearFlags = {
+    FALLENSKY = BitSet128(0, 1 << 21)
+}
+
 ty.CustomCards = {
     SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0")
 }
@@ -91,7 +97,8 @@ ty.CustomEffects = {
     WARFARINBLACKMARKETCRAWLSPACE = Isaac.GetEntitySubTypeByName("Warfarin Blackmarket Crawlspace"),
     WARFARINBLACKMARKETLADDER = Isaac.GetEntityVariantByName("Warfarin Blackmarket Ladder"),
     OCEANUSSOULLASER = Isaac.GetEntityVariantByName("Oceanus Soul Laser"),
-    OCEANUSSOULCHARGEBAR = Isaac.GetEntityVariantByName("Oceanus Soul Charge Bar")
+    OCEANUSSOULCHARGEBAR = Isaac.GetEntityVariantByName("Oceanus Soul Charge Bar"),
+    FALLENSKYSWORD = Isaac.GetEntityVariantByName("Fallen Sky Sword")
 }
 
 ty.CustomPlayerType = {

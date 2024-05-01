@@ -31,7 +31,7 @@ end
 function AtonementVoucher:PostPlayerUpdate(player)
     local room = ty.GAME:GetRoom()
     local data = ty:GetLibData(player)
-    if data.Init then
+    if data.Init and data.AtonementVoucher then
         if room:GetType() == RoomType.ROOM_DEVIL then
             data.AtonementVoucher.DevilRoomVisited = true
         end

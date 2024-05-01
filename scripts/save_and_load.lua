@@ -30,7 +30,6 @@ local function GetInitData()
     data.PlayerSize = { Scale = 1, HugeGrowth = 0, Larger = 0, Smaller = 0 }
     data.Rewind = { RoomList = {}, MaxCharge = 3 }
     data.Warfarin = { Original = -1, UsedCount = 0 }
-    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1 }
     data.Stat = {}
     data._REVIVE = {}
     return data
@@ -59,6 +58,7 @@ local function GetGlobalInitData()
     data.OceanusSoul = { Strength = 0, RoomList = {} }
     data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
     data.TheGospelOfJohn = { Money = {}, BrokenHeart = {} }
+    data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1, PreventActives = false }
     return data
 end
 
@@ -122,9 +122,13 @@ function SaveAndLoad:PostGameStarted(continued)
         ty.GLOBALDATA = ty:GetTableCopyFrom(data["GlobalData"])
         ty.PERSISTENTDATA.ShortestPath = data["GlobalData"].CursedDestiny.ShortestPath
     else
+        for _, player in pairs(PlayerManager.GetPlayers()) do
+            ty:SetLibData(player, ty:GetTableCopyFrom(GetInitData()))
+        end
         ty.GLOBALDATA = ty:GetTableCopyFrom(GetGlobalInitData())
     end
     ResetInitData()
+    ty.PERSISTENTDATA.Rewind = false
 end
 SaveAndLoad:AddCallback(ModCallbacks.MC_POST_GAME_STARTED, SaveAndLoad.PostGameStarted)
 
@@ -145,7 +149,7 @@ end
 SaveAndLoad:AddCallback(ModCallbacks.MC_PRE_GAME_EXIT, SaveAndLoad.PreGameExit)
 
 function SaveAndLoad:PreRoomExit(player, newLevel)
-    if not ty.PERSISTENTDATA.Rewind and not newLevel then
+    if not newLevel then
         lastRoomData[tostring(player:GetPlayerType())] = ty:GetTableCopyFrom(ty:GetLibData(player))
         lastRoomData["GlobalData"] = ty:GetTableCopyFrom(ty.GLOBALDATA)
         if player:GetFlippedForm() then
@@ -178,9 +182,9 @@ function SaveAndLoad:PostUpdate()
         end
         esauJRReset = false
     end
-    if ty.PERSISTENTDATA.Rewind then
-        RewindPlayerData()
-        ty.PERSISTENTDATA.Rewind = false
+    if Console.GetCommandHistory()[#Console.GetCommandHistory()] == "rewind" and Console.GetHistory()[2] == ">rewind" and not ty.PERSISTENTDATA.Rewind then
+        ty.PERSISTENTDATA.Rewind = true
+        Console.PopHistory(1)
     end
 end
 SaveAndLoad:AddCallback(ModCallbacks.MC_POST_UPDATE, SaveAndLoad.PostUpdate)
@@ -194,10 +198,20 @@ function SaveAndLoad:PostNewRoom(room, roomDesc)
         RewindPlayerData()
         ty.PERSISTENTDATA.GlowingHourglass = false
     end
-    if Console.GetCommandHistory()[#Console.GetCommandHistory()] == "rewind" and Console.GetHistory()[2] == ">rewind" and not ty.PERSISTENTDATA.Rewind then
-        ty.PERSISTENTDATA.Rewind = true
-    end
 end
 SaveAndLoad:AddCallback(ModCallbacks.MC_PRE_NEW_ROOM, SaveAndLoad.PostNewRoom)
+
+function SaveAndLoad:PostRender()
+    if ty.PERSISTENTDATA.Rewind then
+        if Options.Language == "zh" then
+            local warningString = "检测到rewind指令的使用，这会导致mod出错!"
+            ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
+        else
+            local warningString = "Command rewind detected, this would cause bugs!"
+            ty.PFTEMP:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.PFTEMP:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.PFTEMP:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
+        end
+    end
+end
+SaveAndLoad:AddCallback(ModCallbacks.MC_POST_RENDER, SaveAndLoad.PostRender)
 
 return SaveAndLoad

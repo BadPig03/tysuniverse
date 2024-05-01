@@ -24,6 +24,7 @@ ty.CollectiblesList = {
     'cursed_destiny',
     'cursed_treasure',
     'expired_glue',
+    'fallen_sky',
     'guilt',
     'guppys_food',
     'hades_blade',
@@ -50,6 +51,7 @@ ty.CardsList = {
     'soul_of_ff0'
 }
 ty.TrinketsList = {
+    'broken_glass_eye',
     'lost_bottle_cap'
 }
 ty.ChallengesList = {

@@ -39,7 +39,7 @@ local function IsCollectibleHasNoItemPool(collectibleType)
 end
 
 local function GetClosestCollectible(player)
-    local minDistance = 128
+    local minDistance = 192
     local collectible = nil
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
@@ -466,7 +466,7 @@ function Warfarin:EvaluateCache(player, cacheFlag)
         local effects = player:GetEffects()
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
             stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
-        elseif cacheFlag == CacheFlag.CACHE_FLYING and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) then
+        elseif cacheFlag == CacheFlag.CACHE_FLYING and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) and not player:HasCurseMistEffect() then
             player.CanFly = true
         elseif effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
             if cacheFlag == CacheFlag.CACHE_TEARFLAG then
@@ -523,12 +523,13 @@ function Warfarin:PreSFXPlay(id, volume, frameDelay, loop, pitch, pan)
 end
 Warfarin:AddCallback(ModCallbacks.MC_PRE_SFX_PLAY, Warfarin.PreSFXPlay, SoundEffect.SOUND_ISAAC_HURT_GRUNT)
 
-function Warfarin:PreDevilApplyItems()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
-        return 0.36
+function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
+    local room = ty.GAME:GetRoom()
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE4_1 and ty.LEVEL:GetCurses() & LevelCurse.CURSE_OF_LABYRINTH == LevelCurse.CURSE_OF_LABYRINTH) and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() and not ty.GAME:IsGreedMode() then
+        replaceTrapDoor = not IsDevilAngelRoomOpened()
     end
 end
-Warfarin:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Warfarin.PreDevilApplyItems)
+Warfarin:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, Warfarin.PreSpawnCleanAward)
 
 function Warfarin:PostGridEntitySpawn(grid)
     local globalData = ty.GLOBALDATA
@@ -542,14 +543,6 @@ function Warfarin:PostGridEntitySpawn(grid)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_GRID_ENTITY_SPAWN, Warfarin.PostGridEntitySpawn, GridEntityType.GRID_TRAPDOOR)
-
-function Warfarin:PreSpawnCleanAward(rng, spawnPosition)
-    local room = ty.GAME:GetRoom()
-    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and room:GetType() == RoomType.ROOM_BOSS and room:IsCurrentRoomLastBoss() and ty.LEVEL:GetAbsoluteStage() < LevelStage.STAGE4_2 and not (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE4_1 and ty.LEVEL:GetCurses() & LevelCurse.CURSE_OF_LABYRINTH == LevelCurse.CURSE_OF_LABYRINTH) and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() and not ty.GAME:IsGreedMode() then
-        replaceTrapDoor = not IsDevilAngelRoomOpened()
-    end
-end
-Warfarin:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, Warfarin.PreSpawnCleanAward)
 
 function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
@@ -573,7 +566,7 @@ function Warfarin:PostNewRoom()
                 ent:Remove()
             end
         end
-        if roomType == RoomType.ROOM_BOSS and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() == functions:GetLastBossRoomIndex() and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() then
+        if roomType == RoomType.ROOM_BOSS and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() == functions:GetLastBossRoomIndex() and not ty.LEVEL:IsAscent() and not room:IsMirrorWorld() and room:IsClear() then
             if restorePosition then
                 for _, player in pairs(PlayerManager.GetPlayers()) do
                     player.Position = room:GetGridPosition(globalData.BloodSample.GridIndex)
@@ -605,7 +598,10 @@ function Warfarin:PostCrawlspaceUpdate(effect)
     local data = ty:GetLibData(effect)
     local room = ty.GAME:GetRoom()
     if effect.SubType == ty.CustomEffects.WARFARINBLACKMARKETCRAWLSPACE then
-        if sprite:IsPlaying("Closed") and #Isaac.FindInRadius(effect.Position, 24, EntityPartition.PLAYER) == 0 then
+        if not sprite:IsPlaying("Closed") and not room:IsClear() then
+            sprite:Play("Closed", true)
+        end
+        if sprite:IsPlaying("Closed") and #Isaac.FindInRadius(effect.Position, 24, EntityPartition.PLAYER) == 0 and room:IsClear() then
             sprite:Play("Open", true)
         end
         if sprite:IsFinished("Open") then
@@ -649,5 +645,12 @@ function Warfarin:PostPickupMorph(pickup, type, variant, subType, keepPrice, kee
     end
 end 
 Warfarin:AddCallback(ModCallbacks.MC_POST_PICKUP_MORPH, Warfarin.PostPickupMorph)
+
+function Warfarin:PreDevilApplyItems()
+    if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) then
+        return 0.36
+    end
+end
+Warfarin:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Warfarin.PreDevilApplyItems)
 
 return Warfarin

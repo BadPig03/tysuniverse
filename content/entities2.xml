@@ -10,7 +10,8 @@
     <entity anm2path="effects/warfarin_blackmarket_ladder.anm2" baseHP="0" boss="0" champion="0" collisionDamage="20" collisionMass="0" collisionRadius="0" friction="1" name="Warfarin Blackmarket Ladder" numGridCollisionPoints="0" shadowSize="20" stageHP="0" id="1000"/>
     <entity anm2path="effects/oceanus_soul_laser.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="16" friction="1" id="1000" name="Oceanus Soul Laser" numGridCollisionPoints="1" shadowSize="0" stageHP="0"/>
     <entity anm2path="effects/oceanus_soul_chargebar.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="1" name="Oceanus Soul Charge Bar" numGridCollisionPoints="1" shadowSize="0" stageHP="0" id="1000"/>
-    
+    <entity anm2path="effects/fallen_sky_sword.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="0" collisionRadius="0" friction="1" name="Fallen Sky Sword" numGridCollisionPoints="1" shadowSize="0" stageHP="0" id="1000"/>
+
     <!--Slots-->
     <entity anm2path="items/slots/healing_beggar.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="15" friction="1" name="Healing Beggar" numGridCollisionPoints="24" shadowSize="12" stageHP="0" id="6"/>
     <entity anm2path="items/slots/blood_sacrifice_vessel.anm2" baseHP="0" boss="0" champion="0" collisionDamage="0" collisionMass="3" collisionRadius="15" friction="1" name="Blood Sacrifice Vessel" numGridCollisionPoints="24" shadowSize="33" stageHP="0" id="6"/>
