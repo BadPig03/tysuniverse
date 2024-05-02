@@ -605,19 +605,19 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.FALLENSKY] = {
         [1] = {
             Name = "天坠",
-            Desc = "#有15%的概率发射击中敌人后坠下圣剑的剑气泪弹"..
-            "#圣剑击中敌人后会利用锁链连锁一定范围的其他敌人并给予燃烧效果"..
-            "#锁链一段时间后会坠下不会继续触发锁链的圣剑"..
-            "#{{Warning}} 无敌状态的敌人会直接移除锁链"..
-            "#{{Luck}} 幸运10：60%"
+            Desc = "#10%概率发射追踪剑气泪弹，击中敌人后坠下圣剑"..
+            "#圣剑会连锁一定范围的其他敌人并给予燃烧效果"..
+            "#连锁4秒后会坠下不会继续连锁的圣剑"..
+            "#{{Warning}} 无敌状态的敌人会直接移除连锁效果"..
+            "#{{Luck}} 幸运9：50%几率"
         },
         [2] = {
             Name = "Fallen Sky",
-            Desc = "#There is a 15% chance to fire a sword projectile that falls a holy sword after hitting an enemy"..
+            Desc = "#There is a 10% chance to fire a sword projectile that falls a holy sword after hitting an enemy"..
             "#After hitting an enemy, the holy sword will chain other enemies within a certain range and inflict a burning effect"..
             "#After a period of time, another holy sword that no longer triggers chains will fall down"..
             "#{{Warning}} Chains on invincible enemies will be removed"..
-            "#{{Luck}} At 10 luck: 60%"
+            "#{{Luck}} At 9 luck: 50%"
         }
     },
     [ty.CustomCollectibles.BLOODSAMPLE] = {

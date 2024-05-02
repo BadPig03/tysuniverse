@@ -1,6 +1,9 @@
 local FallenSky = ty:DefineANewClass()
 
+local stat = ty.Stat
 local functions = ty.Functions
+
+local doubleMelee = true
 
 local chainSprite = Sprite("gfx/effects/fallen_sky_chain.anm2", true)
 chainSprite:Play("Idle", true)
@@ -8,7 +11,7 @@ chainSprite:Play("Idle", true)
 local function CanTriggerEffect(player, rng, multiplier)
     rng = rng or player:GetCollectibleRNG(ty.CustomCollectibles.FALLENSKY)
     multiplier = multiplier or 1
-    return rng:RandomFloat() < multiplier / math.max(5 / 3, 20 / 3 - math.floor(player.Luck / 2))
+    return rng:RandomFloat() < multiplier / math.max(2, 10 - math.floor(0.9 * player.Luck))
 end
 
 local function GetChainedEnemies(origin)
@@ -83,7 +86,14 @@ local function HarmTheEnemy(enemy, player, multiplier)
     if player:HasCollectible(CollectibleType.COLLECTIBLE_MOMS_KNIFE) then
         multiplier = multiplier * 3
     end
-    enemy:TakeDamage(2.5 * player.ShotSpeed * player.Damage * multiplier, DamageFlag.DAMAGE_SPIKES, EntityRef(player), 0)
+    local extraDamage = 2 * player.ShotSpeed ^ 2 * player.Damage * multiplier
+    if enemy.Type == EntityType.ENTITY_BEAST and enemy.Variant > 0 and enemy.Variant % 10 == 0 then
+        extraDamage = extraDamage + 50
+    end
+    enemy:TakeDamage(extraDamage, DamageFlag.DAMAGE_SPIKES, EntityRef(player), 0)
+    if extraDamage >= 50 then
+        ty.GAME:ShakeScreen(5)
+    end
     local countdown = enemy:GetBossStatusEffectCooldown()
     enemy:SetBossStatusEffectCooldown(0)
     enemy:AddBleeding(EntityRef(player), 90)
@@ -129,7 +139,7 @@ function FallenSky:PostFireTear(tear)
             if newTear.Variant == TearVariant.SWORD_BEAM then
                 newTear:GetSprite():ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_effect.png", true)
             end
-            newTear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY
+            newTear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY | TearFlags.TEAR_HOMING
             newTear.FallingSpeed = tear.FallingSpeed
             newTear.FallingAcceleration = tear.FallingAcceleration
             newTear.ContinueVelocity = tear.ContinueVelocity
@@ -206,7 +216,7 @@ function FallenSky:PostNPCUpdate(npc)
             end
             ty:GetLibData(npc).FallenSky = nil
         end
-        if npc.EntityCollisionClass == EntityCollisionClass.ENTCOLL_NONE or (parent and parent:ToNPC() and (not parent:Exists() or ty:GetLibData(parent).FallenSky == nil)) then
+        if npc.EntityCollisionClass == EntityCollisionClass.ENTCOLL_NONE or (parent and parent:ToNPC() and (not parent:Exists() or parent.Position:Distance(npc.Position) >= 512 or ty:GetLibData(parent).FallenSky == nil)) then
             ty:GetLibData(npc).FallenSky = nil
         end
         if npcData.Timeout > 0 then
@@ -226,10 +236,13 @@ function FallenSky:PostTearCollision(tear, collider, low)
         tear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY
     end
     if tear.TearFlags & ty.CustomTearFlags.FALLENSKY == ty.CustomTearFlags.FALLENSKY and functions:IsValidEnemy(collider) then
-        if tear.Variant == TearVariant.FETUS and tear.FrameCount % 16 ~= 0 then
+        if tear.Variant == TearVariant.FETUS and tear.FrameCount % 15 ~= 0 then
             return
         end
-        if tear:HasTearFlags(TearFlags.TEAR_LUDOVICO) and not CanTriggerEffect(player, nil, 0.2) then
+        if tear:HasTearFlags(TearFlags.TEAR_PIERCING) and tear.FrameCount % 3 ~= 0 then
+            return
+        end
+        if tear:HasTearFlags(TearFlags.TEAR_LUDOVICO) and tear.FrameCount % 30 ~= 0 then
             return
         end
         if (tear:HasTearFlags(TearFlags.TEAR_STICKY) or tear:HasTearFlags(TearFlags.TEAR_BOOGER) or tear:HasTearFlags(TearFlags.TEAR_SPORE)) and tear.FrameCount % 30 ~= 0 then
@@ -275,10 +288,8 @@ FallenSky:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, FallenSky.PostRocketEf
 function FallenSky:PostLaserCollision(laser, collider, low)
 	local laser = laser:ToLaser()
 	local player = laser.SpawnerEntity and laser.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and functions:IsValidEnemy(collider) then
-        if CanTriggerEffect(player, laser:GetDropRNG()) then
-            SpawnFallenSword(collider, player, true, (not laser:GetDisableFollowParent() and not laser:GetOneHit() and laser.SubType == LaserSubType.LASER_SUBTYPE_LINEAR and 0.13) or 1)
-        end
+	if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and functions:IsValidEnemy(collider) and CanTriggerEffect(player, laser:GetDropRNG()) then
+        SpawnFallenSword(collider, player, true, laser.CollisionDamage / player.Damage)
 	end
 end
 FallenSky:AddCallback(ModCallbacks.MC_POST_LASER_COLLISION, FallenSky.PostLaserCollision)
@@ -287,15 +298,35 @@ function FallenSky:PostKnifeCollision(knife, collider, low)
 	local knife = knife:ToKnife()
 	local player = knife.SpawnerEntity and knife.SpawnerEntity:ToPlayer()
 	if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and functions:IsValidEnemy(collider) then
-        if (knife.Variant == KnifeVariant.MOMS_KNIFE or knife.Variant == KnifeVariant.SUMPTORIUM) then
-            if ((knife:IsFlying() and knife:GetKnifeDistance() / knife.MaxDistance < 0.8) and CanTriggerEffect(player, knife:GetDropRNG(), 0.4)) or ((not knife:IsFlying() or knife:GetKnifeDistance() / knife.MaxDistance >= 0.8) and CanTriggerEffect(player, knife:GetDropRNG(), 0.5)) then
-                SpawnFallenSword(collider, player, true)
-            end
-        elseif CanTriggerEffect(player, knife:GetDropRNG()) then
+        if (knife.Variant == KnifeVariant.MOMS_KNIFE or knife.Variant == KnifeVariant.SUMPTORIUM) and (((knife:IsFlying() and knife:GetKnifeDistance() / knife.MaxDistance < 0.8) and CanTriggerEffect(player, knife:GetDropRNG(), 0.4)) or ((not knife:IsFlying() or knife:GetKnifeDistance() / knife.MaxDistance >= 0.8) and CanTriggerEffect(player, knife:GetDropRNG(), 0.5))) then
             SpawnFallenSword(collider, player, true)
 		end
 	end
 end
 FallenSky:AddCallback(ModCallbacks.MC_POST_KNIFE_COLLISION, FallenSky.PostKnifeCollision)
+
+function FallenSky:PostKnifeUpdate(knife)
+    local knife = knife:ToKnife()
+	local player = knife.SpawnerEntity and knife.SpawnerEntity:ToPlayer()
+    if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and (knife.Variant ~= KnifeVariant.MOMS_KNIFE and knife.Variant ~= KnifeVariant.SUMPTORIUM and knife.Variant ~= KnifeVariant.BAG_OF_CRAFTING) and ty:GetLibData(knife).FallenSky == nil then
+        local knifeSprite = knife:GetSprite()
+        knife.CollisionDamage = player.Damage * 2
+        if knife.Variant == KnifeVariant.BONE_CLUB then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_bone_club.png", true)
+        elseif knife.Variant == KnifeVariant.BONE_SCYTHE then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_bone_scythe.png", true)
+        elseif knife.Variant == KnifeVariant.BERSERK_CLUB then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_berserk_club.png", true)
+        elseif knife.Variant == KnifeVariant.NOTCHED_AXE then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_notched_axe.png", true)
+        elseif knife.Variant == KnifeVariant.SPIRIT_SWORD then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_spirit_sword.png", true)
+        elseif knife.Variant == KnifeVariant.TECH_SWORD then
+            knifeSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_tech_sword.png", true)
+        end
+        ty:GetLibData(knife).FallenSky = true
+    end
+end
+FallenSky:AddCallback(ModCallbacks.MC_POST_KNIFE_UPDATE, FallenSky.PostKnifeUpdate)
 
 return FallenSky
