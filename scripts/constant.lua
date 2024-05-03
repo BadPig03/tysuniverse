@@ -44,7 +44,8 @@ ty.CustomCollectibles = {
 
 ty.CustomTrinkets = {
     LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap"),
-    BROKENGLASSEYE = Isaac.GetTrinketIdByName("Broken Glass Eye")
+    BROKENGLASSEYE = Isaac.GetTrinketIdByName("Broken Glass Eye"),
+    STONECARVINGKNIFE = Isaac.GetTrinketIdByName("Stone Carving Knife")
 }
 
 ty.CustomChallenges = {
@@ -85,6 +86,10 @@ ty.CustomTearFlags = {
 
 ty.CustomCards = {
     SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0")
+}
+
+ty.CustomPills = {
+    BAITANDSWITCH = Isaac.GetPillEffectByName("Bait and Switch")
 }
 
 ty.CustomEffects = {

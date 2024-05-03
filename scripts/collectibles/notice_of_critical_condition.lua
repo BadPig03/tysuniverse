@@ -112,7 +112,7 @@ function NoticeOfCriticalCondition:PostNewLevel()
 	end
 	data.NoticeOfCriticalCondition.MachineList = {}
 	if not data.NoticeOfCriticalCondition.Disabled then
-		AddChance(data, 30)
+		AddChance(data, 40)
 		local spawnChance = data.NoticeOfCriticalCondition.CurrentSpawnChance
 		local rng = ty.LEVEL:GetDevilAngelRoomRNG()
 		if rng:RandomInt(100) < spawnChance then

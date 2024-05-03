@@ -67,4 +67,5 @@
 	<!--Trinkets-->
 	<trinket id="1" name="Lost Bottle Cap" description="One more bottle!" gfx="trinket_lost_bottle_cap.png" />
 	<trinket id="2" name="Broken Glass Eye" description="It used to be whole" gfx="trinket_broken_glass_eye.png" cache="firedelay"/>
+	<trinket id="3" name="Stone Carving Knife" description="Stone sculpture" gfx="trinket_stone_carving_knife.png"/>
 </items>

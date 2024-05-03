@@ -77,6 +77,7 @@ local bannedActives = {
     CollectibleType.COLLECTIBLE_TELEPORT,
     CollectibleType.COLLECTIBLE_FORGET_ME_NOW,
     CollectibleType.COLLECTIBLE_TELEPORT_2,
+    CollectibleType.COLLECTIBLE_GLOWING_HOUR_GLASS,
     CollectibleType.COLLECTIBLE_GENESIS,
     CollectibleType.COLLECTIBLE_DEATH_CERTIFICATE,
     CollectibleType.COLLECTIBLE_R_KEY

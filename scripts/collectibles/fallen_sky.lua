@@ -131,20 +131,52 @@ local function HarmNearbyEnemies(effect)
     end
 end
 
+local function ReplaceFetusSprite(tear, player)
+    local tearSprite = tear:GetSprite()
+    if tear.Variant == TearVariant.SWORD_BEAM then
+        tearSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_effect.png", true)
+    elseif tear.Variant == TearVariant.FETUS then
+        if player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN or player:GetPlayerType() == PlayerType.PLAYER_THEFORGOTTEN_B then
+            tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_forgotten.png", true)
+        elseif player:GetPlayerType() == PlayerType.PLAYER_BLACKJUDAS then
+            tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_shadow.png", true)
+        else
+            local color = player:GetBodyColor()
+            if color == SkinColor.SKIN_PINK then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears.png", true)
+            elseif color == SkinColor.SKIN_WHITE then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_white.png", true)
+            elseif color == SkinColor.SKIN_BLACK then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_black.png", true)
+            elseif color == SkinColor.SKIN_BLUE then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_blue.png", true)
+            elseif color == SkinColor.SKIN_RED then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_red.png", true)
+            elseif color == SkinColor.SKIN_GREEN then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_green.png", true)
+            elseif color == SkinColor.SKIN_GREY then
+                tearSprite:ReplaceSpritesheet(0, "gfx/effects/fetus_tears_grey.png", true)  
+            end
+        end
+    end
+end
+
 function FallenSky:PostFireTear(tear)
     local player = functions:GetPlayerFromTear(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) then
         if CanTriggerEffect(player) then
             local newTear = Isaac.Spawn(EntityType.ENTITY_TEAR, (tear.Variant == TearVariant.FETUS and TearVariant.FETUS) or TearVariant.SWORD_BEAM, 0, tear.Position - Vector(0, 16), tear.Velocity, tear.SpawnerEntity):ToTear()
-            if newTear.Variant == TearVariant.SWORD_BEAM then
-                newTear:GetSprite():ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_effect.png", true)
-            end
+            ReplaceFetusSprite(newTear, player)
             newTear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY | TearFlags.TEAR_HOMING
             newTear.FallingSpeed = tear.FallingSpeed
             newTear.FallingAcceleration = tear.FallingAcceleration
             newTear.ContinueVelocity = tear.ContinueVelocity
             newTear.Height = tear.Height
             newTear.CollisionDamage = tear.CollisionDamage
+            newTear.Scale = tear.Scale
+            newTear.KnockbackMultiplier = tear.KnockbackMultiplier
+            newTear.HomingFriction = tear.HomingFriction
+            newTear.CanTriggerStreakEnd = tear.CanTriggerStreakEnd
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, newTear.Position + Vector(0, 20), Vector(0, 0), nil):GetSprite().PlaybackSpeed = 1.5
             tear:Remove()
         end

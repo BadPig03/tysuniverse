@@ -2,6 +2,7 @@ ty.LoadedLua = {}
 ty.ClassesList = {
     Functions = 'functions',
     Card = 'card',
+    Pill = 'pill',
     Collectible = 'collectible',
     Stat = 'stat',
     Revive = 'revive',
@@ -47,12 +48,14 @@ ty.CollectiblesList = {
     'tool_box',
     'wake_up'
 }
-ty.CardsList = {
-    'soul_of_ff0'
+ty.PocketItemsList = {
+    'soul_of_ff0',
+    'bait_and_switch'
 }
 ty.TrinketsList = {
     'broken_glass_eye',
-    'lost_bottle_cap'
+    'lost_bottle_cap',
+    'stone_carving_knife'
 }
 ty.ChallengesList = {
     'glue_prohibition'
@@ -84,8 +87,8 @@ for _, title in pairs(ty.TrinketsList) do
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
 end
-for _, title in pairs(ty.CardsList) do
-    local class = include("scripts.cards."..title)
+for _, title in pairs(ty.PocketItemsList) do
+    local class = include("scripts.pocket_items."..title)
 	table.insert(ty.LoadedLua, class)
 	ty[_] = class
 end

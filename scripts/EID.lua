@@ -686,6 +686,28 @@ EIDInfo.Trinkets = {
                 "90"
             }
         }
+    },
+    [ty.CustomTrinkets.STONECARVINGKNIFE] = {
+        [1] = {
+            Name = "石刻刀",
+            Desc = "#{{Rune}} 摧毁岩石有3%几率掉落符文或魂石",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "3",
+                "6", 
+                "9"
+            }
+        },
+        [2] = {
+            Name = "Stone Carving Knife",
+            Desc = "#{{Rune}} Destroying rocks has a 3% chance to spawn a rune or soul stone",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "3",
+                "6", 
+                "9"
+            }
+        }
     }
 }
 
@@ -704,6 +726,23 @@ EIDInfo.Cards = {
             "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted",
             MimicCharge = 12,
             IsRune = true
+        }
+    }
+}
+
+EIDInfo.Pills = {
+    [ty.CustomPills.BAITANDSWITCH] = {
+        [1] = {
+            Name = "偷天换日",
+            Desc = "#传送角色至房间中某个随机位置，并获得1秒无敌",
+            MimicCharge = 2,
+            Class = "0"
+        },
+        [2] = {
+            Name = "Bait and Switch",
+            Desc = "#Teleport Isaac to a random position in the room, and grants shield for 1 second",
+            MimicCharge = 2,
+            Class = "0"
         }
     }
 }
@@ -785,6 +824,13 @@ for ID, Info in pairs(EIDInfo.Cards) do
         local descTable = Info[i]
         EID:addCard(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
         EID:addCardMetadata(ID, descTable.MimicCharge, descTable.IsRune)
+    end
+end
+for ID, Info in pairs(EIDInfo.Pills) do
+    for i = 1, 2 do
+        local descTable = Info[i]
+        EID:addPill(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
+        EID:addPillMetadata(ID, descTable.MimicCharge, descTable.Class)
     end
 end
 for ID, Info in pairs(EIDInfo.Players) do

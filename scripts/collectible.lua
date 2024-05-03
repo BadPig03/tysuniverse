@@ -46,7 +46,8 @@ local collectibles = {
 
 local trinkets = {
     [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" },
-    [ty.CustomTrinkets.BROKENGLASSEYE] = { Name="损坏的玻璃眼", Description="它曾经是完整的" }
+    [ty.CustomTrinkets.BROKENGLASSEYE] = { Name="损坏的玻璃眼", Description="它曾经是完整的" },
+    [ty.CustomTrinkets.STONECARVINGKNIFE] = { Name="石刻刀", Description="石雕" }
 }
 
 function Collectible:ItemQueueUpdate(player)
