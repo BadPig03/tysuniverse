@@ -50,6 +50,7 @@ ty.CollectiblesList = {
 }
 ty.PocketItemsList = {
     'soul_of_ff0',
+    'glowing_hourglass_shard',
     'bait_and_switch'
 }
 ty.TrinketsList = {

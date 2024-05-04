@@ -20,6 +20,7 @@ do
     if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.RED_KEY) then
         itemOutcomes:AddOutcomeWeight(Card.CARD_CRACKED_KEY, 6)
     end
+    itemOutcomes:AddOutcomeWeight(ty.CustomCards.GLOWINGHOURGLASSSHARD, 4)
     if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.GET_OUT_OF_JAIL_FREE_CARD) then
         itemOutcomes:AddOutcomeWeight(Card.CARD_GET_OUT_OF_JAIL, 4)
     end
@@ -35,7 +36,7 @@ do
     if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.HUGE_GROWTH) then
         itemOutcomes:AddOutcomeWeight(Card.CARD_HUGE_GROWTH, 2)
     end
-    itemOutcomes:AddOutcomeWeight(Card.CARD_EMERGENCY_CONTACT, 2)    
+    itemOutcomes:AddOutcomeWeight(Card.CARD_EMERGENCY_CONTACT, 2)
     if ty.PERSISTENTGAMEDATA:Unlocked(Achievement.RULES_CARD) then
         itemOutcomes:AddOutcomeWeight(Card.CARD_RULES, 1)
     end

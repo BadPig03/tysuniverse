@@ -132,7 +132,7 @@ function Conjunctivitis:PostTearUpdate(tear)
             creep:SetTimeout(60)
             creep:Update()
         end
-        if not tearData.MaxTailed and tear.Velocity:Length() < 0.02 and (tear:HasTearFlags(TearFlags.TEAR_CONTINUUM) or math.abs(tear.Color:GetOffset().R - 0.60784316062927) < 1e-10 or math.abs(tear.Color:GetOffset().R - 0.54117649793625) < 1e-10 or math.abs(tear.Color:GetOffset().R + 0.39215689897537) < 1e-10) then
+        if not tearData.MaxTailed and not player:HasCollectible(CollectibleType.COLLECTIBLE_ANTI_GRAVITY) and tear.Velocity:Length() < 0.02 and (tear:HasTearFlags(TearFlags.TEAR_CONTINUUM) or math.abs(tear.Color:GetOffset().R - 0.60784316062927) < 1e-10 or math.abs(tear.Color:GetOffset().R - 0.54117649793625) < 1e-10 or math.abs(tear.Color:GetOffset().R + 0.39215689897537) < 1e-10) then
             tear:ChangeVariant(TearVariant.GRIDENT)
             tear:Remove()
         end

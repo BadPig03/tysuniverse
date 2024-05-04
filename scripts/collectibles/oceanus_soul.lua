@@ -98,6 +98,33 @@ local function GetDefaultLaserColor(player)
     return Color(laserColor.R, laserColor.G, laserColor.B, laserColor.A * 0.4, laserOffset.R, laserOffset.G, laserOffset.B, laserColorize.R, laserColorize.G, laserColorize.B, laserColorize.A)
 end
 
+local function SpawnFallenSwordsRain(entity, player, strength)
+    local rng = player:GetCollectibleRNG(ty.CustomCollectibles.FALLENSKY)
+    local room = ty.GAME:GetRoom()
+    local times = math.ceil(rng:RandomInt(2, 4) * strength)
+    for i = 0, times - 1 do
+        local sword = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.FALLENSKYSWORD, 0, room:GetClampedPosition(entity.Position + rng:RandomVector() * rng:RandomInt(180), 16) - Vector(0, 500), Vector(0, 0), player):ToEffect()
+        local swordSprite = sword:GetSprite()
+        local randomNumber = rng:RandomFloat()
+        if randomNumber < 1 / 3 then
+            swordSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_alt.png", true)
+        elseif randomNumber >= 1 / 3 and randomNumber < 2 / 3 then
+            swordSprite:ReplaceSpritesheet(0, "gfx/effects/fallen_sky_sword_alt_2.png", true)
+        end
+        swordSprite:Play("Fall", true)
+        swordSprite.PlaybackSpeed = 0
+        sword.DepthOffset = entity.DepthOffset + 1
+        local swordData = ty:GetLibData(sword)
+        swordData.Player = player
+        swordData.Target = entity
+        swordData.Position = 500
+        swordData.Multiplier = 0.5
+        swordData.Chain = false
+        swordData.Group = true
+        swordData.Delay = i * 2
+    end
+end
+
 local function SpawnLaser(player, index, percent)
     local isFamiliar = false
     local laser = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.OCEANUSSOULLASER, 0, player.Position, Vector(0, 0), player)
@@ -495,6 +522,9 @@ function OceanusSoul:UpdateLaser(effect)
                 elseif room:GetGridIndex(effect.Position) ~= -1 and data.Continuum then
                     data.Continuum = false
                 end
+            end
+            if effect.FrameCount % 20 == 0 and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) then
+                SpawnFallenSwordsRain(effect, player, data.Percent)
             end
             if effect.FrameCount % 5 == 0 and data.TearFlags & TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP == TearFlags.TEAR_MYSTERIOUS_LIQUID_CREEP then
                 Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.PLAYER_CREEP_GREEN, 0, effect.Position, Vector(0, 0), player)

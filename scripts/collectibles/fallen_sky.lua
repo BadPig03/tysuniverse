@@ -58,9 +58,10 @@ end
 
 local function SpawnAGroupOfFallenSwords(entity, player)
     local rng = player:GetCollectibleRNG(ty.CustomCollectibles.FALLENSKY)
+    local room = ty.GAME:GetRoom()
     local times = rng:RandomInt(6, 11)
     for i = 0, times - 1 do
-        local sword = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.FALLENSKYSWORD, 0, entity.Position + rng:RandomVector() * rng:RandomInt(60) - Vector(0, 500), Vector(0, 0), player):ToEffect()
+        local sword = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.FALLENSKYSWORD, 0, room:GetClampedPosition(entity.Position + rng:RandomVector() * rng:RandomInt(60), 16) - Vector(0, 500), Vector(0, 0), player):ToEffect()
         local swordSprite = sword:GetSprite()
         local randomNumber = rng:RandomFloat()
         if randomNumber < 1 / 3 then

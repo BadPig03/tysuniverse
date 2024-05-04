@@ -1,6 +1,7 @@
 <pocketitems>
 	<!--Runes-->
 	<rune type="rune" name="Soul of ff0" hud="Soul of ff0" mimiccharge="12" description="Blood activation" pickup="128" achievement="4"/> 
+	<card type="object" name="Glowing Hourglass Shard" hud="Glowing Hourglass Shard" description="Turn back time" pickup="129"/>
 
 	<!--Pills-->
 	<pilleffect id="0" name="Bait and Switch" class="0" mimiccharge="2"/>

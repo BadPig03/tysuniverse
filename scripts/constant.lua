@@ -85,7 +85,8 @@ ty.CustomTearFlags = {
 }
 
 ty.CustomCards = {
-    SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0")
+    SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0"),
+    GLOWINGHOURGLASSSHARD = Isaac.GetCardIdByName("Glowing Hourglass Shard")
 }
 
 ty.CustomPills = {

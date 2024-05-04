@@ -727,6 +727,22 @@ EIDInfo.Cards = {
             MimicCharge = 12,
             IsRune = true
         }
+    },
+    [ty.CustomCards.GLOWINGHOURGLASSSHARD] = {
+        [1] = {
+            Name = "发光沙漏碎片",
+            Desc = "#使用一次{{Collectible422}}发光沙漏"..
+            "#受致命伤时自动使用",
+            MimicCharge = nil,
+            IsRune = false
+        },
+        [2] = {
+            Name = "Glowing Hourglass Shard",
+            Desc = "#{{Heart}} Grant the ability to obtain heart containers and immediately receive two heart containers"..
+            "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted",
+            MimicCharge = nil,
+            IsRune = false
+        }
     }
 }
 
@@ -762,35 +778,47 @@ EIDInfo.Players = {
     }
 }
 
-EIDInfo.Icons = {
-    ["Player"..ty.CustomPlayerType.WARFARIN] = {
-        AnimationName = "Players",
-        AnimationFrame = 0,
-        Width = 16,
-        Height = 16,
-        LeftOffset = 0,
-        TopOffset = 0,
-        SpriteObject = Sprite("gfx/eid/player_icons.anm2", true)
-    },
-    ["Card"..ty.CustomCards.SOULOFFF0] = {
-        AnimationName = "Soul of ff0",
-        AnimationFrame = 0,
-        Width = 9,
-        Height = 9,
-        LeftOffset = 0.5,
-        TopOffset = 1.5,
-        SpriteObject = Sprite("gfx/eid/eid_cardfronts.anm2", true)
-    },
-    ["Water"] = {
-        AnimationName = "Water",
-        AnimationFrame = 0,
-        Width = 10,
-        Height = 10,
-        LeftOffset = 0,
-        TopOffset = 0,
-        SpriteObject = Sprite("gfx/eid/inline_icons.anm2", true)
+do
+    local cardfronts = Sprite("gfx/eid/eid_cardfronts.anm2", true)
+    EIDInfo.Icons = {
+        ["Player"..ty.CustomPlayerType.WARFARIN] = {
+            AnimationName = "Players",
+            AnimationFrame = 0,
+            Width = 16,
+            Height = 16,
+            LeftOffset = 0,
+            TopOffset = 0,
+            SpriteObject = Sprite("gfx/eid/player_icons.anm2", true)
+        },
+        ["Card"..ty.CustomCards.SOULOFFF0] = {
+            AnimationName = "Soul of ff0",
+            AnimationFrame = 0,
+            Width = 9,
+            Height = 9,
+            LeftOffset = 0.5,
+            TopOffset = 1.5,
+            SpriteObject = cardfronts
+        },
+        ["Card"..ty.CustomCards.GLOWINGHOURGLASSSHARD] = {
+            AnimationName = "Glowing Hourglass Shard",
+            AnimationFrame = 0,
+            Width = 9,
+            Height = 9,
+            LeftOffset = 0.5,
+            TopOffset = 1.5,
+            SpriteObject = cardfronts
+        },
+        ["Water"] = {
+            AnimationName = "Water",
+            AnimationFrame = 0,
+            Width = 10,
+            Height = 10,
+            LeftOffset = 0,
+            TopOffset = 0,
+            SpriteObject = Sprite("gfx/eid/inline_icons.anm2", true)
+        }
     }
-}
+end
 
 for ID, Info in pairs(EIDInfo.Collectibles) do
     for i = 1, 2 do
@@ -807,6 +835,7 @@ for ID, Info in pairs(EIDInfo.Collectibles) do
         end
     end
 end
+
 for ID, Info in pairs(EIDInfo.Trinkets) do
     for i = 1, 2 do
         local descTable = Info[i]
@@ -819,6 +848,7 @@ for ID, Info in pairs(EIDInfo.Trinkets) do
         end
     end
 end
+
 for ID, Info in pairs(EIDInfo.Cards) do
     for i = 1, 2 do
         local descTable = Info[i]
@@ -826,6 +856,7 @@ for ID, Info in pairs(EIDInfo.Cards) do
         EID:addCardMetadata(ID, descTable.MimicCharge, descTable.IsRune)
     end
 end
+
 for ID, Info in pairs(EIDInfo.Pills) do
     for i = 1, 2 do
         local descTable = Info[i]
@@ -833,15 +864,18 @@ for ID, Info in pairs(EIDInfo.Pills) do
         EID:addPillMetadata(ID, descTable.MimicCharge, descTable.Class)
     end
 end
+
 for ID, Info in pairs(EIDInfo.Players) do
     for i = 1, 2 do
         local descTable = Info[i]
         EID:addBirthright(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
     end
 end
+
 for ShortCut, descTable in pairs(EIDInfo.Icons) do
     EID:addIcon(ShortCut, descTable.AnimationName, descTable.AnimationFrame, descTable.Width, descTable.Height, descTable.LeftOffset, descTable.TopOffset, descTable.SpriteObject)
 end
+
 do
     local function WakeUpCondition(descObj)
         return descObj.ObjType == EntityType.ENTITY_PICKUP and descObj.ObjVariant == PickupVariant.PICKUP_COLLECTIBLE and descObj.ObjSubType == ty.CustomCollectibles.WAKEUP
