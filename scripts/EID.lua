@@ -724,11 +724,13 @@ EIDInfo.Trinkets = {
     [ty.CustomTrinkets.BETHSSALVATION] = {
         [1] = {
             Name = "伯大尼的救赎",
-            Desc = "#到下一层时有50%的概率传送到{{AngelRoom}}天使房"
+            Desc = "#到下一层时有50%的概率传送到{{AngelRoom}}天使房"..
+            "#拥有{{Collectible499}}圣餐时100%触发"
         },
         [2] = {
             Name = "Beth's Salvation",
-            Desc = "#Entering a new floor, there is a 50% chance of being teleported to {{AngelRoom}} the Angel Room "
+            Desc = "#Entering a new floor, there is a 50% chance of being teleported to {{AngelRoom}} the Angel Room"..
+            "#Always triggers if Isaac has {{Collectible499}} the Eucharist"
         }
     }
 }
@@ -914,7 +916,7 @@ do
         end
         local wakeUpDesc = EIDInfo.Collectibles[ty.CustomCollectibles.WAKEUP][languageIndex].WakeUp
         if wakeUpDesc then
-            EID:appendToDescription(descObj, wakeUpDesc..string.format("%.1f", (math.min(math.max(Game():GetLevel():GetAbsoluteStage() / 22 + 5 / 11, 0.5), 1) * 100)).."%")
+            EID:appendToDescription(descObj, wakeUpDesc..string.format("%.1f", (math.min(math.max(ty.LEVEL:GetAbsoluteStage() / 22 + 5 / 11, 0.5), 1) * 100)).."%")
         end
         return descObj
     end
