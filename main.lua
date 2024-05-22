@@ -1,7 +1,7 @@
 ty = RegisterMod("ty's Universe [+REPENTOGON]", 1)
 
-ty.VERSION = "02w17a"
-ty.REPENTOGONVERSION = "1.0.9d"
+ty.VERSION = "02w16e"
+ty.REPENTOGONVERSION = "1.0.8c"
 ty.GAME = Game()
 ty.HUD = ty.GAME:GetHUD()
 ty.ITEMPOOL = ty.GAME:GetItemPool()
@@ -25,8 +25,6 @@ include("scripts/load.lua")
 if EID then
 	include("scripts/EID.lua")
 end
-
-Isaac.SetWindowTitle(" with ty's Universe "..ty.VERSION.." Enabled!")
 
 local function MeetsVersion(targetVersion)
     local version = {}

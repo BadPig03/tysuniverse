@@ -48,8 +48,7 @@ end
 local function GetActiveItemCounts(player)
     local count = 0
     for index = ActiveSlot.SLOT_PRIMARY, ActiveSlot.SLOT_SECONDARY do
-        local activeItem = player:GetActiveItem(index)
-        if activeItem > 0 and activeItem ~= CollectibleType.COLLECTIBLE_BOOK_OF_VIRTUES then
+        if player:GetActiveItem(index) > 0 then
             count = count + 1
         end
     end

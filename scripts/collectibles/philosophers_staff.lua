@@ -11,14 +11,14 @@ function PhilosophersStaff:UseItem(itemID, rng, player, useFlags, activeSlot, va
             ty.SFXMANAGER:Play(SoundEffect.SOUND_GOLD_HEART, 0.6)
             Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.CRACKED_ORB_POOF, 0, ent.Position, Vector(0, 0), nil)
             local crater = Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.BOMB_CRATER, 0, ent.Position, Vector(0, 0), nil)
-            crater:GetSprite().Color:SetColorize(6, 4.5, 0.2, 2)
+            crater:GetSprite().Color:SetColorize(6,4.5,0.2,2)
             ty.GAME:SpawnParticles(ent.Position, EffectVariant.COIN_PARTICLE, 25, 7)
             for i = 1, 4 + rng:RandomInt(4) do
                 local subType = CoinSubType.COIN_PENNY
                 if rng:RandomInt(100) < 10 then
                     subType = rng:RandomInt(CoinSubType.COIN_NICKEL, CoinSubType.COIN_GOLDEN + 1)
                 end
-                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(ent.Position, 0, true), Vector(0, 0), nil)
+                Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COIN, subType, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
             end
             ent:Remove()
             flag = true

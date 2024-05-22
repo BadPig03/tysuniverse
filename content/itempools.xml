@@ -15,9 +15,6 @@
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
-  <Pool Name="bombBum">
-		<Item Name="Explosion Master" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-	</Pool>
   <Pool Name="boss">
     <Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Guppy's Food" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -82,7 +79,6 @@
     <Item Name="Bone-in Fish Steak" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Beggar Mask" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Explosion Master" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="keyMaster">
     <Item Name="Lumigyro Fly" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -147,7 +143,6 @@
     <Item Name="Planetarium Telescope" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Beggar Mask" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Peeled Banana" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
-    <Item Name="Explosion Master" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="ultraSecret">
     <Item Name="Guilt" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

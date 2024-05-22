@@ -466,13 +466,13 @@ EIDInfo.Collectibles = {
             Name = "工具箱",
             Desc = "#生成一个工具箱跟班"..
             "#{{Card}} 每清理五个房间后生成一张随机特殊卡牌"..
-            "#包括：混沌卡、信用卡、规则卡、反人类卡、免费保释卡、？卡、紧急联系电话、神圣卡、变巨术、先祖召唤、时空漫步、红钥匙碎片、骰子碎片、万用牌和发光沙漏碎片"
+            "#包括：混沌卡、信用卡、规则卡、反人类卡、免费保释卡、？卡、紧急联系电话、神圣卡、变巨术、先祖召唤、时空漫步、红钥匙碎片、骰子碎片和万用牌"
         },
         [2] = {
             Name = "Tool Box",
             Desc = "#Spawns a tool box familiar"..
             "#{{Card}} Randomly spawns a special card every 5 rooms"..
-            "#Includes: Chaos Card, Credit Card, Rules Card, A Card Against Humanity, Get out of Jail Free Card, ? Card, Emergency Contact, Holy Card, Huge Growth, Ancient Recall, Era Walk, Cracked Key, Dice Shard, Wild Card and Glowing Hourglass Shard"
+            "#Includes: Chaos Card, Credit Card, Rules Card, A Card Against Humanity, Get out of Jail Free Card, ? Card, Emergency Contact, Holy Card, Huge Growth, Ancient Recall, Era Walk, Cracked Key, Dice Shard and Wild Card"
         }
     },
     [ty.CustomCollectibles.OCEANUSSOUL] = {
@@ -620,18 +620,6 @@ EIDInfo.Collectibles = {
             "#{{Luck}} At 9 luck: 50%"
         }
     },
-    [ty.CustomCollectibles.EXPLOSIONMASTER] = {
-        [1] = {
-            Name = "爆炸大师",
-            Desc = "#敌方泪弹有40%的概率被替换成造成40点伤害的即爆炸弹"..
-            "#{{Warning}} 鲜血伤心炸弹不对角色造成伤害，但会阻挡角色泪弹，并且在离开房间后消失"
-        },
-        [2] = {
-            Name = "Explosion Master",
-            Desc = "#Enemy projectiles have 40% chance to be replaced by troll bombs which cause 40 damage on explosion"..
-            "#{{Warning}} Those bombs won't do harm to Isaac, but they can block tears and disappear if leaving the room"
-        }
-    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
@@ -720,16 +708,6 @@ EIDInfo.Trinkets = {
                 "9"
             }
         }
-    },
-    [ty.CustomTrinkets.BETHSSALVATION] = {
-        [1] = {
-            Name = "伯大尼的救赎",
-            Desc = "#到下一层时有50%的概率传送到{{AngelRoom}}天使房"
-        },
-        [2] = {
-            Name = "Beth's Salvation",
-            Desc = "#Entering a new floor, there is a 50% chance of being teleported to {{AngelRoom}} the Angel Room "
-        }
     }
 }
 
@@ -740,16 +718,14 @@ EIDInfo.Cards = {
             Desc = "#{{Heart}} 给予可获得心之容器的能力并立即获得两颗心之容器"..
             "#{{Warning}} 效果仅持续一层，结束后将所有的心之容器转换为原本可接受的血量",
             MimicCharge = 12,
-            IsRune = true,
-            TarotCloth = nil
+            IsRune = true
         },
         [2] = {
             Name = "Soul of ff0",
             Desc = "#{{Heart}} Grant the ability to obtain heart containers and immediately receive two heart containers"..
             "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted",
             MimicCharge = 12,
-            IsRune = true,
-            TarotCloth = nil
+            IsRune = true
         }
     },
     [ty.CustomCards.GLOWINGHOURGLASSSHARD] = {
@@ -758,16 +734,14 @@ EIDInfo.Cards = {
             Desc = "#使用一次{{Collectible422}}发光沙漏"..
             "#受致命伤时自动使用",
             MimicCharge = nil,
-            IsRune = false,
-            TarotCloth = nil
+            IsRune = false
         },
         [2] = {
             Name = "Glowing Hourglass Shard",
             Desc = "#{{Heart}} Grant the ability to obtain heart containers and immediately receive two heart containers"..
             "#{{Warning}} The ability only lasts for one floor, after which all heart containers will get converted",
             MimicCharge = nil,
-            IsRune = false,
-            TarotCloth = nil
+            IsRune = false
         }
     }
 }
@@ -880,7 +854,6 @@ for ID, Info in pairs(EIDInfo.Cards) do
         local descTable = Info[i]
         EID:addCard(ID, descTable.Desc, descTable.Name, EIDLanguage[i])
         EID:addCardMetadata(ID, descTable.MimicCharge, descTable.IsRune)
-        EID.descriptions[EIDLanguage[i]].tarotClothBuffs[ID] = descTable.TarotCloth
     end
 end
 

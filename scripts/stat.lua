@@ -325,16 +325,18 @@ do
                     end
                     return tears
                 end
-            },
+            }
+            --[[ Cannot Detect Bloody Gust.
             {
                 function(player, tears, reverse)
-                    local lustCount = math.min(player:GetBloodLustCounter(), 6)
-                    if lustCount > 0 then
-                        tears = AddTearsModifier(tears, 0.05 * lustCount^ 2 + 0.2 * lustCount, reverse)
+                    local effects = player:GetEffects()
+                    local num = effects:GetCollectibleEffectNum(CollectibleType.COLLECTIBLE_BLOODY_GUST)
+                    if num > 0 then
+                        tears = AddTearsModifier(tears, 0.05 * num^ 2 + 0.2 * num, reverse)
                     end
                     return tears
                 end
-            }
+            }]]
         }
         Private.MiscTearsUps = function(player)
             local tearsUp = 0
@@ -546,15 +548,7 @@ do
         Private.DamageSteps3 = {
             function(damage, player, reverse)
                 local effects = player:GetEffects()
-                local lustCount = player:GetBloodLustCounter()
-                if lustCount > 0 then
-                    lustCount = math.min(lustCount, (player:GetPlayerType() == PlayerType.PLAYER_SAMSON and player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) and 10) or 6)
-                    if not reverse then
-                        damage = damage + lustCount * (lustCount + 1) * 0.1 + 0.3 * lustCount
-                    else
-                        damage = damage - lustCount * (lustCount + 1) * 0.1 - 0.3 * lustCount
-                    end
-                end
+                -- Cannot Detect Bloody Lust
                 if effects:HasCollectibleEffect(CollectibleType.COLLECTIBLE_CROWN_OF_LIGHT) then
                     if not reverse then
                         damage = damage * 2

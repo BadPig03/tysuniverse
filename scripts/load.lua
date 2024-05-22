@@ -25,7 +25,6 @@ ty.CollectiblesList = {
     'cursed_destiny',
     'cursed_treasure',
     'expired_glue',
-    'explosion_master',
     'fallen_sky',
     'guilt',
     'guppys_food',
@@ -57,8 +56,7 @@ ty.PocketItemsList = {
 ty.TrinketsList = {
     'broken_glass_eye',
     'lost_bottle_cap',
-    'stone_carving_knife',
-    'beths_salvation'
+    'stone_carving_knife'
 }
 ty.ChallengesList = {
     'glue_prohibition'
