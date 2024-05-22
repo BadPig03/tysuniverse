@@ -80,6 +80,64 @@ function Warfarin:PostPlayerHUDRenderActiveItem(player, slot, offset, alpha, sca
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYERHUD_RENDER_ACTIVE_ITEM, Warfarin.PostPlayerHUDRenderActiveItem)
 
+function Warfarin:PostPlayerInit(player)
+    local effects = player:GetEffects()
+    if player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINHAIR) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINHAIR)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINWINGS) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINMAGIC8BALL) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINMAGIC8BALL)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINCEREMONIALROBES) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINCEREMONIALROBES)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINMOMSWIG) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINMOMSWIG)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINBLACKCANDLE) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINBLACKCANDLE)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINTAURUS) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINTAURUS)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINLEO) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINLEO)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR3) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR3)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR4) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR4)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINCARDREADING) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINCARDREADING)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS)
+        end
+        if effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS) then
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS)
+        end
+    end
+end
+--Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_INIT, Warfarin.PostPlayerInit)
+
 function Warfarin:PostPlayerUpdate(player)
     local room = ty.GAME:GetRoom()
     if not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.FF0UNLOCKED) and player:GetMaxHearts() >= 24 then
@@ -87,63 +145,10 @@ function Warfarin:PostPlayerUpdate(player)
     end
     local data = ty:GetLibData(player)
     local effects = player:GetEffects()
-    if not data.Init then
+    if not data.Init or player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
         return
     end
-    if player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAIR).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAIR).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
-        end
-        if effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
-        end
-        return
-    elseif ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetCurrentRoomIndex() == 94 and room:GetFrameCount() >= 5 and not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.SOULOFFF0UNLOCKED) then
+    if ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetCurrentRoomIndex() == 94 and room:GetFrameCount() >= 5 and not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.SOULOFFF0UNLOCKED) then
         ty.PERSISTENTGAMEDATA:TryUnlock(ty.CustomAchievements.SOULOFFF0UNLOCKED)
     end
     data.BloodSample.Percent = data.BloodSample.Percent + 0.5 * room:GetEnemyDamageInflicted() / GetDamagePerCharge(player)
@@ -152,14 +157,14 @@ function Warfarin:PostPlayerUpdate(player)
         player:AddActiveCharge(1, ActiveSlot.SLOT_POCKET, true, true, true)
     end
     local globalData = ty.GLOBALDATA
-    if player:GetMaxHearts() + player:GetBoneHearts() * 2 > 6 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
+    if player:GetMaxHearts() + player:GetBoneHearts() * 2 > 6 and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA)
         if not globalData.BloodSample.OutTriggered then
             ItemOverlay.Show(ty.CustomGiantBooks.WARFARINOUT, 3, player)
             globalData.BloodSample.OutTriggered = true
         end
-    elseif player:GetMaxHearts() + player:GetBoneHearts() * 2 <= 6 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID)
+    elseif player:GetMaxHearts() + player:GetBoneHearts() * 2 <= 6 and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA)
         if not globalData.BloodSample.InTriggered then
             ItemOverlay.Show(ty.CustomGiantBooks.WARFARININ, 3, player)
             globalData.BloodSample.InTriggered = true
@@ -178,35 +183,35 @@ function Warfarin:PostPlayerUpdate(player)
             player:SetActiveCharge(charge, ActiveSlot.SLOT_POCKET)
         end
     end
-    if player:HasCollectible(CollectibleType.COLLECTIBLE_GNAWED_LEAF) and player:GetGnawedLeafTimer() >= 60 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
+    if player:HasCollectible(CollectibleType.COLLECTIBLE_GNAWED_LEAF) and player:GetGnawedLeafTimer() >= 60 and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR)
     end
-    if player:GetGnawedLeafTimer() < 60 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID)
+    if player:GetGnawedLeafTimer() < 60 and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR)
     end
-    if effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
+    if effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2)
     end
-    if not effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID)
+    if not effects:HasNullEffect(NullItemID.ID_TOOTH_AND_NAIL) and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR2)
     end
-    if not effects:HasNullEffect(NullItemID.ID_ESAU_JR) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
+    if not effects:HasNullEffect(NullItemID.ID_ESAU_JR) and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR)
     end
-    if effects:HasNullEffect(NullItemID.ID_ESAU_JR) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID)
+    if effects:HasNullEffect(NullItemID.ID_ESAU_JR) and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINESAUJRHAIR)
     end
-    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) >= 3 and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) >= 3 and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS)
     end
-    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) < 3 and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID)
+    if player:GetPlayerFormCounter(PlayerForm.PLAYERFORM_GUPPY) < 3 and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINGUPPYWINGS)
     end
-    if not effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
+    if not effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS) then
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS)
     end
-    if effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and not effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID) then
-        effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID)
+    if effects:HasNullEffect(NullItemID.ID_REVERSE_EMPRESS) and not effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS) then
+        effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINREVERSEEMPRESS)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, Warfarin.PostPlayerUpdate)
@@ -224,7 +229,7 @@ function Warfarin:PrePlayerAddHearts(player, amount, addHealthType, _)
                 end
             end
             return 0
-        elseif player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and addHealthType & AddHealthType.RED == AddHealthType.RED then
+        elseif player:GetEffects():HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) and addHealthType & AddHealthType.RED == AddHealthType.RED then
             return amount * 2
         elseif addHealthType & AddHealthType.MAX == AddHealthType.MAX then
             return math.min(amount, GetHeartLimit(player) - player:GetMaxHearts() - player:GetBoneHearts() * 2)
@@ -358,8 +363,8 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
         end
         if type == CollectibleType.COLLECTIBLE_CHARM_VAMPIRE then
             player:AddCacheFlags(CacheFlag.CACHE_FLYING, true)
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
         end
         if type == CollectibleType.COLLECTIBLE_BLOOD_BAG then
             player:AddHearts(99)
@@ -368,41 +373,41 @@ function Warfarin:PostAddCollectible(type, charge, firstTime, slot, varData, pla
             player:AddBoneHearts(-1)
         end
         if type == CollectibleType.COLLECTIBLE_SPIRIT_OF_THE_NIGHT or type == CollectibleType.COLLECTIBLE_DEAD_DOVE then
-            effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+            effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
         end
         if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINMAGIC8BALL)
         end
         if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINCEREMONIALROBES)
         end
         if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINMOMSWIG)
         end
         if type == CollectibleType.COLLECTIBLE_BLACK_CANDLE then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINBLACKCANDLE)
         end
         if type == CollectibleType.COLLECTIBLE_TAURUS then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINTAURUS)
         end
         if type == CollectibleType.COLLECTIBLE_LEO then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINLEO)
         end
         if type == CollectibleType.COLLECTIBLE_INTRUDER then
             player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_INTRUDER))
         end
         if type == CollectibleType.COLLECTIBLE_TERRA then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR3)
         end
         if type == CollectibleType.COLLECTIBLE_JUPITER then
             player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_JUPITER))
         end
         if type == CollectibleType.COLLECTIBLE_URANUS then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR4)
         end
         if type == CollectibleType.COLLECTIBLE_CARD_READING then
-            effects:AddNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+            effects:AddNullEffect(ty.CustomNullItemIDs.WARFARINCARDREADING)
         end
         if type == CollectibleType.COLLECTIBLE_C_SECTION then
             player:RemoveCostume(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_C_SECTION))
@@ -416,37 +421,37 @@ function Warfarin:PostTriggerCollectibleRemoved(player, type)
     local effects = player:GetEffects()
     if type == CollectibleType.COLLECTIBLE_CHARM_VAMPIRE then
         player:EvaluateItems()
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
     end
     if type == CollectibleType.COLLECTIBLE_SPIRIT_OF_THE_NIGHT or type == CollectibleType.COLLECTIBLE_DEAD_DOVE then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINWINGS)
     end
     if type == CollectibleType.COLLECTIBLE_MAGIC_8_BALL then
-	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID)
+	    effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINMAGIC8BALL)
 	end
     if type == CollectibleType.COLLECTIBLE_CEREMONIAL_ROBES then
-	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID)
+	    effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINCEREMONIALROBES)
 	end
     if type == CollectibleType.COLLECTIBLE_MOMS_WIG then
-	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID)
+	    effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINMOMSWIG)
 	end
     if type == CollectibleType.COLLECTIBLE_BLACK_CANDLE then
-	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID)
+	    effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINBLACKCANDLE)
 	end
     if type == CollectibleType.COLLECTIBLE_TAURUS then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINTAURUS)
     end
     if type == CollectibleType.COLLECTIBLE_LEO then
-	    effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID)
+	    effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINLEO)
 	end
     if type == CollectibleType.COLLECTIBLE_TERRA then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR3)
     end
     if type == CollectibleType.COLLECTIBLE_URANUS then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINFROZENHAIR4)
     end
     if type == CollectibleType.COLLECTIBLE_CARD_READING then
-        effects:RemoveNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID)
+        effects:RemoveNullEffect(ty.CustomNullItemIDs.WARFARINCARDREADING)
     end
 end
 Warfarin:AddCallback(ModCallbacks.MC_POST_TRIGGER_COLLECTIBLE_REMOVED, Warfarin.PostTriggerCollectibleRemoved)
@@ -466,9 +471,9 @@ function Warfarin:EvaluateCache(player, cacheFlag)
         local effects = player:GetEffects()
         if cacheFlag == CacheFlag.CACHE_DAMAGE then
             stat:AddFlatDamage(player, 0.2 * ty.GAME:GetDevilRoomDeals())
-        elseif cacheFlag == CacheFlag.CACHE_FLYING and effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID) and not player:HasCurseMistEffect() then
+        elseif cacheFlag == CacheFlag.CACHE_FLYING and effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINWINGS) and not player:HasCurseMistEffect() then
             player.CanFly = true
-        elseif effects:HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) then
+        elseif effects:HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) then
             if cacheFlag == CacheFlag.CACHE_TEARFLAG then
                 player.TearFlags = player.TearFlags | TearFlags.TEAR_BURSTSPLIT
             end
@@ -487,7 +492,7 @@ function Warfarin:PostFireTear(tear)
     local tear = tear:ToTear()
     local player = tear.SpawnerEntity:ToPlayer()
     if player and player:GetPlayerType() == ty.CustomPlayerType.WARFARIN then
-        if player:GetEffects():HasNullEffect(ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID) and tear.Variant == TearVariant.BLUE then
+        if player:GetEffects():HasNullEffect(ty.CustomNullItemIDs.WARFARINHAEMOLACRIA) and tear.Variant == TearVariant.BLUE then
             tear:ChangeVariant(TearVariant.BLOOD)
         end
         if player:HasCollectible(CollectibleType.COLLECTIBLE_POLYPHEMUS) then
@@ -548,6 +553,7 @@ function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
+        ty.ITEMPOOL:AddRoomBlacklist(CollectibleType.COLLECTIBLE_POUND_OF_FLESH)
         local roomType = room:GetType()
         if roomType == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)

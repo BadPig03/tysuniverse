@@ -265,7 +265,7 @@ FallenSky:AddCallback(ModCallbacks.MC_NPC_UPDATE, FallenSky.PostNPCUpdate)
 function FallenSky:PostTearCollision(tear, collider, low)
     local tearData = ty:GetLibData(tear)
     local player = functions:GetPlayerFromTear(tear)
-    if tear:HasTearFlags(TearFlags.TEAR_LUDOVICO) and tear.TearFlags & ty.CustomTearFlags.FALLENSKY ~= ty.CustomTearFlags.FALLENSKY then
+    if player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and tear:HasTearFlags(TearFlags.TEAR_LUDOVICO) and tear.TearFlags & ty.CustomTearFlags.FALLENSKY ~= ty.CustomTearFlags.FALLENSKY then
         tear.TearFlags = tear.TearFlags | ty.CustomTearFlags.FALLENSKY
     end
     if tear.TearFlags & ty.CustomTearFlags.FALLENSKY == ty.CustomTearFlags.FALLENSKY and functions:IsValidEnemy(collider) then

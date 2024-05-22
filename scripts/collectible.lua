@@ -40,6 +40,7 @@ local collectibles = {
     [ty.CustomCollectibles.PEELEDBANANA] = { Name="剥皮香蕉", Description="甜甜的感觉" },
     [ty.CustomCollectibles.CURSEDDESTINY] = { Name="被诅咒的命运", Description="命中注定" },
     [ty.CustomCollectibles.FALLENSKY] = { Name="天坠", Description="直坠深渊" },
+    [ty.CustomCollectibles.EXPLOSIONMASTER] = { Name="爆炸大师", Description="艺术就是爆炸" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }
@@ -47,7 +48,8 @@ local collectibles = {
 local trinkets = {
     [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" },
     [ty.CustomTrinkets.BROKENGLASSEYE] = { Name="损坏的玻璃眼", Description="它曾经是完整的" },
-    [ty.CustomTrinkets.STONECARVINGKNIFE] = { Name="石刻刀", Description="石雕" }
+    [ty.CustomTrinkets.STONECARVINGKNIFE] = { Name="石刻刀", Description="石雕" },
+    [ty.CustomTrinkets.BETHSSALVATION] = { Name="伯大尼的救赎", Description="解脱于罪恶" }
 }
 
 function Collectible:ItemQueueUpdate(player)
