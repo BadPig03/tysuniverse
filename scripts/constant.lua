@@ -38,6 +38,7 @@ ty.CustomCollectibles = {
     PEELEDBANANA = Isaac.GetItemIdByName("Peeled Banana"),
     CURSEDDESTINY = Isaac.GetItemIdByName("Cursed Destiny"),
     FALLENSKY = Isaac.GetItemIdByName("Fallen Sky"),
+    EXPLOSIONMASTER = Isaac.GetItemIdByName("Explosion Master"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
@@ -45,7 +46,8 @@ ty.CustomCollectibles = {
 ty.CustomTrinkets = {
     LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap"),
     BROKENGLASSEYE = Isaac.GetTrinketIdByName("Broken Glass Eye"),
-    STONECARVINGKNIFE = Isaac.GetTrinketIdByName("Stone Carving Knife")
+    STONECARVINGKNIFE = Isaac.GetTrinketIdByName("Stone Carving Knife"),
+    BETHSSALVATION = Isaac.GetTrinketIdByName("Beth's Salvation")
 }
 
 ty.CustomChallenges = {
@@ -78,6 +80,29 @@ ty.CustomNullItems = {
     WARFARINESAUJRHAIR = Isaac.GetNullItemIdByName("Warfarin Esau Jr Hair"),
     WARFARINGUPPYWINGS = Isaac.GetNullItemIdByName("Warfarin Guppy Wings"),
     WARFARINREVERSEEMPRESS = Isaac.GetNullItemIdByName("Warfarin Reverse Empress")
+}
+
+ty.CustomNullItemIDs = {
+    HEPHAESTUSSOUL = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.HEPHAESTUSSOUL).ID,
+    MARRIAGECERTIFICATEHEARTS = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.MARRIAGECERTIFICATEHEARTS).ID,
+    LOSTSOUL = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.LOSTSOUL).ID,
+    WARFARINHAIR = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAIR).ID,
+    WARFARINWINGS = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINWINGS).ID,
+    WARFARINHAEMOLACRIA = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINHAEMOLACRIA).ID,
+    WARFARINMAGIC8BALL = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMAGIC8BALL).ID,
+    WARFARINCEREMONIALROBES = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCEREMONIALROBES).ID,
+    WARFARINMOMSWIG = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINMOMSWIG).ID,
+    WARFARINBLACKCANDLE = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINBLACKCANDLE).ID,
+    WARFARINTAURUS = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINTAURUS).ID,
+    WARFARINLEO = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINLEO).ID,
+    WARFARINFROZENHAIR = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR).ID,
+    WARFARINFROZENHAIR2 = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR2).ID,
+    WARFARINFROZENHAIR3 = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR3).ID,
+    WARFARINFROZENHAIR4 = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINFROZENHAIR4).ID,
+    WARFARINCARDREADING = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINCARDREADING).ID,
+    WARFARINESAUJRHAIR = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINESAUJRHAIR).ID,
+    WARFARINGUPPYWINGS = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINGUPPYWINGS).ID,
+    WARFARINREVERSEEMPRESS = ty.ITEMCONFIG:GetCollectible(ty.CustomNullItems.WARFARINREVERSEEMPRESS).ID
 }
 
 ty.CustomTearFlags = {
@@ -148,6 +173,10 @@ ty.CustomChallenges = {
 
 ty.CustomSounds = {
     WARFARINHURT = Isaac.GetSoundIdByName("Warfarin Hurt")
+}
+
+ty.CustomBackdrops = {
+    ICU = Isaac.GetBackdropIdByName("tyuniverse_icu")
 }
 
 return ty
