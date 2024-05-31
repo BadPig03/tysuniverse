@@ -77,7 +77,7 @@ Absolution:AddCallback(ModCallbacks.MC_FAMILIAR_UPDATE, Absolution.FamiliarUpdat
 
 function Absolution:PreDevilApplyItems()
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.ABSOLUTION) then
-        return 0.2
+        return 0.15
     end
 end
 Absolution:AddCallback(ModCallbacks.MC_PRE_DEVIL_APPLY_ITEMS, Absolution.PreDevilApplyItems)

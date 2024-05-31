@@ -39,6 +39,7 @@ ty.CustomCollectibles = {
     CURSEDDESTINY = Isaac.GetItemIdByName("Cursed Destiny"),
     FALLENSKY = Isaac.GetItemIdByName("Fallen Sky"),
     EXPLOSIONMASTER = Isaac.GetItemIdByName("Explosion Master"),
+    SINISTERPACT = Isaac.GetItemIdByName("Sinister Pact"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }
@@ -111,7 +112,8 @@ ty.CustomTearFlags = {
 
 ty.CustomCards = {
     SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0"),
-    GLOWINGHOURGLASSSHARD = Isaac.GetCardIdByName("Glowing Hourglass Shard")
+    GLOWINGHOURGLASSSHARD = Isaac.GetCardIdByName("Glowing Hourglass Shard"),
+    --VIPCARD = Isaac.GetCardIdByName("VIP Card")
 }
 
 ty.CustomPills = {

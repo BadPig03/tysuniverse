@@ -321,7 +321,7 @@ FallenSky:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, FallenSky.PostRocketEf
 function FallenSky:PostLaserCollision(laser, collider, low)
 	local laser = laser:ToLaser()
 	local player = laser.SpawnerEntity and laser.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and functions:IsValidEnemy(collider) and CanTriggerEffect(player, laser:GetDropRNG()) then
+	if laser.Visible and player and player:HasCollectible(ty.CustomCollectibles.FALLENSKY) and functions:IsValidEnemy(collider) and CanTriggerEffect(player, laser:GetDropRNG()) then
         SpawnFallenSword(collider, player, true, laser.CollisionDamage / player.Damage)
 	end
 end

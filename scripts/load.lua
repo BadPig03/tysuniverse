@@ -45,6 +45,7 @@ ty.CollectiblesList = {
     'planetarium_telescope',
     'rewind',
     'scapegoat',
+    'sinister_pact',
     'the_gospel_of_john',
     'tool_box',
     'wake_up'
@@ -52,7 +53,8 @@ ty.CollectiblesList = {
 ty.PocketItemsList = {
     'soul_of_ff0',
     'glowing_hourglass_shard',
-    'bait_and_switch'
+    'bait_and_switch',
+    --'vip_card'
 }
 ty.TrinketsList = {
     'broken_glass_eye',

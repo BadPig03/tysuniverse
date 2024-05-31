@@ -145,7 +145,7 @@ function Warfarin:PostPlayerUpdate(player)
     end
     local data = ty:GetLibData(player)
     local effects = player:GetEffects()
-    if not data.Init or player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
+    if not data.Init or not data.BloodSample or player:GetPlayerType() ~= ty.CustomPlayerType.WARFARIN then
         return
     end
     if ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE8 and ty.LEVEL:GetCurrentRoomIndex() == 94 and room:GetFrameCount() >= 5 and not ty.PERSISTENTGAMEDATA:Unlocked(ty.CustomAchievements.SOULOFFF0UNLOCKED) then
@@ -553,7 +553,12 @@ function Warfarin:PostNewRoom()
     local room = ty.GAME:GetRoom()
     local globalData = ty.GLOBALDATA
     if PlayerManager.AnyoneIsPlayerType(ty.CustomPlayerType.WARFARIN) and globalData.BloodSample then
-        ty.ITEMPOOL:AddRoomBlacklist(CollectibleType.COLLECTIBLE_POUND_OF_FLESH)
+        if ty.ITEMPOOL:HasCollectible(CollectibleType.COLLECTIBLE_POUND_OF_FLESH) then
+            ty.ITEMPOOL:RemoveCollectible(CollectibleType.COLLECTIBLE_POUND_OF_FLESH)
+        end
+        if ty.ITEMPOOL:HasCollectible(CollectibleType.COLLECTIBLE_DAMOCLES) then
+            ty.ITEMPOOL:RemoveCollectible(CollectibleType.COLLECTIBLE_DAMOCLES)
+        end
         local roomType = room:GetType()
         if roomType == RoomType.ROOM_BLACK_MARKET and globalData.BloodSample.BossDefeated and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX then
             Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.WARFARINBLACKMARKETLADDER, 0, Vector(200, 160), Vector(0, 0), nil)

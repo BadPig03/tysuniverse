@@ -21,14 +21,14 @@ EIDInfo.Collectibles = {
             Name = "赦罪",
             Desc = "#{{ArrowUp}} 非自伤的伤害均视作自伤"..
             "#{{ArrowUp}} 原本属于自伤的伤害来源只造成一半伤害，最低半颗心"..
-            "#{{AngelChance}} 恶魔房开启率转换为天使房开启率，并额外增加20%恶魔房开启率"..
+            "#{{AngelChance}} 恶魔房开启率转换为天使房开启率，并额外增加15%恶魔房开启率"..
             "#天使房内多选一的道具拿走后不会导致其他道具消失"
         },
         [2] = {
             Name = "Absolution",
             Desc = "#{{ArrowUp}} Damage taken from all sources will be considered as self-inflicted damage"..
             "#{{ArrowUp}} Damage sources that originally belonged to self-inflicted only deal half damage, at a minimum of half a heart"..
-            "#{{AngelChance}} Spawns Angel Rooms only, with the same chance of spawning as Devil Rooms, and increase the Devil Room spawning chance by 20%"..
+            "#{{AngelChance}} Spawns Angel Rooms only, with the same chance of spawning as Devil Rooms, and increases the Devil Room spawning chance by 15%"..
             "#Items in the Angel Room can be taken without causing other items to disappear"
         }
     },
@@ -632,6 +632,18 @@ EIDInfo.Collectibles = {
             "#{{Warning}} Those bombs won't do harm to Isaac, but they can block tears and disappear if leaving the room"
         }
     },
+    [ty.CustomCollectibles.SINISTERPACT] = {
+        [1] = {
+            Name = "邪恶契约",
+            Desc = "#购买血量交易后会立刻补货"..
+            "#{{Warning}} 无偿购买血量交易无法补货"
+        },
+        [2] = {
+            Name = "Sinister Pact",
+            Desc = "#Buying an item by heart containers restocks it instantly"..
+            "#{{Warning}} Doing it for free won't restock"
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",
@@ -771,7 +783,23 @@ EIDInfo.Cards = {
             IsRune = false,
             TarotCloth = nil
         }
-    }
+    },
+    --[[[ty.CustomCards.VIPCARD] = {
+        [1] = {
+            Name = "贵宾卡",
+            Desc = "#重新生成房间内原有的商店交易和恶魔交易",
+            MimicCharge = 4,
+            IsRune = false,
+            TarotCloth = nil
+        },
+        [2] = {
+            Name = "VIP Card",
+            Desc = "#Restocks all shop and devil deals originally spawned from current room",
+            MimicCharge = 4,
+            IsRune = false,
+            TarotCloth = nil
+        }
+    }]]
 }
 
 EIDInfo.Pills = {
@@ -836,6 +864,15 @@ do
             TopOffset = 1.5,
             SpriteObject = cardfronts
         },
+        --[[["Card"..ty.CustomCards.VIPCARD] = {
+            AnimationName = "VIP Card",
+            AnimationFrame = 0,
+            Width = 9,
+            Height = 9,
+            LeftOffset = 0.5,
+            TopOffset = 1.5,
+            SpriteObject = cardfronts
+        },]]
         ["Water"] = {
             AnimationName = "Water",
             AnimationFrame = 0,

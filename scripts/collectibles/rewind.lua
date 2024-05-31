@@ -193,11 +193,15 @@ function Rewind:PostNewRoom()
 	local room = ty.GAME:GetRoom()
 	local roomDesc = ty.LEVEL:GetCurrentRoomDesc()
 	local roomConfigRoom = roomDesc.Data
-	if roomDesc.VisitedCount == 1 and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX and roomTypeString[room:GetType()] then
+	local roomType = room:GetType()
+	if roomDesc.VisitedCount == 1 and ty.LEVEL:GetCurrentRoomIndex() ~= GridRooms.ROOM_DEBUG_IDX and roomTypeString[roomType] then
 		for _, player in pairs(PlayerManager.GetPlayers()) do
 			local data = ty:GetLibData(player)
-			table.insert(data.Rewind.RoomList, room:GetType())
+			table.insert(data.Rewind.RoomList, roomType)
 		end
+	end
+	if not PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.REWIND) then
+		return
 	end
 	if ty.LEVEL:GetCurrentRoomIndex() == GridRooms.ROOM_DEBUG_IDX then
 		for i = 0, 7 do
@@ -206,11 +210,15 @@ function Rewind:PostNewRoom()
 				door.TargetRoomIndex = ty.LEVEL:GetStartingRoomIndex()
 			end
 		end
-		if room:GetType() == RoomType.ROOM_BLACK_MARKET and ty.LEVEL:MakeRedRoomDoor(GridRooms.ROOM_DEBUG_IDX, DoorSlot.LEFT0) then
-			local door = ty.GAME:GetRoom():GetDoor(DoorSlot.LEFT0)
-			door.TargetRoomIndex = ty.LEVEL:GetStartingRoomIndex()
+		if roomType == RoomType.ROOM_BLACK_MARKET then
+			if ty.LEVEL:MakeRedRoomDoor(GridRooms.ROOM_DEBUG_IDX, DoorSlot.LEFT0) then
+				local door = ty.GAME:GetRoom():GetDoor(DoorSlot.LEFT0)
+				door.TargetRoomIndex = ty.LEVEL:GetStartingRoomIndex()
+			else
+				Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_FOOL, Vector(200, 280), Vector(0, 0), nil)
+			end
 		end
-		if room:GetType() == RoomType.ROOM_CHALLENGE and roomConfigRoom.Variant >= 16 then
+		if roomType == RoomType.ROOM_CHALLENGE and roomConfigRoom.Variant >= 16 then
 			for i = 0, 7 do
 				local door = room:GetDoor(i)
 				if door then

@@ -41,6 +41,7 @@ local collectibles = {
     [ty.CustomCollectibles.CURSEDDESTINY] = { Name="被诅咒的命运", Description="命中注定" },
     [ty.CustomCollectibles.FALLENSKY] = { Name="天坠", Description="直坠深渊" },
     [ty.CustomCollectibles.EXPLOSIONMASTER] = { Name="爆炸大师", Description="艺术就是爆炸" },
+    [ty.CustomCollectibles.SINISTERPACT] = { Name="邪恶契约", Description="他渴望你的誓言" },
     [ty.CustomCollectibles.BLOODSAMPLE] = { Name="血液样本", Description="血量提升" },
     [ty.CustomCollectibles.BLOODYDICE] = { Name="血之骰", Description="重置你的交易" }
 }

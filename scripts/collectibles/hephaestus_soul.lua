@@ -201,7 +201,7 @@ HephaestusSoul:AddCallback(ModCallbacks.MC_POST_FIRE_BOMB, HephaestusSoul.PostFi
 function HephaestusSoul:PostLaserCollision(laser, collider, low)
 	local laser = laser:ToLaser()
 	local player = laser.SpawnerEntity and laser.SpawnerEntity:ToPlayer()
-	if player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and functions:IsValidEnemy(collider) and laser.FrameCount % 3 == 0 then
+	if laser.Visible and player and player:HasCollectible(ty.CustomCollectibles.HEPHAESTUSSOUL) and functions:IsValidEnemy(collider) and laser.FrameCount % 3 == 0 then
 		local fireJet = Isaac.Spawn(EntityType.ENTITY_EFFECT, ty.CustomEffects.HEPHAESTUSSOULFIREJET, 0, collider.Position, Vector(0, 0), player):ToEffect()
 		local fireData = ty:GetLibData(fireJet, true)
 		if laser.Variant == LaserVariant.THIN_RED or laser.Variant == LaserVariant.ELECTRIC then

@@ -106,7 +106,7 @@ function BobsStomach:UpdateChargeBar(effect)
 	if sprite:IsFinished("StartCharged") then
         sprite:Play("Charged", true)
 	end
-	if sprite:IsFinished("Disappear") or not player:Exists() then
+	if sprite:IsFinished("Disappear") or not player:Exists() or not player:HasCollectible(ty.CustomCollectibles.BOBSSTOMACH) then
 		effect:Remove()
 	end
 end

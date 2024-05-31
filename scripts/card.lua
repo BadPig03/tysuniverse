@@ -2,7 +2,8 @@ local Card = ty:DefineANewClass()
 
 local cards = {
     [ty.CustomCards.SOULOFFF0] = { Name="ff0的魂石", Description="血液活化" },
-    [ty.CustomCards.GLOWINGHOURGLASSSHARD] = { Name="发光沙漏碎片", Description="逆转时间" }
+    [ty.CustomCards.GLOWINGHOURGLASSSHARD] = { Name="发光沙漏碎片", Description="逆转时间" },
+    --[ty.CustomCards.VIPCARD] = { Name="贵宾卡", Description="如你所愿" }
 }
 
 local pickingUpCard = nil

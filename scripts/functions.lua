@@ -50,6 +50,15 @@ function Functions:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rn
         if (roomType == RoomType.ROOM_BOSS and (room:GetBossID() == 23 or ty.LEVEL:GetStateFlag(LevelStateFlag.STATE_SATANIC_BIBLE_USED))) or (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE6 and ty.LEVEL:GetStageType() == StageType.STAGETYPE_ORIGINAL and ty.LEVEL:GetCurrentRoomIndex() == ty.LEVEL:GetStartingRoomIndex()) then
             newPool = ItemPoolType.POOL_DEVIL
         end
+        if roomType == RoomType.ROOM_TREASURE then
+            for i = 0, 7 do
+                local door = room:GetDoor(i)
+                if door and door:GetSprite():GetFilename() == "gfx/grid/Door_02_TreasureRoomDoor_Devil.anm2" then
+                    newPool = ItemPoolType.POOL_DEVIL
+                    break
+                end
+            end
+        end
         if type(rng) == "userdata" then
             result = ty.ITEMPOOL:GetCollectible(newPool, true, rng:Next())
         else

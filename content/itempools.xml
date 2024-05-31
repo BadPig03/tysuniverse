@@ -39,6 +39,7 @@
 		<Item Name="Conservative Treatment" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 		<Item Name="Chocolate Pancake" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Absence Note" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Sinister Pact" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="devil">
     <Item Name="Guilt" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -47,6 +48,7 @@
     <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Cursed Destiny" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Fallen Sky" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Sinister Pact" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
   </Pool>
   <Pool Name="goldenChest">
     <Item Name="Marriage Certificate" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
@@ -59,6 +61,7 @@
     <Item Name="Hades Blade" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Blood Sacrifice" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Fallen Sky" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
+    <Item Name="Sinister Pact" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="greedAngel">
     <Item Name="Hephaestus' Soul" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>

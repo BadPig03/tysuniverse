@@ -23,7 +23,7 @@
 
 	<!--Passive and Active Items-->
 	<passive id="0" quality="4" craftquality="4" description="God of fire" gfx="collectibles_hephaestus_soul.png" name="Hephaestus' Soul" cache="flying" devilprice="2" shopprice="30" tags="offensive" customtags="nometronome"/>
-	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="lazarusshared"/>
+	<passive id="1" quality="4" craftquality="4" description="It's not your fault" gfx="collectibles_absolution.png" name="Absolution" devilprice="2" shopprice="30" tags="angel lazarusshared"/>
 	<passive id="2" quality="3" craftquality="3" description="Sink into the quicksand of evil" gfx="collectibles_guilt.png" name="Guilt" devilprice="2" tags="nolostbr nokeeper devil lazarusshared"/>
 	<active id="3" quality="3" craftquality="3" description="Seems to have met before" gfx="collectibles_rewind.png" name="Rewind" maxcharges="3" cooldown="440" tags="nogreed offensive"/>
 	<passive id="4" quality="2" craftquality="2" description="I can't eat anymore" gfx="collectibles_anorexia.png" name="Anorexia" tags="nolostbr"/>
@@ -48,7 +48,7 @@
 	<passive id="23" quality="2" craftquality="2" description="Amlost leaking out" gfx="collectibles_bobs_stomach.png" name="Bob's Stomach" tags="bob offensive"/>
 	<active id="24" quality="2" craftquality="2" description="Forged in blood and flesh" gfx="collectibles_blood_sacrifice.png" name="Blood Sacrifice" maxcharges="5" cache="damage" tags="nolostbr nokeeper"/>
 	<passive id="25" quality="2" craftquality="2" description="Demon's favorite" gfx="collectibles_chocolate_pancake.png" name="Chocolate Pancake" maxhearts="2" cache="speed shotspeed luck" tags="food nolostbr"/>
-	<passive id="26" quality="1" craftquality="1" description="Confess my sin" gfx="collectibles_atonement_voucher.png" name="Atonement Voucher" tags="nolostbr"/>
+	<passive id="26" quality="1" craftquality="1" description="Confess my sin" gfx="collectibles_atonement_voucher.png" name="Atonement Voucher" tags="nolostbr" customtags="nometronome"/>
 	<active id="27" quality="3" craftquality="-1" description="Is it a dream?" gfx="collectibles_wake_up.png" name="Wake-up" maxcharges="0" cooldown="60" tags="nogreed offensive nocantrip"/>
 	<active id="28" quality="2" craftquality="3" description="Don't touch it!" gfx="collectibles_philosophers_staff.png" name="Philosopher's Staff" maxcharges="6" cooldown="60" tags="offensive nocantrip"/>
 	<passive id="29" quality="0" craftquality="3" description="It stinks" gfx="collectibles_expired_glue.png" name="Expired Glue" tags="offensive"/>
@@ -62,8 +62,9 @@
 	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" devilprice="2" tags="devil lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
 	<passive id="38" quality="3" craftquality="3" description="Plunge into the abyss" gfx="collectibles_fallen_sky.png" name="Fallen Sky" devilprice="2" tags="devil" cache="tearflag"/>
 	<passive id="39" quality="2" craftquality="2" description="Art is an explosion" gfx="collectibles_explosion_master.png" name="Explosion Master" tags="offensive"/>
-	<active	id="40" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
-	<active	id="41" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<passive id="40" quality="2" craftquality="2" description="He craves your pledge" gfx="collectibles_sinister_pact.png" name="Sinister Pact" tags="devil nokeeper nolostbr"/>
+	<active	id="41" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="42" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
     
 	<!--Trinkets-->
 	<trinket id="1" name="Lost Bottle Cap" description="One more bottle!" gfx="trinket_lost_bottle_cap.png" />
