@@ -68,9 +68,6 @@ function Conjunctivitis:EvaluateCache(player, cacheFlag)
                 player.TearFlags = player.TearFlags | TearFlags.TEAR_SPECTRAL | TearFlags.TEAR_PIERCING
             end
         end
-        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            stat:AddTearsMultiplier(player, 0.8)
-        end
         if cacheFlag == CacheFlag.CACHE_SHOTSPEED and player:HasCollectible(CollectibleType.COLLECTIBLE_TRISAGION) then
             player.ShotSpeed = player.ShotSpeed * 0.8
         end
@@ -115,7 +112,7 @@ function Conjunctivitis:PostTearUpdate(tear)
     local player = functions:GetPlayerFromTear(tear)
     local tearData = ty:GetLibData(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) then
-        if tearData.Tailed == nil and tear.CollisionDamage >= 1 then
+        if tearData.Tailed == nil and tear.CollisionDamage >= player.Damage * 0.1 + 1 and tear.TearIndex ~= ty.ConstantValues.SPLITTEARINDEX then
             FireNewTear(player, tear)
         end
         if tear:HasTearFlags(TearFlags.TEAR_LASERSHOT) then
@@ -133,7 +130,6 @@ function Conjunctivitis:PostTearUpdate(tear)
             creep:Update()
         end
         if not tearData.MaxTailed and not player:HasCollectible(CollectibleType.COLLECTIBLE_ANTI_GRAVITY) and tear.Velocity:Length() < 0.02 and (tear:HasTearFlags(TearFlags.TEAR_CONTINUUM) or math.abs(tear.Color:GetOffset().R - 0.60784316062927) < 1e-10 or math.abs(tear.Color:GetOffset().R - 0.54117649793625) < 1e-10 or math.abs(tear.Color:GetOffset().R + 0.39215689897537) < 1e-10) then
-            tear:ChangeVariant(TearVariant.GRIDENT)
             tear:Remove()
         end
     end
@@ -156,7 +152,6 @@ function Conjunctivitis:PostTearInit(tear)
     local player = functions:GetPlayerFromTear(tear)
     local tearData = ty:GetLibData(tear)
     if player and player:HasCollectible(ty.CustomCollectibles.CONJUNCTIVITIS) and not tearData.MaxTailed then
-        tear:ChangeVariant(TearVariant.GRIDENT)
         tear:Remove()
     end
 end

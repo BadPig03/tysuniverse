@@ -12,6 +12,7 @@ local bannedCollectibles = {
     CollectibleType.COLLECTIBLE_STRAW_MAN,
     CollectibleType.COLLECTIBLE_INNER_CHILD,
     ty.CustomCollectibles.BOBSSTOMACH,
+    ty.CustomCollectibles.CROWNOFKINGS,
     ty.CustomCollectibles.HEPHAESTUSSOUL,
     ty.CustomCollectibles.MAGNIFIER,
     ty.CustomCollectibles.MARRIAGECERTIFICATE,

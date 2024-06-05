@@ -4,8 +4,4 @@
 	<card type="object" name="Glowing Hourglass Shard" hud="Glowing Hourglass Shard" description="Turn back time" pickup="129"/>
 	<!--Pills-->
 	<pilleffect id="0" name="Bait and Switch" class="0" mimiccharge="2"/>
-
-	<!--WIP
-	<card type="special" name="VIP Card" hud="VIP Card" description="As you wish" pickup="130" mimiccharge="6"/>
-	-->
 </pocketitems>

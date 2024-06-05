@@ -50,7 +50,8 @@ local trinkets = {
     [ty.CustomTrinkets.LOSTBOTTLECAP] = { Name="丢失的瓶盖", Description="再来一瓶！" },
     [ty.CustomTrinkets.BROKENGLASSEYE] = { Name="损坏的玻璃眼", Description="它曾经是完整的" },
     [ty.CustomTrinkets.STONECARVINGKNIFE] = { Name="石刻刀", Description="石雕" },
-    [ty.CustomTrinkets.BETHSSALVATION] = { Name="伯大尼的救赎", Description="解脱于罪恶" }
+    [ty.CustomTrinkets.BETHSSALVATION] = { Name="伯大尼的救赎", Description="解脱于罪恶" },
+    [ty.CustomTrinkets.KEEPERSCORE] = { Name="店主的核心", Description="积少成多" }
 }
 
 function Collectible:ItemQueueUpdate(player)

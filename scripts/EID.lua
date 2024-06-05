@@ -273,12 +273,12 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "结膜炎",
             Desc = "#{{ArrowUp}} 泪弹获得拖尾和穿透敌人与障碍物的效果"..
-            "#{{ArrowDown}} 射速修正x80%"
+            "#{{Warning}} 分裂的泪弹不能产生拖尾"
         },
         [2] = {
             Name = "Conjunctivitis",
             Desc = "#{{ArrowUp}} Grants trailing tears that deals extra damage and penetrating tears that travel through enemies and obstacles"..
-            "#{{ArrowDown}} x0.8 Fire rate multiplier"
+            "#{{Warning}} Split tears can not trail"
         }
     },
     [ty.CustomCollectibles.CROWNOFKINGS] = {
@@ -535,15 +535,15 @@ EIDInfo.Collectibles = {
         [1] = {
             Name = "星象望远镜",
             Desc = "#{{Card}} 生成一张'XVII-星星'卡牌"..
-            "#{{ArrowUp}} 每持有一个有'星星'标签的道具会获得+2幸运值和+0.25射速修正"..
-            "#{{Planetarium}} 进入新的一层时，星象房的开启概率为幸运值/24"..
+            "#{{ArrowUp}} 每持有一个有'星星'标签的道具会获得+2幸运值"..
+            "#{{Planetarium}} 到新层时，星象房开启概率增加幸运值/12，最多加50%"..
             "#{{Warning}} 允许在第三章之后开启星象房，并可以拾取星象房中的所有道具"
         },
         [2] = {
             Name = "Planetarium Telescope",
             Desc = "#{{Card}} Spawns a tarot card 'XVII-Star'"..
-            "#{{ArrowUp}} Each collectible with a 'star' tag will grant +2 luck and +0.25 fire rate"..
-            "#{{Planetarium}} When entering a new floor, the Planetarium chance is luck / 24"..
+            "#{{ArrowUp}} Each collectible with a 'star' tag will grant +2 luck"..
+            "#{{Planetarium}} When entering a new floor, the Planetarium chance increases by Luck / 12, up to a maximum of 50%"..
             "#{{Warning}} Allows the spawning of the Planetarium Room after Chapter 3"..
             "#Isaac can pick up all collectibles in the Planetarium Room"
         }
@@ -551,16 +551,16 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.BEGGARMASK] = {
         [1] = {
             Name = "丐帮面具",
-            Desc = "#{{ArrowUp}} 部分房间第一次进入时会额外生成一个对应的乞丐"..
-            "#每次向乞丐捐赠时增加生成掉落物的概率"..
-            "#当乞丐生成道具时，额外生成一个道具交易或者再次生成一个乞丐"..
-            "#{{Warning}} 如果任意乞丐被炸死，则失去'丐帮面具'道具"
+            Desc = "#部分房间第一次进入时会生成一个对应的乞丐"..
+            "#每次向乞丐捐赠时增加给予掉落物的概率"..
+            "#当乞丐生成道具时，生成新的道具交易或者再次生成该乞丐"..
+            "#{{Warning}} 如果任意乞丐被炸死，则失去该道具"
         },
         [2] = {
             Name = "Beggar Mask",
-            Desc = "#{{ArrowUp}} A beggar will be spawned in some rooms upon the first entry"..
+            Desc = "#A beggar will be spawned in some rooms upon the first entry"..
             "#For every donation received, beggars have a higher chance to drop a random pick up"..
-            "#When a beggar drops an item, another item trade or a new beggar will be spawned"..
+            "#When a beggar drops an item, another item trade or a new but the same type of beggar will be spawned"..
             "#{{Warning}} If a beggar is killed by explosion, the Beggar Mask is removed"
         }
     },
@@ -635,12 +635,14 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.SINISTERPACT] = {
         [1] = {
             Name = "邪恶契约",
-            Desc = "#购买血量交易后会立刻补货"..
+            Desc = "{{BlackHeart}} +1黑心"..
+            "#购买血量交易后会立刻补货"..
             "#{{Warning}} 无偿购买血量交易无法补货"
         },
         [2] = {
             Name = "Sinister Pact",
-            Desc = "#Buying an item by heart containers restocks it instantly"..
+            Desc = "{{BlackHeart}} +1 Black heart"..
+            "#Buying an item by heart containers restocks it instantly"..
             "#{{Warning}} Doing it for free won't restock"
         }
     },
@@ -744,6 +746,28 @@ EIDInfo.Trinkets = {
             Desc = "#Entering a new floor, there is a 50% chance of being teleported to {{AngelRoom}} the Angel Room"..
             "#Always triggers if Isaac has {{Collectible499}} the Eucharist"
         }
+    },
+    [ty.CustomTrinkets.KEEPERSCORE] = {
+        [1] = {
+            Name = "店主的核心",
+            Desc = "#箱子中至少含有1枚硬币",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "1",
+                "2", 
+                "3"
+            }
+        },
+        [2] = {
+            Name = "Keeper's Core",
+            Desc = "#The chest contains at least 1 coin",
+            GoldenInfo = {findReplace = true},
+            GoldenEffect = {
+                "1 coin",
+                "2 coins", 
+                "3 coins"
+            }
+        }
     }
 }
 
@@ -783,36 +807,22 @@ EIDInfo.Cards = {
             IsRune = false,
             TarotCloth = nil
         }
-    },
-    --[[[ty.CustomCards.VIPCARD] = {
-        [1] = {
-            Name = "贵宾卡",
-            Desc = "#重新生成房间内原有的商店交易和恶魔交易",
-            MimicCharge = 4,
-            IsRune = false,
-            TarotCloth = nil
-        },
-        [2] = {
-            Name = "VIP Card",
-            Desc = "#Restocks all shop and devil deals originally spawned from current room",
-            MimicCharge = 4,
-            IsRune = false,
-            TarotCloth = nil
-        }
-    }]]
+    }
 }
 
 EIDInfo.Pills = {
     [ty.CustomPills.BAITANDSWITCH] = {
         [1] = {
             Name = "偷天换日",
-            Desc = "#传送角色至房间中某个随机位置，并获得1秒无敌",
+            Desc = "#传送角色至房间中某个随机位置，并获得2秒无敌"..
+            "#大胶囊额外获得2秒无敌",
             MimicCharge = 2,
             Class = "0"
         },
         [2] = {
             Name = "Bait and Switch",
-            Desc = "#Teleport Isaac to a random position in the room, and grants shield for 1 second",
+            Desc = "#Teleport Isaac to a random position in the room, and grants shield for 2 second"..
+            "#Extraly grants shield for 2 seconds for the horse pill",
             MimicCharge = 2,
             Class = "0"
         }
@@ -864,15 +874,6 @@ do
             TopOffset = 1.5,
             SpriteObject = cardfronts
         },
-        --[[["Card"..ty.CustomCards.VIPCARD] = {
-            AnimationName = "VIP Card",
-            AnimationFrame = 0,
-            Width = 9,
-            Height = 9,
-            LeftOffset = 0.5,
-            TopOffset = 1.5,
-            SpriteObject = cardfronts
-        },]]
         ["Water"] = {
             AnimationName = "Water",
             AnimationFrame = 0,

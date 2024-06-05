@@ -1,6 +1,7 @@
 local TheGospelOfJohn = ty:DefineANewClass()
 
 local purchased = false
+local preventRestock = false
 local preventMorph = true
 
 local function GetAngelRoomCollectible(rng)
@@ -18,18 +19,28 @@ local function GetAngelRoomCollectible(rng)
     return itemID
 end
 
+local function GetCollectibleShopItemId(index)
+    local id = ty.LEVEL:GetCurrentRoomDesc().ShopItemIdx + index
+    if id > 7 then
+        id = 0
+    end
+    return id
+end
+
 local function MorphAllCollectibles(rng, flag)
     local room = ty.GAME:GetRoom()
+    local index = 0
     for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
         local pickup = ent:ToPickup()
-        if pickup.SubType > 0 and pickup.SubType ~= CollectibleType.COLLECTIBLE_DADS_NOTE then
+        if pickup.SubType > 0 and pickup.SubType < ty.ConstantValues.PROCEDURALITEMID and pickup.SubType ~= CollectibleType.COLLECTIBLE_DADS_NOTE then
             local position = pickup.Position
             if pickup:GetAlternatePedestal() == 14 then
                 position = room:FindFreePickupSpawnPosition(position, 0, true)
             end
             local newItem = Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetAngelRoomCollectible(rng), position, Vector(0, 0), nil):ToPickup()
-            newItem:MakeShopItem(pickup.ShopItemId)
+            newItem:MakeShopItem(GetCollectibleShopItemId(index))
             newItem:RemoveCollectibleCycle()
+            index = index + 1
             newItem.AutoUpdatePrice = false
             if flag then
                 newItem.Price = (ty.ITEMCONFIG:GetCollectible(newItem.SubType).Quality - 2) * 20
@@ -87,6 +98,7 @@ TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, TheGospelOfJohn.
 
 function TheGospelOfJohn:PostPickupShopPurchase(pickup, player, moneySpent)
     local pickup = pickup:ToPickup()
+    local room = ty.GAME:GetRoom()
     if ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) then
         player:AddBrokenHearts(player.QueuedItem.Item.Quality - 1)
         purchased = true
@@ -99,19 +111,11 @@ end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PICKUP_SHOP_PURCHASE, TheGospelOfJohn.PostPickupShopPurchase, PickupVariant.PICKUP_COLLECTIBLE)
 
 function TheGospelOfJohn:PrePickupMorph(pickup, type, variant, subType, keepPrice, keepSeed, ignoreModifiers)
-    if preventMorph and pickup:IsShopItem() and (ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) or ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)) then
+    if preventMorph and pickup:IsShopItem() and keepPrice and not keepSeed and not ignoreModifiers and (ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart, pickup.InitSeed) or ty:IsValueInTable(ty.GLOBALDATA.TheGospelOfJohn.Money, pickup.InitSeed)) then
         return false
     end
 end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_PRE_PICKUP_MORPH, TheGospelOfJohn.PrePickupMorph)
-
-function TheGospelOfJohn:PostNewLevel()
-    if ty.GLOBALDATA.TheGospelOfJohn then
-        ty.GLOBALDATA.TheGospelOfJohn.Money = {}
-        ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart = {}
-    end
-end
-TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, TheGospelOfJohn.PostNewLevel)
 
 function TheGospelOfJohn:PostPlayerUpdate(player)
     if purchased and player:IsExtraAnimationFinished() and player:GetHealthType() == HealthType.LOST and player:GetHeartLimit() == 0 then
@@ -120,5 +124,13 @@ function TheGospelOfJohn:PostPlayerUpdate(player)
     end
 end
 TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_PLAYER_UPDATE, TheGospelOfJohn.PostPlayerUpdate)
+
+function TheGospelOfJohn:PostNewLevel()
+    if ty.GLOBALDATA and ty.GLOBALDATA.TheGospelOfJohn then
+        ty.GLOBALDATA.TheGospelOfJohn.Money = {}
+        ty.GLOBALDATA.TheGospelOfJohn.BrokenHeart = {}
+    end
+end
+TheGospelOfJohn:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, TheGospelOfJohn.PostNewLevel)
 
 return TheGospelOfJohn

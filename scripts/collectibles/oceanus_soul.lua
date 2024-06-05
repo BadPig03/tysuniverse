@@ -535,7 +535,7 @@ function OceanusSoul:UpdateLaser(effect)
             end
             do
                 local gridIndex = room:GetGridIndex(effect.Position)
-                local grid = room:GetGridEntity(gridIndex)
+                local grid = room:GetBLUEity(gridIndex)
                 if grid and not grid:ToDoor() and data.TearFlags & TearFlags.TEAR_ACID == TearFlags.TEAR_ACID then
                     room:DestroyGrid(gridIndex)
                 end
@@ -568,22 +568,22 @@ function OceanusSoul:UpdateLaser(effect)
                     if effect.FrameCount % 5 == 0 then
                         if player:HasCollectible(CollectibleType.COLLECTIBLE_HOLY_LIGHT) and rng:RandomFloat() < 1 / math.max(2, 10 - math.floor(0.9 * player.Luck)) then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_LIGHT_FROM_HEAVEN
                         end
                         if data.TearFlags & TearFlags.TEAR_SPLIT == TearFlags.TEAR_SPLIT then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_SPLIT
                         end
                         if data.TearFlags & TearFlags.TEAR_QUADSPLIT == TearFlags.TEAR_QUADSPLIT then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 0.5)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_QUADSPLIT
                         end
                         if data.TearFlags & TearFlags.TEAR_MULLIGAN == TearFlags.TEAR_MULLIGAN and rng:RandomInt(100) < 17 then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_MULLIGAN
                         end
                         if data.TearFlags & TearFlags.TEAR_STICKY == TearFlags.TEAR_STICKY and rng:RandomInt(100) < 25 then
@@ -613,7 +613,7 @@ function OceanusSoul:UpdateLaser(effect)
                         end
                         if data.TearFlags & TearFlags.TEAR_HORN == TearFlags.TEAR_HORN and rng:RandomFloat() < 1 / math.max(5, 20 - math.floor(player.Luck)) then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_HORN
                         end
                         if data.TearFlags & TearFlags.TEAR_SPORE == TearFlags.TEAR_SPORE and rng:RandomInt(100) < 25 then
@@ -628,7 +628,7 @@ function OceanusSoul:UpdateLaser(effect)
                         end
                         if data.TearFlags & TearFlags.TEAR_JACOBS == TearFlags.TEAR_JACOBS then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                             tear.TearFlags = TearFlags.TEAR_JACOBS
                         end
                         if data.TearFlags & TearFlags.TEAR_OCCULT == TearFlags.TEAR_OCCULT and rng:RandomFloat() < 1 / math.max(5, 20 - math.floor(player.Luck)) then
@@ -636,7 +636,7 @@ function OceanusSoul:UpdateLaser(effect)
                         end
                         if data.RandomEffect then
                             local tear = player:FireTear(ent.Position, Vector(0, 0), true, true, false, player, 1)
-                            tear:ChangeVariant(TearVariant.GRIDENT)
+                            tear:ChangeVariant(TearVariant.BLUE)
                         end
                         if data.TearFlags & TearFlags.TEAR_EXPLOSIVE == TearFlags.TEAR_EXPLOSIVE then
                             local bomb = player:FireBomb(effect.Position, Vector(0, 0), player)

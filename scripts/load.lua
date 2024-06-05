@@ -53,14 +53,14 @@ ty.CollectiblesList = {
 ty.PocketItemsList = {
     'soul_of_ff0',
     'glowing_hourglass_shard',
-    'bait_and_switch',
-    --'vip_card'
+    'bait_and_switch'
 }
 ty.TrinketsList = {
     'broken_glass_eye',
     'lost_bottle_cap',
     'stone_carving_knife',
-    'beths_salvation'
+    'beths_salvation',
+    'keepers_core'
 }
 ty.ChallengesList = {
     'glue_prohibition'

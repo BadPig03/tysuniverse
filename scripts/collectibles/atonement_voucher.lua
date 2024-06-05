@@ -1,5 +1,7 @@
 local AtonementVoucher = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local function IsAngelRoomOpened()
     local room = ty.GAME:GetRoom()
     for i = 0, 7 do
@@ -40,7 +42,7 @@ function AtonementVoucher:PostPlayerUpdate(player)
                 Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_REDEMPTION, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
                 player:RemoveCollectible(ty.CustomCollectibles.ATONEMENTVOUCHER)
             else
-                if room:IsClear() and room:GetType() == RoomType.ROOM_BOSS and not IsAngelRoomOpened() then
+                if room:IsClear() and room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == functions:GetLastBossRoomIndex() and not IsAngelRoomOpened() then
                     ForceOpenAngelRoom(player)
                     data.AtonementVoucher.Effected = true
                 end

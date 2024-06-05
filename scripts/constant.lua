@@ -48,7 +48,8 @@ ty.CustomTrinkets = {
     LOSTBOTTLECAP = Isaac.GetTrinketIdByName("Lost Bottle Cap"),
     BROKENGLASSEYE = Isaac.GetTrinketIdByName("Broken Glass Eye"),
     STONECARVINGKNIFE = Isaac.GetTrinketIdByName("Stone Carving Knife"),
-    BETHSSALVATION = Isaac.GetTrinketIdByName("Beth's Salvation")
+    BETHSSALVATION = Isaac.GetTrinketIdByName("Beth's Salvation"),
+    KEEPERSCORE = Isaac.GetTrinketIdByName("Keeper's Core")
 }
 
 ty.CustomChallenges = {
@@ -112,8 +113,7 @@ ty.CustomTearFlags = {
 
 ty.CustomCards = {
     SOULOFFF0 = Isaac.GetCardIdByName("Soul of ff0"),
-    GLOWINGHOURGLASSSHARD = Isaac.GetCardIdByName("Glowing Hourglass Shard"),
-    --VIPCARD = Isaac.GetCardIdByName("VIP Card")
+    GLOWINGHOURGLASSSHARD = Isaac.GetCardIdByName("Glowing Hourglass Shard")
 }
 
 ty.CustomPills = {
@@ -154,7 +154,9 @@ ty.ConstantValues = {
     HEPHAESTUSSOULCIRCLE = 180,
     COLLAPSERANGE = 384,
     LASERGUNPLASMABALLRANGE = 160,
-    HIDDENITEMMANAGERCONSTANT = 20030730
+    HIDDENITEMMANAGERCONSTANT = 20030730,
+    PROCEDURALITEMID = 4294960071,
+    SPLITTEARINDEX = (1<<32) - 1
 }
 
 ty.CustomGiantBooks = {

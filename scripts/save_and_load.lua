@@ -59,6 +59,7 @@ local function GetGlobalInitData()
     data.Order = { Set = false, ItemPoolList = GetItemPoolListInit(), Timeout = -1 }
     data.TheGospelOfJohn = { Money = {}, BrokenHeart = {} }
     data.WakeUp = { CurrentStage = 0, StageType = 0, DetectDogma = false, Used = false, VirtueTriggered = false, BelialTriggered = false, Time = -1, Delay = -1, HealthFactor = 1, PreventActives = false }
+    data.KeepersCore = {}
     return data
 end
 

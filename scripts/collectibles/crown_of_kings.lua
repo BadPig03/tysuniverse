@@ -1,8 +1,5 @@
 local CrownOfKings = ty:DefineANewClass()
 
-local willSpawnItem = false
-local collectibleID = CollectibleType.COLLECTIBLE_BREAKFAST
-
 local function HasCrown(player)
     for _, effect in pairs(Isaac.FindByType(EntityType.ENTITY_EFFECT, ty.CustomEffects.CROWNOFKINGS)) do
         local effectData = ty:GetLibData(effect)
@@ -37,8 +34,7 @@ local function SpawnCrown(player)
     if player.CanFly then
         flyOffset = Vector(0, -4)
     end
-    local scale = data.PlayerSize.Scale
-    crownSprite.Scale = Vector(1, 1) * scale
+    crownSprite.Scale = player.SpriteScale
     crown.DepthOffset = 0.1
     if mask & 1 << 1 == 1 << 1 and mask & 1 << 2 == 1 << 2 then
         crown.Position = crown.Position + Vector(0, -21) + flyOffset
@@ -57,7 +53,7 @@ local function SpawnCrown(player)
 end
 
 local function GetCollectibleQualityFromRandomPool(lowQuality, highQuality, rng)
-    local itemID
+    local itemID = CollectibleType.COLLECTIBLE_BREAKFAST
     local itemList = {}
     repeat 
         for i = 1, ty.ITEMCONFIG:GetCollectibles().Size - 1 do
@@ -85,25 +81,28 @@ function CrownOfKings:PostNewRoom()
     local room = ty.GAME:GetRoom()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
+        local flag = false
         if player:HasCollectible(ty.CustomCollectibles.CROWNOFKINGS) then
             for _, ent in pairs(Isaac.GetRoomEntities()) do
                 if ent:IsBoss() then
                     data.CrownOfKings.CanSpawn = true
-                    return
+                    flag = true
                 end
             end
             if room:GetType() == RoomType.ROOM_CHALLENGE and ty.LEVEL:GetCurrentRoomDesc().Data.Variant >= 16 and ty.LEVEL:HasBossChallenge() and not room:IsAmbushDone() then
                 data.CrownOfKings.CanSpawn = true
                 data.CrownOfKings.IsBossChallenge = true
-                return
+                flag = true
             end
             if room:GetType() == RoomType.ROOM_BOSSRUSH and not room:IsAmbushDone() then
                 data.CrownOfKings.CanSpawn = true
                 data.CrownOfKings.IsBossrush = true
-                return
+                flag = true
             end
         end
-        data.CrownOfKings.CanSpawn = false
+        if not flag then
+            data.CrownOfKings.CanSpawn = false
+        end
     end
 end
 CrownOfKings:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, CrownOfKings.PostNewRoom)
@@ -114,31 +113,26 @@ function CrownOfKings:PreSpawnCleanAward(rng, spawnPosition)
         local data = ty:GetLibData(player)
         if player:HasCollectible(ty.CustomCollectibles.CROWNOFKINGS) and data.CrownOfKings.CanSpawn then
             if room:GetType() == RoomType.ROOM_CHALLENGE and data.CrownOfKings.IsBossChallenge then
-                collectibleID = GetCollectibleQualityFromRandomPool(1, 3, rng)
+                Isaac.CreateTimer(function()
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetCollectibleQualityFromRandomPool(1, 3, rng), room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
+                end, 1, 0, false)
                 data.CrownOfKings.IsBossChallenge = false
             elseif room:GetType() == RoomType.ROOM_BOSSRUSH and data.CrownOfKings.IsBossrush then
-                collectibleID = GetCollectibleQualityFromRandomPool(3, 3, rng)
+                Isaac.CreateTimer(function()
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetCollectibleQualityFromRandomPool(3, 3, rng), room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
+                end, 1, 0, false)
                 data.CrownOfKings.IsBossrush = false
             else
-                collectibleID = GetCollectibleQualityFromRandomPool(0, 3, rng)
+                Isaac.CreateTimer(function()
+                    Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, GetCollectibleQualityFromRandomPool(0, 3, rng), room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
+                end, 1, 0, false)
             end
-            willSpawnItem = true
             data.CrownOfKings.CanSpawn = false
             player:AnimateHappy()
         end
     end
 end
 CrownOfKings:AddCallback(ModCallbacks.MC_PRE_SPAWN_CLEAN_AWARD, CrownOfKings.PreSpawnCleanAward)
-
-function CrownOfKings:PostUpdate()
-    local room = ty.GAME:GetRoom()
-    if willSpawnItem then
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, collectibleID, room:FindFreePickupSpawnPosition(room:GetCenterPos(), 0, true), Vector(0, 0), nil) 
-        collectibleID = CollectibleType.COLLECTIBLE_BREAKFAST
-        willSpawnItem = false
-    end
-end
-CrownOfKings:AddCallback(ModCallbacks.MC_POST_UPDATE, CrownOfKings.PostUpdate)
 
 function CrownOfKings:PostTakeDamage(entity, amount, flags, source, countdown)
     local player = entity:ToPlayer()
@@ -153,8 +147,8 @@ end
 CrownOfKings:AddCallback(ModCallbacks.MC_POST_ENTITY_TAKE_DMG, CrownOfKings.PostTakeDamage, EntityType.ENTITY_PLAYER)
 
 function CrownOfKings:PostPlayerRender(player)
-    if player:HasCollectible(ty.CustomCollectibles.CROWNOFKINGS) then
-        local data = ty:GetLibData(player)
+    local data = ty:GetLibData(player)
+    if data.Init and player:HasCollectible(ty.CustomCollectibles.CROWNOFKINGS) and not data.CrownOfKings.CanRender then
         data.CrownOfKings.CanRender = true
     end
 end
@@ -178,8 +172,7 @@ function CrownOfKings:UpdateCrownOfKingsEffect(effect)
     if player.CanFly then
         flyOffset = Vector(0, -4)
     end
-    local scale = data.PlayerSize.Scale
-    sprite.Scale = Vector(1, 1) * scale
+    sprite.Scale = player.SpriteScale
     if mask & 1 << 1 == 1 << 1 and mask & 1 << 2 == 1 << 2 then
         effect.ParentOffset = Vector(0, -21) + flyOffset
     elseif (mask & 1 << 1 == 1 << 1 and mask & 1 << 2 ~= 1 << 2) or (mask & 1 << 1 ~= 1 << 1 and mask & 1 << 2 == 1 << 2) then

@@ -47,7 +47,7 @@ function Functions:GetCollectibleFromCurrentRoom(includeActives, excludeTags, rn
         if newPool < 0 then
             newPool = ItemPoolType.POOL_TREASURE
         end
-        if (roomType == RoomType.ROOM_BOSS and (room:GetBossID() == 23 or ty.LEVEL:GetStateFlag(LevelStateFlag.STATE_SATANIC_BIBLE_USED))) or (ty.LEVEL:GetAbsoluteStage() == LevelStage.STAGE6 and ty.LEVEL:GetStageType() == StageType.STAGETYPE_ORIGINAL and ty.LEVEL:GetCurrentRoomIndex() == ty.LEVEL:GetStartingRoomIndex()) then
+        if (roomType == RoomType.ROOM_BOSS and (room:GetBossID() == 23 or ty.LEVEL:GetStateFlag(LevelStateFlag.STATE_SATANIC_BIBLE_USED))) then
             newPool = ItemPoolType.POOL_DEVIL
         end
         if roomType == RoomType.ROOM_TREASURE then
@@ -159,6 +159,17 @@ function Functions:GetLastBossRoomIndex()
         end    
     end
     return ty.LEVEL:GetStartingRoomIndex()
+end
+
+function Functions:AddPlayerShield(player, time)
+    local effects = player:GetEffects()
+    local effect = effects:GetCollectibleEffect(CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS)
+    if not effect then
+        effects:AddCollectibleEffect(CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS)
+        effect = effects:GetCollectibleEffect(CollectibleType.COLLECTIBLE_BOOK_OF_SHADOWS)
+        effect.Cooldown = 0
+    end
+    effect.Cooldown = (effect.Cooldown or 0) + time
 end
 
 return Functions

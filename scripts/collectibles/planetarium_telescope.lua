@@ -22,16 +22,10 @@ end
 
 function PlanetariumTelescope:EvaluateCache(player, cacheFlag)
     if player:HasCollectible(ty.CustomCollectibles.PLANETARIUMTELESCOPE) then
-        local num = GetStarsItemsCount(player)
-        if cacheFlag == CacheFlag.CACHE_LUCK then
-            player.Luck = player.Luck + 2 * num
-        end
-        if cacheFlag == CacheFlag.CACHE_FIREDELAY then
-            stat:AddFlatTears(player, 0.25 * num)
-        end
+        player.Luck = player.Luck + 2 * GetStarsItemsCount(player)
     end
 end
-PlanetariumTelescope:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, PlanetariumTelescope.EvaluateCache)
+PlanetariumTelescope:AddCallback(ModCallbacks.MC_EVALUATE_CACHE, PlanetariumTelescope.EvaluateCache, CacheFlag.CACHE_LUCK)
 
 function PlanetariumTelescope:PrePlanetariumApplyStagePenalty()
     local stage = ty.LEVEL:GetAbsoluteStage()
@@ -41,16 +35,17 @@ function PlanetariumTelescope:PrePlanetariumApplyStagePenalty()
 end
 PlanetariumTelescope:AddCallback(ModCallbacks.MC_PRE_PLANETARIUM_APPLY_STAGE_PENALTY, PlanetariumTelescope.PrePlanetariumApplyStagePenalty)
 
-function PlanetariumTelescope:PostPlanetariumCalculate(chance)
+function PlanetariumTelescope:PrePlanetariumApplyTelescopeLens(chance)
     if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.PLANETARIUMTELESCOPE) then
-        return math.min(1, math.max(0, GetAvarageLuck() / 24))
+        return chance + math.min(0.5, math.max(0, GetAvarageLuck() / 12))
     end
 end
-PlanetariumTelescope:AddCallback(ModCallbacks.MC_POST_PLANETARIUM_CALCULATE, PlanetariumTelescope.PostPlanetariumCalculate)
+PlanetariumTelescope:AddCallback(ModCallbacks.MC_PRE_PLANETARIUM_APPLY_TELESCOPE_LENS, PlanetariumTelescope.PrePlanetariumApplyTelescopeLens)
 
 function PlanetariumTelescope:PostPickupUpdate(pickup)
     local pickup = pickup:ToPickup()
-    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.PLANETARIUMTELESCOPE) and ty.GAME:GetRoom():GetType() == RoomType.ROOM_PLANETARIUM then
+    local room = ty.GAME:GetRoom()
+    if PlayerManager.AnyoneHasCollectible(ty.CustomCollectibles.PLANETARIUMTELESCOPE) and room:GetType() == RoomType.ROOM_PLANETARIUM then
         if pickup.OptionsPickupIndex ~= 0 then
             pickup.OptionsPickupIndex = 0
         end
@@ -59,11 +54,12 @@ end
 PlanetariumTelescope:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, PlanetariumTelescope.PostPickupUpdate, PickupVariant.PICKUP_COLLECTIBLE)
 
 function PlanetariumTelescope:PostAddCollectible(type, charge, firstTime, slot, varData, player)
+    local room = ty.GAME:GetRoom()
     if type == ty.CustomCollectibles.PLANETARIUMTELESCOPE and firstTime then
-        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_STARS, ty.GAME:GetRoom():FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
+        Isaac.Spawn(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_TAROTCARD, Card.CARD_STARS, room:FindFreePickupSpawnPosition(player.Position, 0, true), Vector(0, 0), nil)
     end
     if ty.ITEMCONFIG:GetCollectible(type):HasTags(ItemConfig.TAG_STARS) then
-        player:AddCacheFlags(CacheFlag.CACHE_LUCK | CacheFlag.CACHE_FIREDELAY, true)
+        player:AddCacheFlags(CacheFlag.CACHE_LUCK, true)
     end
 end
 PlanetariumTelescope:AddCallback(ModCallbacks.MC_POST_ADD_COLLECTIBLE, PlanetariumTelescope.PostAddCollectible)
