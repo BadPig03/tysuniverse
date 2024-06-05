@@ -535,7 +535,7 @@ function OceanusSoul:UpdateLaser(effect)
             end
             do
                 local gridIndex = room:GetGridIndex(effect.Position)
-                local grid = room:GetBLUEity(gridIndex)
+                local grid = room:GetGridEntity(gridIndex)
                 if grid and not grid:ToDoor() and data.TearFlags & TearFlags.TEAR_ACID == TearFlags.TEAR_ACID then
                     room:DestroyGrid(gridIndex)
                 end
