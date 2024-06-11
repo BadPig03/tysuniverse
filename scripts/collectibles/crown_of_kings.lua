@@ -84,7 +84,7 @@ function CrownOfKings:PostNewRoom()
         local flag = false
         if player:HasCollectible(ty.CustomCollectibles.CROWNOFKINGS) then
             for _, ent in pairs(Isaac.GetRoomEntities()) do
-                if ent:IsBoss() then
+                if ent:IsBoss() and ent.Type ~= EntityType.ENTITY_DARK_ESAU then
                     data.CrownOfKings.CanSpawn = true
                     flag = true
                 end
@@ -154,7 +154,7 @@ function CrownOfKings:PostPlayerRender(player)
 end
 CrownOfKings:AddCallback(ModCallbacks.MC_POST_PLAYER_RENDER, CrownOfKings.PostPlayerRender)
 
-function CrownOfKings:UpdateCrownOfKingsEffect(effect)
+function CrownOfKings:PostEffectUpdate(effect)
     local effectData = ty:GetLibData(effect)
     local sprite = effect:GetSprite()
     local player = effectData.Owner
@@ -187,6 +187,6 @@ function CrownOfKings:UpdateCrownOfKingsEffect(effect)
     end
     data.CrownOfKings.CanRender = false
 end
-CrownOfKings:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, CrownOfKings.UpdateCrownOfKingsEffect, ty.CustomEffects.CROWNOFKINGS)
+CrownOfKings:AddCallback(ModCallbacks.MC_POST_EFFECT_UPDATE, CrownOfKings.PostEffectUpdate, ty.CustomEffects.CROWNOFKINGS)
 
 return CrownOfKings

@@ -45,6 +45,7 @@ function AtonementVoucher:PostPlayerUpdate(player)
                 if room:IsClear() and room:GetType() == RoomType.ROOM_BOSS and ty.LEVEL:GetCurrentRoomIndex() == functions:GetLastBossRoomIndex() and not IsAngelRoomOpened() then
                     ForceOpenAngelRoom(player)
                     data.AtonementVoucher.Effected = true
+                    player:RemoveCollectible(ty.CustomCollectibles.ATONEMENTVOUCHER)
                 end
             end
         end
@@ -65,9 +66,6 @@ AtonementVoucher:AddCallback(ModCallbacks.MC_POST_DEVIL_CALCULATE, AtonementVouc
 function AtonementVoucher:PostNewLevel()
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
-        if data.AtonementVoucher.Effected then
-            player:RemoveCollectible(ty.CustomCollectibles.ATONEMENTVOUCHER)
-        end
         data.AtonementVoucher.Effected = false
     end
 end

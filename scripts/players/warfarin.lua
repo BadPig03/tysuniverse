@@ -15,7 +15,7 @@ end
 
 local function GetDamagePerCharge(player)
     local data = ty:GetLibData(player)
-    local charge = 20 + math.log(data.Warfarin.UsedCount ^ 2 + 1) + (data.Warfarin.UsedCount) ^ 1.5
+    local charge = 20 + math.log(data.Warfarin.UsedCount ^ 2 + 1) + (data.Warfarin.UsedCount) ^ 1.8
     if player:HasCollectible(CollectibleType.COLLECTIBLE_4_5_VOLT) then
         charge = charge * 0.8
     end

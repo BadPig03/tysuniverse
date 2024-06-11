@@ -6,7 +6,8 @@ ty.ClassesList = {
     Collectible = 'collectible',
     Stat = 'stat',
     Revive = 'revive',
-    SaveAndLoad = 'save_and_load'
+    SaveAndLoad = 'save_and_load',
+    Room = 'room'
 }
 ty.CollectiblesList = {
     'absence_note',

@@ -70,7 +70,8 @@ local BannedItems = {
     ty.CustomCollectibles.TELESCOPE,
     ty.CustomCollectibles.BEGGARMASK,
     ty.CustomCollectibles.MIRRORING,
-    ty.CustomCollectibles.BROKENMIRRORING
+    ty.CustomCollectibles.BROKENMIRRORING,
+    ty.CustomCollectibles.THEGOSPELOFJOHN
 }
 
 local bannedActives = {

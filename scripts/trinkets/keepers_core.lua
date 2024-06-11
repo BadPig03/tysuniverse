@@ -11,6 +11,7 @@ local chestTable = {
     PickupVariant.PICKUP_MEGACHEST,
     PickupVariant.PICKUP_HAUNTEDCHEST,
     PickupVariant.PICKUP_LOCKEDCHEST,
+    PickupVariant.PICKUP_GRAB_BAG,
     PickupVariant.PICKUP_REDCHEST,
     PickupVariant.PICKUP_MOMSCHEST
 }
@@ -65,5 +66,11 @@ function KeepersCore:PostTriggerTrinketChanged(player, trinket, _)
 end
 KeepersCore:AddCallback(ModCallbacks.MC_POST_TRIGGER_TRINKET_ADDED, KeepersCore.PostTriggerTrinketChanged)
 KeepersCore:AddCallback(ModCallbacks.MC_POST_TRIGGER_TRINKET_REMOVED, KeepersCore.PostTriggerTrinketChanged)
+
+function KeepersCore:PostNewLevel()
+    local globalData = ty.GLOBALDATA
+    globalData.KeepersCore = {}
+end
+KeepersCore:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, KeepersCore.PostNewLevel)
 
 return KeepersCore

@@ -204,12 +204,13 @@ SaveAndLoad:AddCallback(ModCallbacks.MC_PRE_NEW_ROOM, SaveAndLoad.PostNewRoom)
 
 function SaveAndLoad:PostRender()
     if ty.PERSISTENTDATA.Rewind then
+        local frame = math.sin(ty.GAME:GetFrameCount() / 5)
         if Options.Language == "zh" then
             local warningString = "检测到rewind指令的使用，这会导致mod出错!"
-            ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
+            ty.LANAPIXEL:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.LANAPIXEL:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.LANAPIXEL:GetBaselineHeight()), 1, 1, KColor(1, frame, frame, 1))
         else
-            local warningString = "Command rewind detected, this would cause bugs!"
-            ty.PFTEMP:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.PFTEMP:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.PFTEMP:GetBaselineHeight()), 1, 1, KColor(1, 0, 0, 1))
+            local warningString = "Rewind command detected, bugs may occur!"
+            ty.PFTEMP:DrawStringScaledUTF8(warningString, (Isaac.GetScreenWidth() - ty.PFTEMP:GetStringWidthUTF8(warningString)) / 2, (Isaac.GetScreenHeight() - 2 * ty.PFTEMP:GetBaselineHeight()), 1, 1, KColor(1, frame, frame, 1))
         end
     end
 end

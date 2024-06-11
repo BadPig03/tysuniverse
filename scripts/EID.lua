@@ -284,12 +284,12 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.CROWNOFKINGS] = {
         [1] = {
             Name = "主宰之冠",
-            Desc = "#{{BossRoom}} 未受到任何伤害的情况下清理完初始含有头目的房间："..
+            Desc = "#{{BossRoom}} 未受到任何伤害的情况下清理进入时就含头目的房间："..
             "#{{Collectible}} 额外掉落一个来自随机道具池的品质不高于3的道具"
         },
         [2] = {
             Name = "Crown of Kings",
-            Desc = "#{{BossRoom}} Cleaning a room containing any boss without being hit:"..
+            Desc = "#{{BossRoom}} Cleaning a room containing any boss when entering without being hit:"..
             "#{{Collectible}} Spawns an extra item of at most quality 3 from random item pools"
         }
     },
@@ -536,14 +536,14 @@ EIDInfo.Collectibles = {
             Name = "星象望远镜",
             Desc = "#{{Card}} 生成一张'XVII-星星'卡牌"..
             "#{{ArrowUp}} 每持有一个有'星星'标签的道具会获得+2幸运值"..
-            "#{{Planetarium}} 到新层时，星象房开启概率增加幸运值/12，最多加50%"..
+            "#{{Planetarium}} 到新的一层时，星象房的基础开启概率增加幸运值/12，最多增加50%"..
             "#{{Warning}} 允许在第三章之后开启星象房，并可以拾取星象房中的所有道具"
         },
         [2] = {
             Name = "Planetarium Telescope",
             Desc = "#{{Card}} Spawns a tarot card 'XVII-Star'"..
             "#{{ArrowUp}} Each collectible with a 'star' tag will grant +2 luck"..
-            "#{{Planetarium}} When entering a new floor, the Planetarium chance increases by Luck / 12, up to a maximum of 50%"..
+            "#{{Planetarium}} When entering a new floor, the Planetarium base chance increases by Luck / 12, up to a maximum of 50%"..
             "#{{Warning}} Allows the spawning of the Planetarium Room after Chapter 3"..
             "#Isaac can pick up all collectibles in the Planetarium Room"
         }
@@ -750,7 +750,7 @@ EIDInfo.Trinkets = {
     [ty.CustomTrinkets.KEEPERSCORE] = {
         [1] = {
             Name = "店主的核心",
-            Desc = "#箱子中至少含有1枚硬币",
+            Desc = "#箱子和福袋中至少含有1枚硬币",
             GoldenInfo = {findReplace = true},
             GoldenEffect = {
                 "1",

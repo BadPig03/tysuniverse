@@ -121,6 +121,7 @@
     <Item Name="Cursed Destiny" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
 	</Pool>
   <Pool Name="shop">
+    <Item Name="Rewind" Weight="0.1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Anorexia" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Laser Gun" Weight="1" DecreaseBy="1" RemoveOn="0.1"/>
     <Item Name="Atonement Voucher" Weight="1" DecreaseBy="0.25" RemoveOn="0.1"/>

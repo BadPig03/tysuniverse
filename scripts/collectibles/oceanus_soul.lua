@@ -904,7 +904,7 @@ function OceanusSoul:UpdateChargeBar(effect)
 	if sprite:IsFinished("Charging") then
 		sprite:Play("Charged", true)
 	end
-	if sprite:IsFinished("Disappear") or not player:Exists() or not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL) then
+	if sprite:IsFinished("Disappear") or not player:Exists() or (player:ToPlayer() and not player:HasCollectible(ty.CustomCollectibles.OCEANUSSOUL)) or (player:ToFamiliar() and not player.SpawnerEntity:ToPlayer():HasCollectible(ty.CustomCollectibles.OCEANUSSOUL)) then
 		effect:Remove()
 	end
 end

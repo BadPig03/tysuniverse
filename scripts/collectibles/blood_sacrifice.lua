@@ -27,9 +27,9 @@ local function RemoveVesselFromList(seed)
     for _, player in pairs(PlayerManager.GetPlayers()) do
         local data = ty:GetLibData(player)
         local index = 0
-        for __, vesselTable in pairs(data.BloodSacrifice.VesselList) do
+        for index2, vesselTable in pairs(data.BloodSacrifice.VesselList) do
             if vesselTable.InitSeed == seed then
-                index = __
+                index = index2
                 break
             end
         end
@@ -120,7 +120,7 @@ BloodSacrifice:AddCallback(ModCallbacks.MC_POST_NEW_LEVEL, BloodSacrifice.PostNe
 function BloodSacrifice:PostPlayerUpdate(player)
     local data = ty:GetLibData(player)
     local sprite = player:GetSprite()
-    if data.Init and data.BloodSacrifice and data.BloodSacrifice.PlaySound and sprite:GetAnimation() == "Appear" then
+    if data.Init and data.BloodSacrifice and data.BloodSacrifice.PlaySound and sprite:GetAnimation() == "Appear" and not player:IsHologram() then
         local vesselTable = data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]
         local vessel = GetVesselFromSeed(vesselTable.InitSeed)
         if sprite:GetFrame() == 20 then
@@ -198,7 +198,10 @@ BloodSacrifice:AddCallback("TY_POST_PLAYER_REVIVE", BloodSacrifice.PostReviveBlo
 function BloodSacrifice:PreReviveBloodSacrifice(player)
     local data = ty:GetLibData(player)
     if #data.BloodSacrifice.VesselList > 0 and type(data.BloodSacrifice.VesselList[#data.BloodSacrifice.VesselList]) == "table" then
-        return "TY_BLOODSACRIFICE_REVIVE"
+        local playerType = player:GetPlayerType()
+        if not player:IsHologram() and not (playerType == PlayerType.PLAYER_THEFORGOTTEN or playerType == PlayerType.PLAYER_THESOUL or playerType == PlayerType.PLAYER_BETHANY_B) then
+            return "TY_BLOODSACRIFICE_REVIVE"
+        end
     end
 end
 BloodSacrifice:AddPriorityCallback("TY_PRE_PLAYER_REVIVE", 9, BloodSacrifice.PreReviveBloodSacrifice)
