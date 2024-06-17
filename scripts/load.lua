@@ -47,6 +47,7 @@ ty.CollectiblesList = {
     'rewind',
     'scapegoat',
     'sinister_pact',
+    'strange_syringe',
     'the_gospel_of_john',
     'tool_box',
     'wake_up'

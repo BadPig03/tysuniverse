@@ -646,6 +646,24 @@ EIDInfo.Collectibles = {
             "#{{Warning}} Doing it for free won't restock"
         }
     },
+    [ty.CustomCollectibles.STRANGESYRINGE] = {
+        [1] = {
+            Name = "奇怪的针筒",
+            Desc = "#{{Warning}} 一次性"..
+            "#{{Warning}} 随机受到0-6颗半心的伤害"..
+            "#使{{Spun}}嗑药！的套装进度+3",
+            BookOfVirtues = "使{{Seraphim}}撒拉弗！的套装进度+1",
+            BookOfBelial = "使{{Leviathan}}利维坦！的套装进度+1"
+        },
+        [2] = {
+            Name = "Strange Syringe",
+            Desc = "#{{Warning}} SINGLE USE"..
+            "{{Warning}} Deals 0-6 half hearts of damage to Isaac randomly"..
+            "#Increases the count by 3 items toward {{Spun}} Spun transformation progress",
+            BookOfVirtues = "Increases the count by 1 item toward {{Seraphim}} Seraphim transformation progress",
+            BookOfBelial = "Increases the count by 1 item toward {{Leviathan}} Leviathan transformation progress"
+        }
+    },
     [ty.CustomCollectibles.BLOODSAMPLE] = {
         [1] = {
             Name = "血液样本",

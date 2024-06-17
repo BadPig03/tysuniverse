@@ -31,19 +31,19 @@
 	<active id="6" quality="3" craftquality="3" description="Another me" gfx="collectibles_mirroring_broken.png" name="Broken Mirroring" maxcharges="6" hidden="true" tags="offensive nocantrip"/>
 	<active	id="7" quality="3" craftquality="3" description="Burning plasma" gfx="collectibles_laser_gun.png" maxcharges="300" chargetype="timed" name="Laser Gun" cooldown="60" tags="offensive nocantrip"/>
 	<active	id="8" quality="4" craftquality="-1" description="Turning trash into treasure" gfx="collectibles_cornucopia.png" maxcharges="0" chargetype="special" devilprice="2" shopprice="30" name="Cornucopia" cooldown="12" tags="offensive nocantrip"/>
-	<passive id="9" quality="3" craftquality="3" description="Uncertain fate" gfx="collectibles_notice_of_critical_condition.png" name="Notice of Critical Condition" tags="nolostbr nogreed nokeeper lazarusshared"/>
+	<passive id="9" quality="3" craftquality="3" description="Uncertain fate" gfx="collectibles_notice_of_critical_condition.png" name="Notice of Critical Condition" tags="nolostbr nogreed nokeeper lazarusshared" customtags="nometronome"/>
 	<familiar id="10" quality="3" craftquality="3" description="They're more violent" gfx="collectibles_lumigyrofly.png" name="Lumigyro Fly" cache="familiars" tags="fly offensive"/>
 	<passive id="11" quality="0" craftquality="0" description="I'm attractive" gfx="collectibles_collapse.png" name="Collapse" tags="nolostbr offensive"/>
 	<passive id="12" quality="2" craftquality="2" description="More goods... but at what cost?" gfx="collectibles_cursed_treasure.png" name="Cursed Treasure" tags="offensive"/>
 	<active	id="13" quality="4" craftquality="4" description="Aspiration of the future" gfx="collectibles_the_gospel_of_john.png" maxcharges="8" devilprice="2" shopprice="30" name="The Gospel of John" cooldown="60" tags="angel book offensive"/>
 	<familiar id="14" quality="2" craftquality="2" description="Bigger than ever" gfx="collectibles_magnifier.png" name="Magnifier" cache="familiars" tags="offensive uniquefamiliar"/>
-	<passive id="15" quality="3" craftquality="3" description="Takes on all sins and impurities" gfx="collectibles_scapegoat.png" name="Scapegoat" tags="nocantrip" customtags="revive"/>
+	<passive id="15" quality="3" craftquality="3" description="Takes on all sins and impurities" gfx="collectibles_scapegoat.png" name="Scapegoat" tags="nocantrip" customtags="revive nometronome nolazarus"/>
 	<passive id="16" quality="2" craftquality="2" description="Not expired yet" gfx="collectibles_guppys_food.png" maxhearts="2" hearts="99" name="Guppy's Food" cache="damage speed range" tags="food guppy nolostbr"/>
 	<passive id="17" quality="2" craftquality="2" description="Prevents from becoming worse" gfx="collectibles_conservative_treatment.png" name="Conservative Treatment" cache="speed firedelay damage range shotspeed luck" tags="syringe offensive"/>
 	<passive id="18" quality="4" craftquality="4" description="Increased tear production" gfx="collectibles_conjunctivitis.png" name="Conjunctivitis" devilprice="2" shopprice="30" cache="tearflag shotspeed" tags="offensive"/>
 	<passive id="19" quality="3" craftquality="3" description="Power is fragile" gfx="collectibles_crown_of_kings.png" name="Crown of Kings" tags="nogreed offensive" customtags="nometronome nolazarus"/>
-	<passive id="20" quality="3" craftquality="-1" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive"/>
-	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive"/>
+	<passive id="20" quality="3" craftquality="-1" description="The witness of unswerving love" gfx="collectibles_marriage_certificate.png" name="Marriage Certificate" tags="mom offensive" customtags="nometronome"/>
+	<passive id="21" quality="3" craftquality="3" description="???" gfx="collectibles_order.png" name="Order" tags="summonable offensive nocantrip"/>
 	<active id="22" quality="3" craftquality="3" description="Sinister motive" gfx="collectibles_hades_blade.png" name="Hades Blade" maxcharges="5" cache="damage" tags="offensive"/>
 	<passive id="23" quality="2" craftquality="2" description="Amlost leaking out" gfx="collectibles_bobs_stomach.png" name="Bob's Stomach" tags="bob offensive"/>
 	<active id="24" quality="2" craftquality="2" description="Forged in blood and flesh" gfx="collectibles_blood_sacrifice.png" name="Blood Sacrifice" maxcharges="5" cache="damage" tags="nolostbr nokeeper"/>
@@ -56,15 +56,16 @@
 	<passive id="31" quality="4" craftquality="4" description="Master of ocean" gfx="collectibles_oceanus_soul.png" name="Oceanus' Soul" cache="flying" devilprice="2" shopprice="30" cache="firedelay weapon" tags="offensive lazarusshared" customtags="nometronome" achievement="oceanus_soul_unlocked"/>
 	<passive id="32" quality="2" craftquality="2" description="Take medicine on time" gfx="collectibles_absence_note.png" name="Absence Note" tags="offensive"/>
 	<passive id="33" quality="2" craftquality="2" description="Eat carefully" gfx="collectibles_bone-in_fish_steak.png" name="Bone-in Fish Steak" maxhearts="2" hearts="2" cache="firedelay speed damage luck" tags="food nolostbr"/>
-	<passive id="34" quality="3" craftquality="3" description="Distant observation" gfx="collectibles_planetarium_telescope.png" name="Planetarium Telescope" cache="luck" tags="stars lazarusshared nogreed offensive"/>
+	<passive id="34" quality="3" craftquality="3" description="Distant observation" gfx="collectibles_planetarium_telescope.png" name="Planetarium Telescope" cache="luck" tags="stars lazarusshared nogreed offensive" customtags="nometronome"/>
 	<passive id="35" quality="3" craftquality="3" description="The loyalty!" gfx="collectibles_beggar_mask.png" name="Beggar Mask" tags="offensive"/>
 	<passive id="36" quality="2" craftquality="2" description="Sweet sensation" gfx="collectibles_peeled_banana.png" name="Peeled Banana" maxhearts="2" hearts="2" tags="food nolostbr" cache="luck range"/>
 	<passive id="37" quality="3" craftquality="3" description="Destined" gfx="collectibles_cursed_destiny.png" name="Cursed Destiny" devilprice="2" tags="devil lazarusshared nogreed" cache="speed firedelay damage shotspeed range luck"/>
 	<passive id="38" quality="3" craftquality="3" description="Plunge into the abyss" gfx="collectibles_fallen_sky.png" name="Fallen Sky" devilprice="2" tags="devil" cache="tearflag"/>
 	<passive id="39" quality="2" craftquality="2" description="Art is an explosion" gfx="collectibles_explosion_master.png" name="Explosion Master" tags="offensive"/>
 	<passive id="40" quality="3" craftquality="3" description="He craves your pledge" gfx="collectibles_sinister_pact.png" name="Sinister Pact" blackhearts="2" tags="devil nokeeper nolostbr nogreed"/>
-	<active	id="41" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
-	<active	id="42" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active id="41" quality="2" craftquality="2" description="Spun?" gfx="collectibles_strange_syringe.png" name="Strange Syringe" maxcharges="0" cooldown="60" tags="offensive nolostbr nocantrip" customtags="nometronome"/>
+	<active	id="42" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
+	<active	id="43" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
     
 	<!--Trinkets-->
 	<trinket id="1" name="Lost Bottle Cap" description="One more bottle!" gfx="trinket_lost_bottle_cap.png" />

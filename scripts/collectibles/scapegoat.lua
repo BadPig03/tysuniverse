@@ -3,8 +3,12 @@ local Scapegoat = ty:DefineANewClass()
 ty.Revive:SetReviveConfig("TY_SCAPEGOAT_REVIVE", { BeforeVanilla = true })
 
 function Scapegoat:PostReviveScapegoat(player, configKey, reviver)
-    player:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
-    player:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")
+    local removed = false
+    if player:HasCollectible(ty.CustomCollectibles.SCAPEGOAT) then
+        player:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
+        player:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")
+        removed = true
+    end
     if player:GetPlayerType() ~= PlayerType.PLAYER_AZAZEL and player:GetPlayerType() ~= PlayerType.PLAYER_AZAZEL_B and player:GetPlayerType() ~= PlayerType.PLAYER_ESAU then
         player:ChangePlayerType(PlayerType.PLAYER_AZAZEL)
         player:AddBlackHearts(2)
@@ -13,6 +17,10 @@ function Scapegoat:PostReviveScapegoat(player, configKey, reviver)
     elseif player:GetPlayerType() == PlayerType.PLAYER_ESAU then
         for _, player2 in pairs(PlayerManager.GetPlayers()) do
             if player2:GetPlayerType() == PlayerType.PLAYER_JACOB then
+                if not removed then
+                    player2:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
+                    player2:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")    
+                end
                 player2:ChangePlayerType(PlayerType.PLAYER_AZAZEL)
                 player2:AddBlackHearts(2)
                 break

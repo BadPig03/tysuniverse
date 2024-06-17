@@ -16,4 +16,7 @@
 	<wisp id="24" hp="8" layer="2" damage="3" tearColor="tear_dark_red" flameColor="flame_dark_red" coreColor="core_dark_red" coreGfx="heart.png" />
 	<wisp id="27" count="0" />
 	<wisp id="28" count="0" />
+	<wisp id="41" count="0" />
+	<wisp id="42" count="0" />
+	<wisp id="43" count="0" />
 </wisps>
