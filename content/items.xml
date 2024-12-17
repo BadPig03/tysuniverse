@@ -64,6 +64,7 @@
 	<passive id="39" quality="2" craftquality="2" description="Art is an explosion" gfx="collectibles_explosion_master.png" name="Explosion Master" tags="offensive"/>
 	<passive id="40" quality="3" craftquality="3" description="He craves your pledge" gfx="collectibles_sinister_pact.png" name="Sinister Pact" blackhearts="2" tags="devil nokeeper nolostbr nogreed"/>
 	<active id="41" quality="2" craftquality="2" description="Spun?" gfx="collectibles_strange_syringe.png" name="Strange Syringe" maxcharges="0" cooldown="60" tags="offensive nolostbr nocantrip" customtags="nometronome"/>
+	<passive id="42" quality="0" craftquality="0" description="Divide continually" gfx="collectibles_cancer_cells.png" name="Cancer Cells" tags="" cache="damage"/>
 	<active	id="42" quality="0" craftquality="-1" description="Health up" gfx="collectibles_blood_sample.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Blood Sample" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
 	<active	id="43" quality="0" craftquality="-1" description="Reroll your deal" gfx="collectibles_bloody_dice.png" maxcharges="6" initcharge="0" chargetype="special" hidden="true" name="Bloody Dice" cooldown="60" tags="nolostbr nokeeper nogreed nocantrip"/>
     

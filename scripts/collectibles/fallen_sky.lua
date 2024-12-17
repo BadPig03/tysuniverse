@@ -3,8 +3,6 @@ local FallenSky = ty:DefineANewClass()
 local stat = ty.Stat
 local functions = ty.Functions
 
-local doubleMelee = true
-
 local chainSprite = Sprite("gfx/effects/fallen_sky_chain.anm2", true)
 chainSprite:Play("Idle", true)
 

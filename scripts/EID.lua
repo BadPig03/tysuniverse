@@ -139,7 +139,7 @@ EIDInfo.Collectibles = {
     [ty.CustomCollectibles.NOTICEOFCRITICALCONDITION] = {
         [1] = {
             Name = "病危通知书",
-            Desc = "#{{Pill}} 使用好胶囊时有20%的概率消除一颗碎心"..
+            Desc = "#{{Pill}} 使用正面胶囊时有20%的概率消除一颗碎心"..
             "#{{BrokenHeart}} 每到新层时获得两颗碎心，有概率生成一位医疗护士"
         },
         [2] = {

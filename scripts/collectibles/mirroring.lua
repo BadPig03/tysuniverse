@@ -1,16 +1,17 @@
 local Mirroring = ty:DefineANewClass()
 
+local functions = ty.Functions
+
 local function ChangePlayerToOtherSide(player)
     local data = ty:GetLibData(player)
     local room = ty.GAME:GetRoom()
     local playerType = player:GetPlayerType()
     if playerType == PlayerType.PLAYER_ISAAC then
         local historyItems = player:GetHistory():GetCollectiblesHistory()
-        local newItems = {}
         player:ChangePlayerType(PlayerType.PLAYER_ISAAC_B)
-        local count, limit = 0, 10
+        local count, limit = 0, 9
         if player:HasCollectible(CollectibleType.COLLECTIBLE_BIRTHRIGHT) then
-            limit = 16
+            limit = 15
         end
         for index = #historyItems, 1, -1 do
             local item = historyItems[index]
@@ -18,19 +19,16 @@ local function ChangePlayerToOtherSide(player)
             if not item:IsTrinket() and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type ~= ItemType.ITEM_ACTIVE and itemID ~= CollectibleType.COLLECTIBLE_BIRTHRIGHT then
                 if count <= limit then
                     player:DropCollectible(itemID)
-                    table.insert(newItems, { ItemID = itemID, ItemPoolType = item:GetItemPoolType() })
                     count = count + 1
                 end
                 player:RemoveCollectible(itemID)
             end
         end
-        for _, newItem in pairs(newItems) do
-            for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, newItem.ItemID)) do
-                local pickup = ent:ToPickup()
-                if pickup.FrameCount <= 1 then
-                    pickup:AddCollectibleCycle(ty.ITEMPOOL:GetCollectible(newItem.ItemPoolType, true, player:GetCollectibleRNG(newItem.ItemID):Next()))
-                end
-            end    
+        for _, ent in pairs(Isaac.FindByType(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE)) do
+            local pickup = ent:ToPickup()
+            if pickup.FrameCount <= 1 then
+                pickup:AddCollectibleCycle(functions:GetCollectibleFromCurrentRoom(true, nil, player:GetCollectibleRNG(pickup.SubType)))
+            end  
         end
     elseif playerType == PlayerType.PLAYER_JUDAS or playerType == PlayerType.PLAYER_BLACKJUDAS then
         local health = player:GetMaxHearts() + player:GetSoulHearts()

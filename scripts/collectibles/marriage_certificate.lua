@@ -40,7 +40,7 @@ local function GetCollectiblesList(player)
     local list = {}
     for itemID, count in pairs(player:GetCollectiblesList()) do
         if count > 0 and ItemConfig.Config.IsValidCollectible(itemID) and not ty:IsValueInTable(bannedCollectibles, itemID) and not ty.ITEMCONFIG:GetCollectible(itemID):HasTags(ItemConfig.TAG_QUEST) and ty.ITEMCONFIG:GetCollectible(itemID).Type % ItemType.ITEM_ACTIVE == ItemType.ITEM_PASSIVE and not ty.ITEMCONFIG:GetCollectible(itemID).Hidden then
-            table.insert(list, itemID)
+            table.insert(list,  itemID)
         end
     end
     return list
@@ -108,7 +108,10 @@ function MarriageCertificate:PreAddCollectible(type, charge, firstTime, slot, va
             return false
         end
         if player:GetPlayerType() == PlayerType.PLAYER_ESAU then
-            player:GetOtherTwin():AddCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
+            local player2 = player:GetOtherTwin()
+            if player2 then
+                player2:AddCollectible(ty.CustomCollectibles.MARRIAGECERTIFICATE)
+            end
             return false
         elseif player:GetPlayerType() == PlayerType.PLAYER_LAZARUS_B or player:GetPlayerType() == PlayerType.PLAYER_LAZARUS2_B then
             return CollectibleType.COLLECTIBLE_BIRTHRIGHT
@@ -231,5 +234,16 @@ function MarriageCertificate:PostNewRoom()
     end
 end
 MarriageCertificate:AddCallback(ModCallbacks.MC_POST_NEW_ROOM, MarriageCertificate.PostNewRoom)
+
+function MarriageCertificate:PostPickupUpdate(pickup)
+    if pickup.SubType == ty.CustomCollectibles.MARRIAGECERTIFICATE and pickup.Touched then
+        local cycle = pickup:GetCollectibleCycle()
+        pickup:Morph(EntityType.ENTITY_PICKUP, PickupVariant.PICKUP_COLLECTIBLE, CollectibleType.COLLECTIBLE_DIVORCE_PAPERS, true, false, false)
+        for i = 1, #cycle do
+            pickup:AddCollectibleCycle(functions:GetCollectibleFromCurrentRoom(true, nil, pickup.InitSeed))
+        end
+    end
+end
+MarriageCertificate:AddCallback(ModCallbacks.MC_POST_PICKUP_UPDATE, MarriageCertificate.PostPickupUpdate)
 
 return MarriageCertificate

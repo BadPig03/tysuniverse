@@ -18,6 +18,7 @@ ty.CollectiblesList = {
     'blood_sacrifice',
     'bobs_stomach',
     'bone_in_fish_steak',
+    'cancer_cells',
     'chocolate_pancake',
     'collapse',
     'conjunctivitis',

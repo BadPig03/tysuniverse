@@ -41,6 +41,7 @@ ty.CustomCollectibles = {
     EXPLOSIONMASTER = Isaac.GetItemIdByName("Explosion Master"),
     SINISTERPACT = Isaac.GetItemIdByName("Sinister Pact"),
     STRANGESYRINGE = Isaac.GetItemIdByName("Strange Syringe"),
+    CANCERCELLS = Isaac.GetItemIdByName("Cancer Cells"),
     BLOODSAMPLE = Isaac.GetItemIdByName("Blood Sample"),
     BLOODYDICE = Isaac.GetItemIdByName("Bloody Dice")
 }

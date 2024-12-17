@@ -123,12 +123,7 @@ local function GetPickupCharge(pickup, player, real)
                 return -16
             end
             if item > 0 then
-                local itemConfigCollectible = ty.ITEMCONFIG:GetCollectible(item)
-                if itemConfigCollectible:HasTags(ItemConfig.TAG_QUEST) then
-                    charge = 12
-                else
-                    charge = charge + math.max(math.min(24, 6 * itemConfigCollectible.Quality), 3)
-                end
+                charge = charge + math.max(math.min(24, 6 * ty.ITEMCONFIG:GetCollectible(item).Quality), 3)
             else
                 return nil
             end
@@ -241,17 +236,18 @@ local function RenderPickupChargeNum(player)
 end
 
 function Cornucopia:PostRender()
-    if ty.HUD:IsVisible() then
-        for _, player in pairs(PlayerManager.GetPlayers()) do
-            if player:HasCollectible(ty.CustomCollectibles.CORNUCOPIA) then
-                local data = ty:GetLibData(player)
-                RenderChargeIcon(player)
-                if data.Cornucopia.IsHolding then
-                    RenderPickupChargeNum(player)
-                end    
-            end
+    if not ty.HUD:IsVisible() then
+        return
+    end
+    for _, player in pairs(PlayerManager.GetPlayers()) do
+        if player:HasCollectible(ty.CustomCollectibles.CORNUCOPIA) then
+            local data = ty:GetLibData(player)
+            RenderChargeIcon(player)
+            if data.Cornucopia.IsHolding then
+                RenderPickupChargeNum(player)
+            end    
         end
-	end
+    end
 end
 Cornucopia:AddCallback(ModCallbacks.MC_POST_RENDER, Cornucopia.PostRender)
 

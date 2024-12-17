@@ -1,5 +1,5 @@
 <AnimatedActor>
-	<Info CreatedBy="Unknown" CreatedOn="2024/5/4 15:39:33" Version="19" Fps="30"/>
+	<Info CreatedBy="Unknown" CreatedOn="2024/9/5 0:16:02" Version="20" Fps="30"/>
 	<Content>
 		<Spritesheets>
 			<Spritesheet Path="glowing_hourglass_shard.png" Id="0"/>

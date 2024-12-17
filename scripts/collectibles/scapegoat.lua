@@ -15,16 +15,17 @@ function Scapegoat:PostReviveScapegoat(player, configKey, reviver)
     elseif player:GetPlayerType() == PlayerType.PLAYER_AZAZEL_B then
         player:QueueItem(ty.ITEMCONFIG:GetCollectible(CollectibleType.COLLECTIBLE_LORD_OF_THE_PIT))
     elseif player:GetPlayerType() == PlayerType.PLAYER_ESAU then
-        for _, player2 in pairs(PlayerManager.GetPlayers()) do
-            if player2:GetPlayerType() == PlayerType.PLAYER_JACOB then
-                if not removed then
-                    player2:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
-                    player2:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")    
-                end
-                player2:ChangePlayerType(PlayerType.PLAYER_AZAZEL)
-                player2:AddBlackHearts(2)
-                break
+        local player2 = player:GetOtherTwin()
+        if player2 and player2:GetPlayerType() == PlayerType.PLAYER_JACOB then
+            if not removed then
+                player2:RemoveCollectible(ty.CustomCollectibles.SCAPEGOAT)
+                player2:AnimateCollectible(ty.CustomCollectibles.SCAPEGOAT, "UseItem")    
             end
+            player2:ChangePlayerType(PlayerType.PLAYER_AZAZEL)
+            player2:AddBlackHearts(2)
+        else
+            player:ChangePlayerType(PlayerType.PLAYER_AZAZEL)
+            player:AddBlackHearts(2)
         end
     end
     Isaac.Spawn(EntityType.ENTITY_EFFECT, EffectVariant.POOF02, 3, player.Position, Vector(0, 0), nil)
